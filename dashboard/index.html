@@ -155,7 +155,6 @@ a:hover { text-decoration: underline; }
 }
 .rail-btn:hover { background: var(--bg); color: var(--ink); }
 .rail-btn[aria-expanded="true"] { background: var(--violet-soft); color: var(--violet); }
-.rail-sep { width: 22px; height: 1px; background: var(--border); margin: 5px 0; flex: none; }
 
 /* ============ SEO FLYOUT NAV ============ */
 .flyout {
@@ -175,12 +174,7 @@ a:hover { text-decoration: underline; }
 }
 .flyout a:hover { background: var(--bg); text-decoration: none; color: var(--link); }
 .flyout a.top { color: var(--link); padding-top: 2px; }
-.verified {
-  margin: 9px 20px 0; padding: 6px 9px; border-radius: 6px;
-  font-size: 11.5px; line-height: 1.35; border: 1px solid transparent;
-}
 .verified.ok   { background: var(--green-soft); color: var(--green); border-color: var(--green); }
-.verified.todo { background: var(--amber-bg); color: var(--amber); border-color: var(--amber); }
 .scrim {
   position: fixed; inset: 0; z-index: 58; background: rgba(16,16,24,.28);
   opacity: 0; pointer-events: none; transition: opacity .17s;
@@ -194,17 +188,6 @@ a:hover { text-decoration: underline; }
 }
 .topbar-in {
   display: flex; align-items: center; gap: 16px; padding: 10px 20px; flex-wrap: wrap;
-}
-.searchbox { display: flex; flex: none; }
-.searchbox input {
-  width: 340px; max-width: 46vw; padding: 8px 13px; font-family: inherit; font-size: 14px;
-  border: 1px solid var(--border-2); border-right: 0; border-radius: 6px 0 0 6px;
-  background: var(--surface); color: var(--ink);
-}
-.searchbox input::placeholder { color: var(--ink-4); }
-.searchbox button {
-  padding: 8px 18px; border: 0; border-radius: 0 6px 6px 0;
-  background: var(--btn); color: var(--surface); font-weight: 600;
 }
 .topnav { margin-left: auto; display: flex; align-items: center; gap: 22px; }
 .topnav a, .topnav button {
@@ -220,42 +203,6 @@ a:hover { text-decoration: underline; }
 /* ============ PAGE ============ */
 .page { margin-left: 46px; padding: 16px 20px 80px; }
 
-/* --- Toolkit card rail --- */
-.kits-hold { position: relative; }
-.kits {
-  display: flex; gap: 14px; overflow-x: auto; padding-bottom: 4px;
-  scroll-behavior: smooth; scrollbar-width: none;
-}
-.kits::-webkit-scrollbar { display: none; }
-.kit {
-  position: relative; flex: 0 0 258px; background: var(--surface);
-  border: 1px solid var(--border); border-radius: 10px; padding: 15px 16px 17px;
-  box-shadow: var(--shadow);
-}
-.kit-ico {
-  width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center;
-  margin-bottom: 9px;
-}
-.kit h3 { font-size: 15px; font-weight: 600; margin: 0 0 6px; letter-spacing: -.2px; }
-.kit p { margin: 0; font-size: 13px; color: var(--ink-2); line-height: 1.4; }
-.kit-tag {
-  position: absolute; top: 0; right: 30px;
-  background: var(--violet); color: #fff; font-size: 11.5px; font-weight: 500;
-  padding: 3px 9px; border-radius: 0 0 5px 5px;
-}
-.kit-x, .kit-ok {
-  position: absolute; top: 6px; right: 8px; width: 18px; height: 18px;
-  border: 0; background: none; color: var(--ink-3); display: grid; place-items: center;
-  border-radius: 4px;
-}
-.kit-ok { background: var(--green-soft); color: var(--green); top: 0; right: 0; border-radius: 0 9px 0 8px; width: 26px; height: 22px; }
-.kits-next {
-  position: absolute; right: -6px; top: 50%; transform: translateY(-50%);
-  width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--border-2);
-  background: var(--surface); color: var(--ink-2); display: grid; place-items: center;
-  box-shadow: var(--shadow-2); z-index: 2;
-}
-
 /* --- Panels --- */
 .panel {
   background: var(--surface); border: 1px solid var(--border);
@@ -267,61 +214,8 @@ a:hover { text-decoration: underline; }
 .panel-title { font-size: 16px; font-weight: 700; letter-spacing: -.3px; }
 .panel-title sup { font-size: 9.5px; color: var(--violet); font-weight: 700; }
 .panel-note { color: var(--ink-3); font-weight: 400; font-size: 14px; }
-.panel-act {
-  margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
-  background: none; border: 0; color: var(--ink); font-size: 14px;
-}
 
-/* --- Notice --- */
-.notice {
-  margin: 0 14px 14px; border: 1px solid var(--amber); border-left-width: 4px;
-  background: var(--amber-bg); border-radius: 7px; padding: 12px 14px;
-  display: flex; gap: 11px; align-items: flex-start;
-}
-.notice-body { flex: 1; min-width: 0; }
-.notice-title { font-weight: 700; font-size: 14px; }
-.notice p { margin: 2px 0 0; font-size: 13.5px; color: var(--ink-2); }
-.notice-x { border: 0; background: none; color: var(--amber); font-size: 15px; line-height: 1; padding: 2px 4px; border-radius: 4px; }
-
-/* --- Filter row --- */
-.filters {
-  display: flex; align-items: center; gap: 9px; padding: 0 18px 14px; flex-wrap: wrap;
-}
-.field {
-  display: inline-flex; align-items: center; gap: 7px;
-  border: 1px solid var(--border-2); border-radius: 6px; padding: 6px 11px;
-  background: var(--surface); color: var(--ink-2); font-size: 13.5px;
-}
-.field input { border: 0; outline: 0; background: none; font-family: inherit; font-size: 13.5px; width: 168px; color: var(--ink); }
-.field input::placeholder { color: var(--ink-4); }
-.field.sel { cursor: pointer; }
-.field .pip { width: 7px; height: 7px; border-radius: 50%; background: var(--violet); }
-.btn-ghost {
-  display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--border-2);
-  background: var(--surface); color: var(--ink); border-radius: 6px; padding: 6px 13px; font-size: 13.5px;
-}
-.btn-ghost:hover { border-color: var(--ink-4); }
-.toggle-wrap { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-2); font-size: 13.5px; }
-.toggle {
-  width: 32px; height: 18px; border-radius: 999px; background: var(--border-2);
-  border: 0; padding: 0; position: relative; flex: none;
-}
-.toggle::after {
-  content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px;
-  border-radius: 50%; background: var(--surface); transition: left .15s;
-}
-.toggle[aria-pressed="true"] { background: var(--violet); }
-.toggle[aria-pressed="true"]::after { left: 16px; }
-
-/* --- Project rows --- */
 .proj { border-top: 1px solid var(--border); }
-.proj-head {
-  display: flex; align-items: center; gap: 9px; padding: 14px 18px 4px;
-}
-.proj-name { font-size: 15px; font-weight: 600; color: var(--link); }
-.proj-url { color: var(--ink-3); font-size: 13.5px; }
-.proj-kebab { margin-left: auto; border: 0; background: none; color: var(--ink-3); padding: 4px 6px; border-radius: 5px; }
-.proj-kebab:hover { background: var(--bg); }
 
 .metrics {
   display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -337,10 +231,6 @@ a:hover { text-decoration: underline; }
 .metric-sub { font-size: 12.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
 .metric-sub.up { color: var(--green); font-weight: 600; }
 .metric-sub.down { color: var(--red); font-weight: 600; }
-.metric .setup {
-  margin-top: 3px; display: inline-block; background: var(--btn); color: var(--surface);
-  border-radius: 6px; padding: 5px 13px; font-size: 13px; font-weight: 600; border: 0;
-}
 
 .proj-foot {
   display: flex; align-items: center; gap: 8px 18px; flex-wrap: wrap;
@@ -349,36 +239,14 @@ a:hover { text-decoration: underline; }
 }
 .proj-foot b { font-weight: 600; color: var(--ink-2); }
 
-/* --- Health ring --- */
-.ring { flex: none; }
-
-/* --- Tooltip coach mark --- */
-.coach {
-  position: absolute; z-index: 45; width: 348px; max-width: 86vw;
-  background: var(--violet-soft); border: 1px solid var(--violet-line);
-  border-radius: 10px; padding: 15px 17px; box-shadow: var(--shadow-2);
-}
-.coach h4 { margin: 0 0 5px; font-size: 15px; font-weight: 700; }
-.coach p { margin: 0 0 12px; font-size: 13.5px; color: var(--ink-2); }
-.coach-btns { display: flex; align-items: center; gap: 14px; }
-.coach-ok { background: var(--surface); border: 1px solid var(--border-2); border-radius: 6px; padding: 6px 15px; font-weight: 600; font-size: 13.5px; color: var(--ink); }
-.coach-later { background: none; border: 0; color: var(--ink-2); font-size: 13.5px; }
-.coach-x { position: absolute; top: 9px; right: 10px; border: 0; background: none; color: var(--ink-3); font-size: 15px; line-height: 1; }
-
-/* --- Help FAB --- */
-.fab {
-  position: fixed; right: 22px; bottom: 22px; z-index: 50;
-  width: 50px; height: 50px; border-radius: 50%; border: 0;
-  background: var(--violet); color: #fff; font-size: 22px; font-weight: 600;
-  box-shadow: var(--shadow-2);
-}
-
 /* --- Provenance --- */
 .srcbar {
   display: flex; gap: 8px 20px; flex-wrap: wrap; align-items: center;
   margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border);
   font-size: 12.5px; color: var(--ink-3);
 }
+.brand { font-size: 15px; font-weight: 700; letter-spacing: -.3px; }
+.brand span { font-weight: 400; color: var(--ink-3); margin-left: 7px; }
 .src {
   font-size: 10px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700;
   padding: 2px 7px; border-radius: 4px; border: 1px solid transparent;
@@ -400,16 +268,6 @@ a:hover { text-decoration: underline; }
 .viewhead h1 { font-size: 24px; font-weight: 700; margin: 0 0 3px; letter-spacing: -.7px; }
 .viewhead .crumb { font-size: 12.5px; color: var(--ink-3); }
 .viewhead .right { margin-left: auto; display: flex; align-items: center; gap: 9px; }
-
-.stub { max-width: 660px; margin: 30px auto; text-align: center; }
-.stub .ico { width: 46px; height: 46px; border-radius: 12px; background: var(--grey-soft); color: var(--ink-3); display: grid; place-items: center; margin: 0 auto 14px; }
-.stub h2 { font-size: 18px; font-weight: 700; margin: 0 0 7px; letter-spacing: -.4px; }
-.stub > p { color: var(--ink-2); font-size: 14px; margin: 0 auto 18px; max-width: 56ch; }
-.stub-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; text-align: left; box-shadow: var(--shadow); }
-.stub-card h3 { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 9px; font-weight: 700; }
-.stub-card ul { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 13.5px; }
-.stub-card li { margin-bottom: 4px; }
-.stub-need { margin-top: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
 
 .grid2 { display: grid; grid-template-columns: repeat(12,1fr); gap: 14px; margin-top: 14px; }
 .tiles { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-top: 14px; }
@@ -532,8 +390,8 @@ a:hover { text-decoration: underline; }
 
 
 <!-- ================= LEFT ICON RAIL ================= -->
-<nav class="rail" aria-label="Toolkits">
-  <button class="rail-btn" data-nav="home" type="button" aria-expanded="false" aria-controls="flyout" title="Home" aria-label="Home">
+<nav class="rail" aria-label="Sections">
+  <button class="rail-btn" data-nav="home" type="button" title="Home" aria-label="Home">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
   </button>
   <button class="rail-btn" data-nav="site" type="button" aria-expanded="false" aria-controls="flyout" title="Site" aria-label="Site">
@@ -541,13 +399,6 @@ a:hover { text-decoration: underline; }
   </button>
   <button class="rail-btn" data-nav="revenue" type="button" aria-expanded="false" aria-controls="flyout" title="Revenue" aria-label="Revenue">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-8"/><path d="M14 7h6v6"/></svg>
-  </button>
-  <button class="rail-btn" data-nav="local" type="button" aria-expanded="false" aria-controls="flyout" title="Local" aria-label="Local">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-  </button>
-  <div class="rail-sep"></div>
-  <button class="rail-btn" data-nav="reports" type="button" aria-expanded="false" aria-controls="flyout" title="Reports" aria-label="Reports">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 14 3.5-3.5 3 3L18 8"/></svg>
   </button>
 </nav>
 
@@ -558,12 +409,9 @@ a:hover { text-decoration: underline; }
 <!-- ================= TOP BAR ================= -->
 <header class="topbar">
   <div class="topbar-in">
-    <form class="searchbox" onsubmit="return false">
-      <input type="text" placeholder="Enter website or keyword" aria-label="Enter website or keyword">
-      <button type="submit">Analyze</button>
-    </form>
+    <div class="brand">Twin Home Buyer <span>Command Center</span></div>
     <nav class="topnav">
-      <span style="font-size:13.5px;color:var(--ink-3)">Twin Home Buyer</span>
+      <span id="tb-built">—</span>
       <span class="avatar">T</span>
     </nav>
   </div>
@@ -661,78 +509,6 @@ a:hover { text-decoration: underline; }
   </div>
 </section>
 
-<!-- ==================== POSITION TRACKING ==================== -->
-<section class="view" data-view="position-tracking">
-  <div class="viewhead">
-    <div><h1>Position Tracking</h1><div class="crumb">twinhomebuyer.com · Bay Area · desktop + mobile</div></div>
-    <div class="right"><span class="src src-pending">Needs Search Console</span></div>
-  </div>
-  <div class="stub">
-    <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
-    <h2>Not connected yet</h2>
-    <p>Rank tracking needs Google Search Console. Your site already runs Site Kit, so the property exists — it needs a service-account credential to read from it.</p>
-    <div class="stub-card">
-      <h3>What this will show</h3>
-      <ul>
-        <li>Daily position for every tracked keyword, by device and city</li>
-        <li>Visibility %, estimated traffic, average position</li>
-        <li>Ranking distribution — top 3, 4–10, 11–20, 21–50, 51–100</li>
-        <li>Keywords in striking distance (positions 4–15) on money pages</li>
-        <li>Declines on pages that produce contracts, weighted above the rest</li>
-      </ul>
-      <div class="stub-need"><span class="src src-pending">Needs</span> a Google service-account JSON with Search Console read access</div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== TOP PAGES ==================== -->
-<section class="view" data-view="top-pages">
-  <div class="viewhead">
-    <div><h1>Top Pages</h1><div class="crumb">Ranked by contribution to seller contracts</div></div>
-    <div class="right"><span class="src src-pending">Needs GA4</span></div>
-  </div>
-  <div class="stub">
-    <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
-    <h2>Not connected yet</h2>
-    <p>This is the view that fixes your revenue weights. Right now they are a reasoned guess based on funnel position. GA4 replaces the guess with measurement.</p>
-    <div class="stub-card">
-      <h3>What this will show</h3>
-      <ul>
-        <li>Sessions, leads, and conversion rate per landing page</li>
-        <li>Which of the 669 pages actually produce form submissions</li>
-        <li>Pages with real organic traffic and zero conversions</li>
-        <li>Mobile conversion weakness, page by page</li>
-        <li>A measured revenue weight to replace the configured guess</li>
-      </ul>
-      <div class="stub-need"><span class="src src-pending">Needs</span> GA4 property ID and the same service-account credential</div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== REVENUE CHAIN (THB) ==================== -->
-<section class="view" data-view="revenue-chain">
-  <div class="viewhead">
-    <div><h1>Revenue Chain</h1><div class="crumb">Spend → closings · the question this system exists to answer</div></div>
-    <div class="right"><span class="src src-pending">Needs CRM + GA4</span></div>
-  </div>
-  <div class="stub">
-    <div class="ico" style="background:var(--violet-soft);color:var(--violet)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-8"/><path d="M14 7h6v6"/></svg></div>
-    <h2>The reason this system exists</h2>
-    <p>Every other view answers an SEO question. This one answers a business question: are we on pace for target ROAS, and what is pulling us away from it?</p>
-    <div class="stub-card">
-      <h3>The chain it will measure</h3>
-      <ul>
-        <li>Channel spend → visitors → leads → qualified leads</li>
-        <li>Appointments → offers → contracts → closings</li>
-        <li>Gross profit, cost per contract, and ROAS against target</li>
-        <li>Maximum allowable cost per contract, worked backward from target ROAS</li>
-        <li>Attribution labelled honestly — first-touch, last-touch, or unknown, never guessed</li>
-      </ul>
-      <div class="stub-need"><span class="src src-pending">Needs</span> CRM export or CSV bridge, plus GA4. This is Stage 6.</div>
-    </div>
-  </div>
-</section>
-
 <!-- ==================== STAGE 7 — PRIORITY BOARD ==================== -->
 <section class="view" data-view="priority-board">
   <div class="viewhead">
@@ -805,28 +581,10 @@ a:hover { text-decoration: underline; }
   <div id="oti-body"></div>
 </section>
 
-<!-- ==================== GENERIC ==================== -->
-<section class="view" data-view="stub">
-  <div class="viewhead">
-    <div><h1 id="stub-title">—</h1><div class="crumb" id="stub-crumb">—</div></div>
-    <div class="right"><span class="src src-pending" id="stub-badge">Not built</span></div>
-  </div>
-  <div class="stub">
-    <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M12 8v5M12 16v.01"/></svg></div>
-    <h2 id="stub-h2">Not built yet</h2>
-    <p id="stub-p">This view is part of a later stage of the plan.</p>
-    <div class="stub-card">
-      <h3>Where it sits in the plan</h3>
-      <ul id="stub-list"></ul>
-      <div class="stub-need"><span class="src src-pending">Needs</span> <span id="stub-need">—</span></div>
-    </div>
-  </div>
-</section>
-
 
   <div class="srcbar">
-    <span><span class="src src-live">Live</span> Site Audit · Money Page Monitor · Priority Board — agents running today</span>
-    <span><span class="src src-pending">Pending</span> Organic Rankings &amp; Traffic Insights (Search Console + GA4) · ROAS &amp; Attribution (CRM export) · Local (Google Business Profile)</span>
+    <span><span class="src src-live">Live</span> Site Audit · Priority Board — agents running today</span>
+    <span><span class="src src-pending">Waiting on a credential</span> Organic Rankings &amp; Traffic Insights (Search Console + GA4) · ROAS &amp; Attribution (CRM export)</span>
     <span style="margin-left:auto">Twin Home Buyer · Command Center</span>
   </div>
 </main>
@@ -836,7 +594,7 @@ a:hover { text-decoration: underline; }
 <script>window.__AUDIT__ = {"crawled_at":"2026-08-13 17:44 UTC","pages":153,"health":100,"errors":0,"warnings":0,"notices":0,"redirects":12,"fetch_errors":0,"throttled":10,"verdict":"No defects found","blurb":"All 153 crawled pages returned 200 and carry a title, meta description, H1, and a self-referencing canonical. The crawl stopped early after 10 throttled responses \u2014 the host returned 503 under sustained crawling, so coverage is partial. That is a server-load signal, not a page defect.","issues":[],"themes":[["Crawlability",100],["Titles",100],["Meta descriptions",100],["H1 present",100],["Canonical self-referencing",100],["Indexable",100]]};</script>
 <!--@/AUDIT@-->
 <!--@THB@-->
-<script>window.__THB__ = {"generated_at":"2026-08-13 19:07 UTC","site":"Twin Home Buyer","base_url":"https://www.twinhomebuyer.com","row_cap":40,"board":{"generated_at":"2026-08-13T19:07:27.783201+00:00","headline":"Incomplete picture: 4 of 4 agents did not report (ga4, revenue, search_console, technical_seo). Anything absent from this board may simply not have been measured.","counts":{"critical_now":0,"fix_next":0,"growth_opportunities":0,"monitor":0,"no_action":0},"coverage":{"ran":[],"unavailable":{"technical_seo":"skipped: --offline was passed, so the site was not crawled","search_console":"GOOGLE_APPLICATION_CREDENTIALS is not set","ga4":"THB_GA4_PROPERTY_ID is not set","revenue":"no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input."},"failed":{},"complete":false,"blind_spots":["ga4: THB_GA4_PROPERTY_ID is not set","revenue: no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input.","search_console: GOOGLE_APPLICATION_CREDENTIALS is not set","technical_seo: skipped: --offline was passed, so the site was not crawled"],"caveat":"Incomplete picture: 4 of 4 agents did not report (ga4, revenue, search_console, technical_seo). Anything absent from this board may simply not have been measured."},"buckets":{"critical_now":[],"fix_next":[],"growth_opportunities":[],"monitor":[],"no_action":[]},"top_action":null,"narrative":{}},"search":{"status":"unavailable","reason":"GOOGLE_APPLICATION_CREDENTIALS is not set","findings":0},"ga4":{"status":"unavailable","reason":"THB_GA4_PROPERTY_ID is not set","findings":0},"revenue":{"status":"unavailable","reason":"no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input.","findings":0},"joined":[],"joined_count":0,"crawl":{"status":"unavailable","reason":"skipped: --offline was passed, so the site was not crawled","findings":0}};</script>
+<script>window.__THB__ = {"generated_at":"2026-08-13 21:03 UTC","site":"Twin Home Buyer","base_url":"https://www.twinhomebuyer.com","row_cap":40,"board":{"generated_at":"2026-08-13T21:03:47.805391+00:00","headline":"Incomplete picture: 4 of 4 agents did not report (ga4, revenue, search_console, technical_seo). Anything absent from this board may simply not have been measured.","counts":{"critical_now":0,"fix_next":0,"growth_opportunities":0,"monitor":0,"no_action":0},"coverage":{"ran":[],"unavailable":{"technical_seo":"skipped: --offline was passed, so the site was not crawled","search_console":"GOOGLE_APPLICATION_CREDENTIALS is not set","ga4":"THB_GA4_PROPERTY_ID is not set","revenue":"no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input."},"failed":{},"complete":false,"blind_spots":["ga4: THB_GA4_PROPERTY_ID is not set","revenue: no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input.","search_console: GOOGLE_APPLICATION_CREDENTIALS is not set","technical_seo: skipped: --offline was passed, so the site was not crawled"],"caveat":"Incomplete picture: 4 of 4 agents did not report (ga4, revenue, search_console, technical_seo). Anything absent from this board may simply not have been measured."},"buckets":{"critical_now":[],"fix_next":[],"growth_opportunities":[],"monitor":[],"no_action":[]},"top_action":null,"narrative":{}},"search":{"status":"unavailable","reason":"GOOGLE_APPLICATION_CREDENTIALS is not set","findings":0},"ga4":{"status":"unavailable","reason":"THB_GA4_PROPERTY_ID is not set","findings":0},"revenue":{"status":"unavailable","reason":"no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input.","findings":0},"joined":[],"joined_count":0,"crawl":{"status":"unavailable","reason":"skipped: --offline was passed, so the site was not crawled","findings":0}};</script>
 <!--@/THB@-->
 <script>
 (() => {
@@ -853,35 +611,13 @@ a:hover { text-decoration: underline; }
      menu item for them would have been a permanent dead end.
      ====================================================================== */
   const NAV = {
-    home: {
-      title: "Home", top: "Overview",
-      groups: [["", ["All Projects", "Recent Activity"]]]
-    },
     site: {
       title: "Site", top: "Site Audit",
-      groups: [
-        ["Health", ["Site Audit", "Money Page Monitor"]],
-        ["Search", ["Organic Rankings", "Position Tracking", "Top Pages",
-                    "Organic Traffic Insights"]]
-      ]
+      groups: [["", ["Organic Rankings", "Organic Traffic Insights"]]]
     },
     revenue: {
       title: "Revenue", top: "Priority Board",
-      groups: [
-        ["Money", ["ROAS Tracker", "Lead Attribution", "Revenue Chain"]],
-        ["Ranking", ["Priority Board"]]
-      ]
-    },
-    local: {
-      title: "Local", top: "GBP Optimization",
-      groups: [
-        ["Profile", ["GBP Optimization", "Review Management", "Listing Management"]],
-        ["Visibility", ["Map Rank Tracker", "Per-City Lead Volume"]]
-      ]
-    },
-    reports: {
-      title: "Reports", top: "Daily Prioritized Digest",
-      groups: [["", ["Daily Prioritized Digest", "Incident History"]]]
+      groups: [["", ["ROAS Tracker", "Lead Attribution"]]]
     }
   };
 
@@ -968,62 +704,37 @@ a:hover { text-decoration: underline; }
       b.setAttribute("aria-expanded", String(!closing && b.dataset.nav === key)));
   }
 
-  rail.forEach((b) => b.addEventListener("click", () => setNav(b.dataset.nav)));
+  rail.forEach((b) => b.addEventListener("click", () => {
+    if (b.dataset.nav === "home") { setNav(null); showView("home"); return; }
+    setNav(b.dataset.nav);
+  }));
   scrim.addEventListener("click", () => setNav(null));
   addEventListener("keydown", (e) => { if (e.key === "Escape") setNav(null); });
 
 
 
   /* ======================================================================
-     View router. Nav items that map to a built view open it; everything
-     else opens the generic stub, which names the stage it belongs to and
-     the data source it needs rather than pretending to be a real screen.
+     View router. Every menu entry maps to a view that renders real data or
+     states which source it is waiting on. Nothing routes to a placeholder.
      ====================================================================== */
-  const VIEWS = new Set(["home", "site-audit", "position-tracking",
-                         "top-pages", "revenue-chain",
-                         // Stage 4-7, backed by the agents.
-                         "priority-board", "roas-tracker", "lead-attribution",
-                         "organic-rankings", "organic-traffic-insights"]);
+  const VIEWS = new Set(["home", "site-audit", "priority-board", "roas-tracker",
+                         "lead-attribution", "organic-rankings",
+                         "organic-traffic-insights"]);
 
   const SLUG = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
   // Menu labels that lead to a view named differently.
-  const ALIAS = {
-    "daily-prioritized-digest": "priority-board",
-    "incident-history": "priority-board"
-  };
+  const ALIAS = { "daily-prioritized-digest": "priority-board" };
 
-  const STAGE = {
-    "listing-management":     ["Stage 10", "Google Business Profile", "Citation consistency across the directories sellers actually check."],
-    "review-management":      ["Stage 10", "Google Business Profile", "Reviews, rating trend, and anything left unanswered."],
-    "gbp-optimization":       ["Stage 10", "Google Business Profile", "Profile completeness and local pack visibility."],
-    "map-rank-tracker":       ["Stage 10", "Google Business Profile", "Grid rankings per Bay Area city."],
-    "per-city-lead-volume":   ["Stage 10", "GA4 + CRM", "Which Bay Area cities actually send sellers, against which ones have a page."],
-    "money-page-monitor":     ["Stage 3", "nothing - already built", "The 5-minute heartbeat and hourly visual check, as a live view."],
-    "all-projects":           ["Stage 13", "nothing - already built", "One row per monitored site. Today the system monitors one."],
-    "recent-activity":        ["Stage 13", "nothing - already built", "Every agent run, in order, with what it found."]
-  };
-
-  function showView(rawName, label) {
+  function showView(rawName) {
+    // Every menu entry maps to a view that renders. There is no fallback,
+    // because there is nothing left to fall back to -- a tab that could not
+    // show anything was itself a kind of guess, so those tabs are gone
+    // rather than dressed up as "planned".
     const name = ALIAS[rawName] || rawName;
-    const target = VIEWS.has(name) ? name : "stub";
+    if (!VIEWS.has(name)) return;
     document.querySelectorAll(".view").forEach((v) =>
-      v.dataset.active = v.dataset.view === target ? "1" : "0");
-
-    if (target === "stub") {
-      const [stage, needs, blurb] =
-        STAGE[name] || ["a later stage", "a data source it does not have yet", ""];
-      document.getElementById("stub-title").textContent = label || "Not built";
-      document.getElementById("stub-crumb").textContent = "twinhomebuyer.com";
-      document.getElementById("stub-h2").textContent = `Planned for ${stage}`;
-      document.getElementById("stub-p").textContent =
-        blurb || "This screen belongs to a stage the system has not reached yet.";
-      document.getElementById("stub-need").textContent = needs;
-      document.getElementById("stub-list").innerHTML =
-        `<li>Belongs to <strong>${esc(stage)}</strong> of the build plan</li>` +
-        `<li>Nothing is shown here because the data does not exist yet</li>` +
-        `<li>Showing an estimate instead would break the system's core rule</li>`;
-    }
+      v.dataset.active = v.dataset.view === name ? "1" : "0");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -1576,6 +1287,9 @@ a:hover { text-decoration: underline; }
   renderJoined();
   renderHomeCoverage();
   renderHomeMetrics();
+
+  const built = document.getElementById("tb-built");
+  if (built) built.textContent = THB ? `built ${THB.generated_at}` : "never built";
 
   showView("home");
 
