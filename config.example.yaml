@@ -4,17 +4,31 @@
 #
 # Everything here is non-secret. Secrets live in .env.
 #
-# `revenue_weight` (0-100) is the single most important field in this file.
-# It is what makes the system prioritize by BUSINESS impact rather than
-# textbook SEO severity. A defect on a page with revenue_weight 95 outranks a
-# defect on a page with revenue_weight 5, regardless of technical severity.
+# Verified against the live site on 2026-08-13:
+#   canonical host   www.twinhomebuyer.com (non-www 301s to www)
+#   platform         WordPress + Elementor 3.32.0
+#   lead forms       Contact Form 7 (wpcf7-f30)
+#   analytics        Google Site Kit 1.175.0 — so Search Console and GA4 are
+#                    already wired to the site, which is what Stages 4 and 5 need
+#   phone CTA        +1 (415) 415-8946
+#   sitemap          669 pages, mostly programmatic city pages. NOTE: the
+#                    sitemap lists URLs that 301 — /contact/ redirects to
+#                    /contact-us/, and /we-buy-houses-in-oakland-ca-for-cash/
+#                    to /we-buy-houses-oakland/. Config below uses the
+#                    canonical destinations.
+#
+# `revenue_weight` (0-100) is the most important field in this file. It is what
+# makes the system prioritize by BUSINESS impact rather than textbook SEO
+# severity. The weights below are a starting proposal based on funnel position
+# and page intent — they are NOT measured. Correct them once GA4 lead data is
+# connected and you can see which pages actually produce contracts.
 
 site:
   name: "Twin Home Buyer"
-  base_url: "https://twinhomebuyer.com"
+  base_url: "https://www.twinhomebuyer.com"
   timezone: "America/Los_Angeles"
 
-# Scheduling cadences (Stage 2 defaults). Seconds.
+# Scheduling cadences. Seconds.
 schedule:
   heartbeat_interval_seconds: 300        # every 5 minutes  — revenue-page heartbeat
   vision_interval_seconds: 3600          # every 60 minutes — AI visual inspection
@@ -25,15 +39,11 @@ schedule:
 
 # Incident behavior (Rule 9 — no alert spam).
 incidents:
-  # Re-alert on a still-open incident only after this long.
   escalation_after_seconds: 3600
-  # An incident must be seen this many consecutive times before it alerts,
-  # unless the finding is marked conversion-blocking (which alerts at once).
   min_persistence_to_alert: 2
-  # AI findings below this confidence never alert on their own.
   min_confidence_to_alert: 0.75
 
-# Resource protection (Rule: no unbounded disk growth).
+# Resource protection.
 retention:
   screenshots_max_files: 400
   screenshots_max_age_days: 14
@@ -45,11 +55,13 @@ retention:
 # Collector limits and timeouts.
 limits:
   http_timeout_seconds: 20
-  crawl_max_pages: 150
+  # The sitemap lists 669 pages. A full crawl at 1 req/sec is ~11 minutes, which
+  # is fine every 6 hours and stays polite. Raise only if the site grows.
+  crawl_max_pages: 700
   crawl_delay_seconds: 1.0
-  pagespeed_max_urls: 6
+  pagespeed_max_urls: 8
   pagespeed_timeout_seconds: 90
-  vision_max_pages: 6
+  vision_max_pages: 8
   claude_max_calls_per_hour: 60
 
 # Viewports used by the vision collector.
@@ -64,11 +76,19 @@ viewports:
     is_mobile: false
 
 # ---------------------------------------------------------------------------
-# Pages. `money_page: true` pages get the 5-minute heartbeat and the highest
-# vision frequency. Everything else is monitored on the slower cadences.
+# Pages.
+#
+# Every money page below was verified live: it returns 200, renders at least
+# one Contact Form 7 form, carries a tel: CTA, and has exactly one H1.
+#
+# `min_visible_buttons: 1` is deliberately conservative. Vision counts visible
+# CTA elements, and these Elementor templates render several; requiring only one
+# means the check fires when the CTA block genuinely fails, not when a layout
+# variant renders a different number of buttons.
 # ---------------------------------------------------------------------------
 pages:
-  - url: "https://twinhomebuyer.com/"
+  # --- Primary conversion paths -------------------------------------------
+  - url: "https://www.twinhomebuyer.com/"
     name: "Homepage"
     money_page: true
     revenue_weight: 95
@@ -77,22 +97,86 @@ pages:
       form: true
       phone_cta: true
       text_contains:
-        - "cash offer"
+        - "cash"
       min_visible_buttons: 1
 
-  - url: "https://twinhomebuyer.com/contact/"
-    name: "Contact / Seller Form"
+  - url: "https://www.twinhomebuyer.com/contact-us/"
+    name: "Contact"
     money_page: true
-    revenue_weight: 90
+    revenue_weight: 92
     expect:
       status: 200
       form: true
       phone_cta: true
       min_visible_buttons: 1
 
-  - url: "https://twinhomebuyer.com/blog/"
+  - url: "https://www.twinhomebuyer.com/sell-my-house-for-cash/"
+    name: "Sell My House For Cash"
+    money_page: true
+    revenue_weight: 88
+    expect:
+      status: 200
+      form: true
+      phone_cta: true
+      min_visible_buttons: 1
+
+  - url: "https://www.twinhomebuyer.com/we-buy-houses-bay-area/"
+    name: "We Buy Houses — Bay Area"
+    money_page: true
+    revenue_weight: 86
+    expect:
+      status: 200
+      form: true
+      phone_cta: true
+      min_visible_buttons: 1
+
+  - url: "https://www.twinhomebuyer.com/sell-your-house-fast-in-bay-area/"
+    name: "Sell Your House Fast — Bay Area"
+    money_page: true
+    revenue_weight: 85
+    expect:
+      status: 200
+      form: true
+      phone_cta: true
+      min_visible_buttons: 1
+
+  - url: "https://www.twinhomebuyer.com/cash-offer-for-home/"
+    name: "Cash Offer For Home"
+    money_page: true
+    revenue_weight: 82
+    expect:
+      status: 200
+      form: true
+      phone_cta: true
+      min_visible_buttons: 1
+
+  - url: "https://www.twinhomebuyer.com/cash-home-buyers-bay-area/"
+    name: "Cash Home Buyers — Bay Area"
+    money_page: true
+    revenue_weight: 80
+    expect:
+      status: 200
+      form: true
+      phone_cta: true
+      min_visible_buttons: 1
+
+  # --- Top city page. One representative of the programmatic cluster is on
+  # --- the 5-minute heartbeat; the rest are covered by the 6-hour crawl.
+  - url: "https://www.twinhomebuyer.com/we-buy-houses-oakland/"
+    name: "Oakland — We Buy Houses"
+    money_page: true
+    revenue_weight: 74
+    expect:
+      status: 200
+      form: true
+      phone_cta: true
+      min_visible_buttons: 1
+
+  # --- Monitored, but not a money page. Present so the crawler has a
+  # --- low-weight comparison and defects here do not page anyone.
+  - url: "https://www.twinhomebuyer.com/blog/"
     name: "Blog Index"
     money_page: false
-    revenue_weight: 10
+    revenue_weight: 8
     expect:
       status: 200

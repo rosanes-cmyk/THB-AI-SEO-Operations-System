@@ -125,8 +125,13 @@ def _weight_for(settings: Settings, url: str) -> tuple[int, bool, str]:
     return 0, False, url
 
 
-def _analyze(settings: Settings, pages: dict[str, CrawledPage]) -> list[Finding]:
+def _analyze(
+    settings: Settings,
+    pages: dict[str, CrawledPage],
+    redirects: dict[str, str] | None = None,
+) -> list[Finding]:
     findings: list[Finding] = []
+    redirects = redirects or {}
 
     def add(
         page: CrawledPage,
@@ -234,27 +239,92 @@ def _analyze(settings: Settings, pages: dict[str, CrawledPage]) -> list[Finding]
                 action="Confirm the canonical target is intentional.",
             )
 
+    unweighted_dupes: list[tuple[str, list[str]]] = []
+
     for title, urls in titles.items():
         if len(urls) < 2:
             continue
-        # Only escalate duplicates that touch a page we actually care about.
-        weights = [_weight_for(settings, u) for u in urls]
-        max_weight = max(w for w, _, _ in weights)
+        max_weight = max(w for w, _, _ in (_weight_for(settings, u) for u in urls))
         if max_weight == 0:
+            # Not silent. On a site built from hundreds of programmatic city
+            # pages, mass title duplication is a real risk, and reporting
+            # nothing would hide it. Collected and reported once, in aggregate,
+            # so it informs the digest without paging anyone.
+            unweighted_dupes.append((title, urls))
             continue
-        page = pages[urls[0]]
         add(
-            page,
+            pages[urls[0]],
             f"Duplicate title shared by {len(urls)} pages",
             severity=Severity.MEDIUM if max_weight >= 50 else Severity.LOW,
-            impact=(
-                "Duplicate titles make these pages compete with each other in "
-                "search."
-                if max_weight >= 50
-                else "Low-value duplicate; monitor only."
-            ),
+            impact="Duplicate titles make these pages compete with each other in search.",
             action="Give each page a distinct, intent-specific title.",
             extra={"duplicate_title": title[:120], "urls": urls[:10]},
+        )
+
+    if unweighted_dupes:
+        affected = sum(len(u) for _, u in unweighted_dupes)
+        findings.append(
+            Finding(
+                source_agent=AGENT,
+                problem=(
+                    f"{affected} unweighted pages share {len(unweighted_dupes)} "
+                    "duplicate titles"
+                ),
+                url=unweighted_dupes[0][1][0],
+                entity="Programmatic pages",
+                severity=Severity.LOW,
+                confidence=0.97,
+                revenue_weight=0,
+                conversion_blocking=False,
+                business_impact=(
+                    "These pages are not configured as revenue pages, so this is "
+                    "not urgent. It matters at scale: templated pages competing "
+                    "on the same title dilute each other in search."
+                ),
+                evidence={
+                    "duplicate_groups": [
+                        {"title": t[:120], "count": len(u), "sample": u[:5]}
+                        for t, u in unweighted_dupes[:12]
+                    ]
+                },
+                recommended_action=(
+                    "Vary the title template so each page carries its own city, "
+                    "service, or intent."
+                ),
+                risk_tier=RiskTier.APPROVAL,
+                verification_plan="Re-crawl and confirm titles are distinct.",
+            )
+        )
+
+    for source, target in sorted(redirects.items()):
+        weight, money, name = _weight_for(settings, source)
+        if not money:
+            continue
+        # A configured money page that redirects means the config, sitemap, or
+        # internal links point at a stale URL. Cheap to fix, and it silently
+        # wastes crawl budget and link equity until someone notices.
+        findings.append(
+            Finding(
+                source_agent=AGENT,
+                problem=f"Configured money page redirects to {target}",
+                url=source,
+                entity=name,
+                severity=Severity.MEDIUM,
+                confidence=0.99,
+                revenue_weight=weight,
+                conversion_blocking=False,
+                business_impact=(
+                    "Monitoring and inbound links point at a URL that is not the "
+                    "live one. Every request pays a redirect hop, and link equity "
+                    "passes through an extra step."
+                ),
+                evidence={"requested": source, "landed_on": target},
+                recommended_action=(
+                    f"Point config, sitemap, and internal links at {target}."
+                ),
+                risk_tier=RiskTier.HUMAN_ONLY,
+                verification_plan="Request the configured URL; confirm a direct 200.",
+            )
         )
 
     return findings
@@ -276,6 +346,7 @@ def run(
     seeds = [settings.base_url] + [p.url for p in settings.pages]
     queue: deque[str] = deque(dict.fromkeys(normalize_url(s) for s in seeds if s))
     visited: dict[str, CrawledPage] = {}
+    redirects: dict[str, str] = {}
     errors: list[dict[str, str]] = []
 
     while queue and len(visited) < limit:
@@ -289,14 +360,22 @@ def run(
             errors.append({"url": url, "error": f"{type(exc).__name__}: {exc}"[:200]})
             continue
 
+        landed = normalize_url(final_url or url)
+        if landed and landed != url:
+            # The request was redirected. Record the hop and key the page on
+            # where it actually landed — keying on the requested URL would file
+            # the same page twice under two names and then report the pair as a
+            # duplicate title, which is a defect in the crawler, not the site.
+            redirects[url] = landed
+            if landed in visited:
+                continue
+
         page = _parse(final_url or url, html, status, settings.base_url)
-        # Record under the requested URL so link graphs stay consistent even
-        # when a redirect changed the address.
-        visited[url] = page
+        visited[landed or url] = page
 
         if status < 400:
             for link in page.links:
-                if link not in visited and link not in queue:
+                if link not in visited and link not in queue and link not in redirects:
                     queue.append(link)
 
         if delay > 0:
@@ -310,7 +389,7 @@ def run(
             truncated=bool(queue),
         )
 
-    findings = _analyze(settings, visited)
+    findings = _analyze(settings, visited, redirects)
 
     return CollectorResult(
         agent=AGENT,
@@ -320,6 +399,7 @@ def run(
             "page_limit": limit,
             "truncated": bool(queue),
             "fetch_errors": errors[:25],
+            "redirects": redirects,
             "pages": [p.to_dict() for p in visited.values()],
         },
     )

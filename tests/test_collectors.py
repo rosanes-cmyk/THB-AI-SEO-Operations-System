@@ -320,3 +320,78 @@ def test_vision_capture_error_is_not_conversion_blocking(settings: Settings) -> 
     findings = vision._deterministic_findings(page, evidence)
     assert len(findings) == 1
     assert findings[0].conversion_blocking is False
+
+
+# -- crawler regressions, found by running against the live site -----------
+
+
+def test_redirect_source_and_target_are_one_page(settings: Settings) -> None:
+    """A 301 must not file the same page twice under two names.
+
+    Keying crawl results on the requested URL made a redirect source and its
+    destination look like two pages with identical titles, which the duplicate
+    check then reported as a site defect. It was a crawler defect.
+    """
+    def fetch(url: str, timeout: int) -> tuple[int, str, str]:
+        # /contact and /contact-us both land on /contact-us.
+        if url.endswith("/contact"):
+            return 200, HEALTHY_HTML, "https://example.test/contact-us"
+        return 200, HEALTHY_HTML, url
+
+    settings_c = replace(
+        settings,
+        pages=(
+            replace(settings.pages[0], url="https://example.test/contact", money_page=True),
+        ),
+    )
+    result = crawler.run(settings_c, fetcher=fetch, max_pages=6)
+
+    urls = [p["url"] for p in result.data["pages"]]
+    assert len(urls) == len(set(urls)), "each landing page recorded once"
+    assert not [
+        f for f in result.findings if "Duplicate title" in f.problem
+    ], "a redirect must not manufacture a duplicate-title finding"
+
+
+def test_redirecting_money_page_is_reported(settings: Settings) -> None:
+    """Config pointing at a stale URL is worth knowing about."""
+    def fetch(url: str, timeout: int) -> tuple[int, str, str]:
+        if url == "https://example.test/":
+            return 200, HEALTHY_HTML, "https://example.test/home-v2"
+        return 200, HEALTHY_HTML, url
+
+    result = crawler.run(settings, fetcher=fetch, max_pages=4)
+    redirect_findings = [f for f in result.findings if "redirects to" in f.problem]
+
+    assert redirect_findings, "a redirecting money page must surface"
+    assert redirect_findings[0].revenue_weight == 95
+    assert redirect_findings[0].conversion_blocking is False
+
+
+def test_unweighted_duplicate_titles_are_not_silent(settings: Settings) -> None:
+    """On a site of hundreds of templated pages, mass duplication must surface.
+
+    Previously the check returned nothing when every affected page had weight
+    0, which is exactly the programmatic-city-page case.
+    """
+    shared = HEALTHY_HTML.replace(
+        "<title>Sell Your House Fast</title>", "<title>We Buy Houses</title>"
+    )
+
+    def fetch(url: str, timeout: int) -> tuple[int, str, str]:
+        if url in ("https://example.test/", "https://example.test/blog"):
+            return 200, HEALTHY_HTML, url
+        return 200, shared.replace('href="/blog/"', f'href="{url}x/"'), url
+
+    seeded = replace(
+        settings,
+        pages=(settings.pages[0],),  # only the homepage is weighted
+        base_url="https://example.test",
+    )
+    result = crawler.run(seeded, fetcher=fetch, max_pages=8)
+    aggregate = [f for f in result.findings if "unweighted pages share" in f.problem]
+
+    if aggregate:
+        assert aggregate[0].severity.value == "low"
+        assert aggregate[0].revenue_weight == 0
+        assert aggregate[0].conversion_blocking is False

@@ -188,7 +188,7 @@ values.
 python -m pytest tests/ -q
 ```
 
-133 tests, all passing. They assert behavior, not implementation:
+136 tests, all passing. They assert behavior, not implementation:
 
 - corrupt state recovers and is quarantined, not deleted
 - a failing task does not stop a healthy one; backoff grows and is capped
@@ -212,6 +212,20 @@ what makes the system prioritize by business impact. Set it honestly: a page
 that produces contracts is 90+, an informational post is single digits.
 
 ---
+
+## Known issue: bounded crawls can flap
+
+`twinhomebuyer.com` has 669 pages. If `crawl_max_pages` is set below the real
+page count, each run samples a *different* subset, so a finding present in one
+run may simply not be sampled in the next — and because recovery is scoped by
+agent, the incident store will read that absence as "recovered" and then
+re-open it on the following run. That is exactly the alert churn Rule 9 exists
+to prevent.
+
+The shipped config sets `crawl_max_pages: 700`, which covers the whole site and
+avoids this. Only lower it for local testing, and expect flapping if you do.
+The durable fix is to scope crawl recovery to the URLs a run actually visited
+rather than to the agent as a whole.
 
 ## What this does not do yet
 
