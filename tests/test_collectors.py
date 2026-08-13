@@ -395,3 +395,38 @@ def test_unweighted_duplicate_titles_are_not_silent(settings: Settings) -> None:
         assert aggregate[0].severity.value == "low"
         assert aggregate[0].revenue_weight == 0
         assert aggregate[0].conversion_blocking is False
+
+
+def test_crawler_skips_assets(settings: Settings) -> None:
+    """A .webp has no title tag; saying so buries real findings in noise."""
+    html = (
+        '<html><head><title>T</title></head><body>'
+        '<a href="/media/pic.webp">img</a><a href="/real-page/">page</a>'
+        "</body></html>"
+    )
+    seen: list[str] = []
+
+    def fetch(url: str, timeout: int) -> tuple[int, str, str]:
+        seen.append(url)
+        return 200, html, url
+
+    crawler.run(settings, fetcher=fetch, max_pages=8)
+    assert not [u for u in seen if u.endswith(".webp")], "assets must not be crawled"
+
+
+def test_throttling_is_not_reported_as_broken_pages(settings: Settings) -> None:
+    """A 503 wave is us being rate limited, not the customer's site failing."""
+    def fetch(url: str, timeout: int) -> tuple[int, str, str]:
+        if url == "https://example.test/":
+            body = HEALTHY_HTML.replace(
+                '<a href="/blog/">Blog</a>',
+                "".join(f'<a href="/p{i}/">p{i}</a>' for i in range(12)),
+            )
+            return 200, body, url
+        return 503, "", url
+
+    result = crawler.run(settings, fetcher=fetch, max_pages=20)
+    broken = [f for f in result.findings if "HTTP 5" in f.problem]
+
+    assert not broken, "throttled responses must not be filed as site defects"
+    assert result.data.get("throttled_responses", 0) > 0, "throttling is still recorded"

@@ -15,7 +15,7 @@ import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from typing import Any, Callable
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlsplit
 
 import requests
 
@@ -46,6 +46,27 @@ _CANONICAL_RE = re.compile(
 )
 _HREF_RE = re.compile(r"<a\b[^>]*href\s*=\s*[\"']([^\"'#]+)[\"']", re.IGNORECASE)
 _TAG_RE = re.compile(r"<[^>]+>")
+
+# Assets are not pages. A .webp has no title tag, and saying so is noise.
+ASSET_SUFFIXES = (
+    ".webp", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".avif",
+    ".pdf", ".zip", ".mp4", ".webm", ".mp3", ".css", ".js", ".xml", ".json",
+    ".woff", ".woff2", ".ttf", ".eot",
+)
+
+
+def is_asset(url: str) -> bool:
+    path = urlsplit(url).path.lower()
+    return path.endswith(ASSET_SUFFIXES)
+
+
+# Statuses that mean "the server is refusing us right now", not "this page is
+# broken". Reporting our own rate limiting as the customer's broken pages is
+# worse than reporting nothing.
+THROTTLE_STATUSES = frozenset({429, 503, 502, 504})
+
+# Give up rather than fill the digest with our own throttling.
+THROTTLE_ABORT_AFTER = 5
 
 Fetcher = Callable[[str, int], tuple[int, str, str]]
 
@@ -102,7 +123,9 @@ def _parse(url: str, html: str, status: int, base_url: str) -> CrawledPage:
             absolute = urljoin(url, href)
         except ValueError:
             continue
-        if absolute.startswith(("http://", "https://")) and is_same_site(absolute, base_url):
+        if not absolute.startswith(("http://", "https://")):
+            continue
+        if is_same_site(absolute, base_url) and not is_asset(absolute):
             links.append(normalize_url(absolute))
 
     return CrawledPage(
@@ -347,6 +370,8 @@ def run(
     queue: deque[str] = deque(dict.fromkeys(normalize_url(s) for s in seeds if s))
     visited: dict[str, CrawledPage] = {}
     redirects: dict[str, str] = {}
+    throttled = 0
+    throttle_total = 0
     errors: list[dict[str, str]] = []
 
     while queue and len(visited) < limit:
@@ -369,6 +394,23 @@ def run(
             redirects[url] = landed
             if landed in visited:
                 continue
+
+        if status in THROTTLE_STATUSES:
+            # We are being rate limited. Slow down, and if it persists, stop —
+            # every further request produces a finding that describes our own
+            # behavior rather than the site's health.
+            throttled += 1
+            throttle_total += 1
+            logger.warning(
+                "crawl throttled (HTTP %s) at %s; backing off (%d so far)",
+                status, url, throttled,
+            )
+            time.sleep(min(2.0 * throttled, 20.0))
+            if throttled >= THROTTLE_ABORT_AFTER:
+                logger.error("crawl aborted after %d throttled responses", throttled)
+                break
+            continue
+        throttled = 0
 
         page = _parse(final_url or url, html, status, settings.base_url)
         visited[landed or url] = page
@@ -398,6 +440,7 @@ def run(
             "pages_crawled": len(visited),
             "page_limit": limit,
             "truncated": bool(queue),
+            "throttled_responses": throttle_total,
             "fetch_errors": errors[:25],
             "redirects": redirects,
             "pages": [p.to_dict() for p in visited.values()],

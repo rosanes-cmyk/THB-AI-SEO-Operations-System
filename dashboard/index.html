@@ -387,6 +387,33 @@ a:hover { text-decoration: underline; }
 .preview-strip strong { font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--amber); }
 .preview-strip p { margin: 3px 0 0; font-size: 13px; color: var(--ink-2); max-width: 96ch; }
 
+.view { display: none; }
+.view[data-active="1"] { display: block; }
+
+.viewhead { display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
+.viewhead h1 { font-size: 24px; font-weight: 700; margin: 0 0 3px; letter-spacing: -.7px; }
+.viewhead .crumb { font-size: 12.5px; color: var(--ink-3); }
+.viewhead .right { margin-left: auto; display: flex; align-items: center; gap: 9px; }
+
+.stub { max-width: 660px; margin: 30px auto; text-align: center; }
+.stub .ico { width: 46px; height: 46px; border-radius: 12px; background: var(--grey-soft); color: var(--ink-3); display: grid; place-items: center; margin: 0 auto 14px; }
+.stub h2 { font-size: 18px; font-weight: 700; margin: 0 0 7px; letter-spacing: -.4px; }
+.stub > p { color: var(--ink-2); font-size: 14px; margin: 0 auto 18px; max-width: 56ch; }
+.stub-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; text-align: left; box-shadow: var(--shadow); }
+.stub-card h3 { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 9px; font-weight: 700; }
+.stub-card ul { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 13.5px; }
+.stub-card li { margin-bottom: 4px; }
+.stub-need { margin-top: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
+
+.grid2 { display: grid; grid-template-columns: repeat(12,1fr); gap: 14px; margin-top: 14px; }
+.tiles { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-top: 14px; }
+@media (max-width: 1080px) { .tiles { grid-template-columns: repeat(2,1fr); } }
+
+.bigstat { font-size: 34px; font-weight: 700; letter-spacing: -1.4px; color: var(--data); font-variant-numeric: tabular-nums; line-height: 1.05; }
+.issue-table td.sev { width: 96px; }
+.audit-hero { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.audit-hero .num { font-size: 46px; font-weight: 700; letter-spacing: -2px; line-height: 1; font-variant-numeric: tabular-nums; }
+
 @media (max-width: 1080px) { .metrics { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 640px)  { .metrics { grid-template-columns: repeat(2, 1fr); } .searchbox input { width: 190px; } .topnav { gap: 14px; } }
 </style>
@@ -452,6 +479,7 @@ a:hover { text-decoration: underline; }
 </header>
 
 <main class="page">
+<section class="view" data-view="home">
 
   <div class="preview-strip">
     <strong>Preview — figures are sample data</strong>
@@ -599,11 +627,11 @@ a:hover { text-decoration: underline; }
         <div class="metric">
           <div class="metric-label">Site Health</div>
           <div class="metric-value" style="display:flex;align-items:center;gap:9px">
-            86%
+            81%
             <svg class="ring" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
               <circle cx="13" cy="13" r="10" fill="none" stroke="var(--border-2)" stroke-width="3"/>
               <circle cx="13" cy="13" r="10" fill="none" stroke="var(--green)" stroke-width="3"
-                      stroke-linecap="round" stroke-dasharray="54 63" transform="rotate(-90 13 13)"/>
+                      stroke-linecap="round" stroke-dasharray="51 63" transform="rotate(-90 13 13)"/>
             </svg>
           </div>
           <div class="metric-sub"><a href="#">Reload</a></div>
@@ -739,6 +767,189 @@ a:hover { text-decoration: underline; }
   </section>
 
   <!-- ---------- Provenance ---------- -->
+</section>
+
+<!-- ==================== SITE AUDIT ==================== -->
+<section class="view" data-view="site-audit">
+  <div class="viewhead">
+    <div>
+      <h1>Site Audit</h1>
+      <div class="crumb">twinhomebuyer.com · last crawl <span id="au-when">—</span></div>
+    </div>
+    <div class="right">
+      <span class="src src-live">Live data</span>
+      <button class="btn-ghost" type="button">Re-run audit</button>
+    </div>
+  </div>
+
+  <div class="panel" style="padding:18px">
+    <div class="audit-hero">
+      <div style="position:relative;flex:none">
+        <svg width="118" height="118" id="au-ring" aria-hidden="true"></svg>
+        <div style="position:absolute;inset:0;display:grid;place-content:center;text-align:center">
+          <div class="num" id="au-score">—</div>
+          <div style="font-size:10px;letter-spacing:.09em;color:var(--ink-3);font-weight:700">SITE HEALTH</div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:260px">
+        <div style="font-size:15px;font-weight:600;margin-bottom:3px" id="au-verdict">—</div>
+        <p style="margin:0;color:var(--ink-2);font-size:13.5px;max-width:62ch" id="au-blurb">—</p>
+        <div style="display:flex;gap:26px;flex-wrap:wrap;margin-top:14px">
+          <div><div class="metric-label">Pages crawled</div><div class="bigstat" id="au-pages">—</div></div>
+          <div><div class="metric-label">Errors</div><div class="bigstat" id="au-err" style="color:var(--red)">—</div></div>
+          <div><div class="metric-label">Warnings</div><div class="bigstat" id="au-warn" style="color:var(--amber)">—</div></div>
+          <div><div class="metric-label">Notices</div><div class="bigstat" id="au-note" style="color:var(--ink-3)">—</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <section class="card w8" style="grid-column:span 8">
+      <div class="card-head">
+        <div><h3 class="card-title">Issues found</h3>
+        <div class="card-sub">Ranked by revenue impact, not by SEO severity</div></div>
+        <span class="src src-live">Live</span>
+      </div>
+      <div class="table-scroll">
+        <table class="issue-table">
+          <thead><tr><th>Issue</th><th class="sev">Severity</th><th class="num">Pages</th><th class="num">Weight</th><th class="num">Score</th></tr></thead>
+          <tbody id="au-issues"><tr><td colspan="5" style="color:var(--ink-3)">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" style="grid-column:span 4">
+      <div class="card-head">
+        <div><h3 class="card-title">Crawl coverage</h3><div class="card-sub">What the crawler reached</div></div>
+      </div>
+      <dl>
+        <div class="stat-row"><dt>Pages in sitemap</dt><dd>669</dd></div>
+        <div class="stat-row"><dt>Pages crawled</dt><dd id="au-cov">—</dd></div>
+        <div class="stat-row"><dt>Redirects followed</dt><dd id="au-redir">—</dd></div>
+        <div class="stat-row"><dt>Fetch errors</dt><dd id="au-ferr">—</dd></div>
+        <div class="stat-row"><dt>Crawl budget</dt><dd>700</dd></div>
+      </dl>
+      <div class="card-sub" style="margin:14px 0 5px;font-weight:600">Health by check</div>
+      <div id="au-themes"></div>
+    </section>
+  </div>
+</section>
+
+<!-- ==================== POSITION TRACKING ==================== -->
+<section class="view" data-view="position-tracking">
+  <div class="viewhead">
+    <div><h1>Position Tracking</h1><div class="crumb">twinhomebuyer.com · Bay Area · desktop + mobile</div></div>
+    <div class="right"><span class="src src-pending">Needs Search Console</span></div>
+  </div>
+  <div class="stub">
+    <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+    <h2>Not connected yet</h2>
+    <p>Rank tracking needs Google Search Console. Your site already runs Site Kit, so the property exists — it needs a service-account credential to read from it.</p>
+    <div class="stub-card">
+      <h3>What this will show</h3>
+      <ul>
+        <li>Daily position for every tracked keyword, by device and city</li>
+        <li>Visibility %, estimated traffic, average position</li>
+        <li>Ranking distribution — top 3, 4–10, 11–20, 21–50, 51–100</li>
+        <li>Keywords in striking distance (positions 4–15) on money pages</li>
+        <li>Declines on pages that produce contracts, weighted above the rest</li>
+      </ul>
+      <div class="stub-need"><span class="src src-pending">Needs</span> a Google service-account JSON with Search Console read access</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== DOMAIN OVERVIEW ==================== -->
+<section class="view" data-view="domain-overview">
+  <div class="viewhead">
+    <div><h1>Domain Overview</h1><div class="crumb">twinhomebuyer.com</div></div>
+    <div class="right"><span class="src src-pending">Needs Search Console + provider</span></div>
+  </div>
+  <div class="stub">
+    <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.5 9h17M3.5 15h17"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg></div>
+    <h2>Not connected yet</h2>
+    <p>Authority Score, organic traffic, and backlink counts come from a third-party dataset. Search Console covers clicks, impressions, and position — it does not publish authority or backlinks.</p>
+    <div class="stub-card">
+      <h3>What this will show</h3>
+      <ul>
+        <li>Organic clicks, impressions, CTR, average position — from Search Console</li>
+        <li>Traffic value and keyword count — needs a data provider</li>
+        <li>Backlinks and referring domains — needs a data provider</li>
+        <li>Authority score — proprietary to each provider; will be labelled by source</li>
+      </ul>
+      <div class="stub-need"><span class="src src-pending">Needs</span> Search Console, plus a backlink provider for the rest</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOP PAGES ==================== -->
+<section class="view" data-view="top-pages">
+  <div class="viewhead">
+    <div><h1>Top Pages</h1><div class="crumb">Ranked by contribution to seller contracts</div></div>
+    <div class="right"><span class="src src-pending">Needs GA4</span></div>
+  </div>
+  <div class="stub">
+    <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+    <h2>Not connected yet</h2>
+    <p>This is the view that fixes your revenue weights. Right now they are a reasoned guess based on funnel position. GA4 replaces the guess with measurement.</p>
+    <div class="stub-card">
+      <h3>What this will show</h3>
+      <ul>
+        <li>Sessions, leads, and conversion rate per landing page</li>
+        <li>Which of the 669 pages actually produce form submissions</li>
+        <li>Pages with real organic traffic and zero conversions</li>
+        <li>Mobile conversion weakness, page by page</li>
+        <li>A measured revenue weight to replace the configured guess</li>
+      </ul>
+      <div class="stub-need"><span class="src src-pending">Needs</span> GA4 property ID and the same service-account credential</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== REVENUE CHAIN (THB) ==================== -->
+<section class="view" data-view="revenue-chain">
+  <div class="viewhead">
+    <div><h1>Revenue Chain</h1><div class="crumb">Spend → closings · no Semrush equivalent</div></div>
+    <div class="right"><span class="src src-pending">Needs CRM + GA4</span></div>
+  </div>
+  <div class="stub">
+    <div class="ico" style="background:var(--violet-soft);color:var(--violet)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-8"/><path d="M14 7h6v6"/></svg></div>
+    <h2>The reason this system exists</h2>
+    <p>Every other view answers an SEO question. This one answers a business question: are we on pace for target ROAS, and what is pulling us away from it?</p>
+    <div class="stub-card">
+      <h3>The chain it will measure</h3>
+      <ul>
+        <li>Channel spend → visitors → leads → qualified leads</li>
+        <li>Appointments → offers → contracts → closings</li>
+        <li>Gross profit, cost per contract, and ROAS against target</li>
+        <li>Maximum allowable cost per contract, worked backward from target ROAS</li>
+        <li>Attribution labelled honestly — first-touch, last-touch, or unknown, never guessed</li>
+      </ul>
+      <div class="stub-need"><span class="src src-pending">Needs</span> CRM export or CSV bridge, plus GA4. This is Stage 6.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== GENERIC ==================== -->
+<section class="view" data-view="stub">
+  <div class="viewhead">
+    <div><h1 id="stub-title">—</h1><div class="crumb" id="stub-crumb">—</div></div>
+    <div class="right"><span class="src src-pending" id="stub-badge">Not built</span></div>
+  </div>
+  <div class="stub">
+    <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M12 8v5M12 16v.01"/></svg></div>
+    <h2 id="stub-h2">Not built yet</h2>
+    <p id="stub-p">This view is part of a later stage of the plan.</p>
+    <div class="stub-card">
+      <h3>Where it sits in the plan</h3>
+      <ul id="stub-list"></ul>
+      <div class="stub-need"><span class="src src-pending">Needs</span> <span id="stub-need">—</span></div>
+    </div>
+  </div>
+</section>
+
+
   <div class="srcbar">
     <span><span class="src src-live">Live</span> Site Health · Incidents · Agent status — fed by agents that exist today</span>
     <span><span class="src src-pending">Pending</span> Organic Traffic &amp; Keywords (Search Console) · Paid Traffic &amp; Leads (GA4) · Backlinks (provider) · AI Visibility · Mentions</span>
@@ -748,6 +959,9 @@ a:hover { text-decoration: underline; }
 
 <button class="fab" type="button" aria-label="Help">?</button>
 
+<!--@AUDIT@-->
+<script>window.__AUDIT__ = {"crawled_at":"2026-08-13 17:44 UTC","pages":153,"health":100,"errors":0,"warnings":0,"notices":0,"redirects":12,"fetch_errors":0,"throttled":10,"verdict":"No defects found","blurb":"All 153 crawled pages returned 200 and carry a title, meta description, H1, and a self-referencing canonical. The crawl stopped early after 10 throttled responses \u2014 the host returned 503 under sustained crawling, so coverage is partial. That is a server-load signal, not a page defect.","issues":[],"themes":[["Crawlability",100],["Titles",100],["Meta descriptions",100],["H1 present",100],["Canonical self-referencing",100],["Indexable",100]]};</script>
+<!--@/AUDIT@-->
 <script>
 (() => {
   "use strict";
@@ -772,49 +986,60 @@ a:hover { text-decoration: underline; }
                               "Keyword Strategy Builder"]],
         ["Content Ideas", ["SEO Writing Assistant", "Topic Research",
                            "SEO Content Template"]],
-        ["Link Building", ["Backlink Analytics", "Backlink Audit", "Link Building Tool",
-                           "Bulk Backlink Analysis"]],
-        ["Revenue · THB", ["Revenue Chain", "ROAS Tracker", "Lead Attribution",
-                           "Money Page Monitor"]]
+        ["Link Building", ["Backlinks", "Referring Domains", "Backlink Audit"]],
+        ["Extras", ["Sensor", "SEOquake", "Semrush Rank"]],
+        ["Other", ["On Page SEO Checker", "Organic Traffic Insights", "Link Building",
+                   "Log File Analyzer"]],
+        ["Revenue \u00b7 THB", ["Revenue Chain", "ROAS Tracker", "Lead Attribution",
+                                 "Money Page Monitor"]]
       ]
     },
     local: {
-      title: "Local", top: "Local Dashboard",
+      title: "Local", verified: true, top: "Dashboard",
       groups: [
-        ["Presence", ["Listing Management", "Google Business Profile", "Map Rank Tracker"]],
-        ["Reputation", ["Review Management", "Review Analytics"]],
-        ["Revenue · THB", ["Market Coverage", "Per-City Lead Volume"]]
+        ["", ["Listing Management", "Review Management", "GBP Optimization"]],
+        ["Automations", ["GBP AI Agent"]],
+        ["Competitive Analysis", ["Map Rank Tracker"]],
+        ["Revenue \u00b7 THB", ["Per-City Lead Volume"]]
       ]
     },
     advertising: {
-      title: "Advertising", top: "Advertising Dashboard",
+      title: "Advertising", verified: true, top: "Get Started",
       groups: [
-        ["Research", ["Advertising Research", "PLA Research", "Display Advertising",
-                      "AdClarity", "CPC Map"]],
-        ["Build", ["PPC Keyword Tool", "Ad Builder"]],
-        ["Revenue · THB", ["Cost per Contract", "Channel ROAS"]]
+        ["", ["Ads Launch Assistant", "Ads AI Agent", "Advertising Research",
+              "Ads History", "PLA Research", "PPC Keyword Tool", "AdClarity"]],
+        ["Revenue \u00b7 THB", ["Cost per Contract", "Channel ROAS"]]
       ]
     },
     traffic: {
-      title: "Traffic & Market", top: "Market Dashboard",
+      title: "Traffic & Market", verified: true, top: "Traffic Analytics",
       groups: [
-        ["Analysis", ["Traffic Analytics", "Market Explorer", "One2Target", "EyeOn"]],
-        ["Revenue · THB", ["Seller Demand by Metro"]]
+        ["Pages and Categories", ["Subfolders & Subdomains", "Page Groups"]],
+        ["Regional Trends", ["USA", "Countries", "Business Regions",
+                             "Geographical Regions"]],
+        ["Audience Profile", ["Demographics", "Audience Overlap", "Socioeconomics",
+                              "Behavior"]],
+        ["Advanced", ["Daily Trends", "Industry & Bulk Analysis", "Trends API",
+                      "Trending Websites"]],
+        ["Revenue \u00b7 THB", ["Seller Demand by Metro"]]
       ]
     },
     aivis: {
-      title: "AI Visibility", top: "AI Visibility Dashboard",
+      title: "AI Visibility", verified: true, top: "Visibility Overview",
       groups: [
-        ["Tracking", ["AI Visibility Index", "Prompt Tracking", "Brand Perception"]],
-        ["Sources", ["AI Citations", "Competitor Mentions"]]
+        ["AI Analysis", ["Visibility Overview", "Competitor Research", "Prompt Research"]],
+        ["Brand Performance", ["Brand Performance", "Perception", "Narrative Drivers",
+                               "Questions"]],
+        ["Boost & Monitor", ["Site Audit", "Prompt Tracking", "Content Creation"]]
       ]
     },
     content: {
-      title: "Content", top: "Content Dashboard",
+      title: "Content", verified: true, top: "Dashboard",
       groups: [
-        ["Create", ["ContentShake AI", "SEO Writing Assistant", "SEO Content Template"]],
-        ["Research", ["Topic Research", "Content Audit", "Post Tracking"]],
-        ["Revenue · THB", ["Content → Lead Attribution"]]
+        ["", ["AI Article Generator", "Content Optimizer", "Content Repurposing",
+              "Topic Finder", "SEO Brief Generator"]],
+        ["Library", ["My Content"]],
+        ["Revenue \u00b7 THB", ["Content \u2192 Lead Attribution"]]
       ]
     },
     aipr: {
@@ -833,10 +1058,13 @@ a:hover { text-decoration: underline; }
       ]
     },
     reports: {
-      title: "Reports", top: "My Reports",
+      title: "Reports", verified: true, top: "My Reports",
       groups: [
-        ["Reporting", ["Report Builder", "Scheduled Reports", "Client Portal"]],
-        ["Revenue · THB", ["Daily Prioritized Digest", "Incident History"]]
+        ["Recently updated", ["Organic Research: Position Changes",
+                              "Domain Overview (twinhomebuyer.com)"]],
+        ["Top Templates", ["Google Analytics 4", "Google Search Console", "Monthly SEO"]],
+        ["", ["Create report", "Templates", "Themes", "About My Reports Suite"]],
+        ["Revenue \u00b7 THB", ["Daily Prioritized Digest", "Incident History"]]
       ]
     },
     home: {
@@ -844,11 +1072,12 @@ a:hover { text-decoration: underline; }
       groups: [["Overview", ["All Projects", "Folders", "Recent Activity"]]]
     },
     alltools: {
-      title: "All tools", top: "Browse all",
+      title: "App Center", verified: true, top: "Store",
       groups: [
-        ["Toolkits", ["SEO", "Local", "Advertising", "Traffic & Market",
-                      "AI Visibility", "Content", "AI PR", "Social"]],
-        ["Management", ["Projects", "Calendar", "CRM", "Lead Finder", "Client Portal"]]
+        ["", ["My Apps"]],
+        ["Active", ["AdClarity - Advertising Intelligence"]],
+        ["Try for free", ["AI Website Testing", "SERP Gap Analyzer", "CallRail",
+                          "Influencer Analytics", "Exploding Topics", "AdCreative.ai"]]
       ]
     }
   };
@@ -872,7 +1101,7 @@ a:hover { text-decoration: underline; }
       `<a class="top" href="#">${esc(kit.top)}</a>` +
       flag +
       kit.groups.map(([name, items]) =>
-        `<div class="flyout-group">${esc(name)}</div>` +
+        (name ? `<div class="flyout-group">${esc(name)}</div>` : "") +
         items.map((i) => `<a href="#">${esc(i)}</a>`).join("")
       ).join("");
   }
@@ -904,6 +1133,141 @@ a:hover { text-decoration: underline; }
   const tv = document.getElementById("tableview");
   tv.addEventListener("click", () =>
     tv.setAttribute("aria-pressed", tv.getAttribute("aria-pressed") === "true" ? "false" : "true"));
+
+
+  /* ======================================================================
+     View router. Nav items that map to a built view open it; everything
+     else opens the generic stub, which names the stage it belongs to and
+     the data source it needs rather than pretending to be a real screen.
+     ====================================================================== */
+  const VIEWS = new Set(["home", "site-audit", "position-tracking",
+                         "domain-overview", "top-pages", "revenue-chain"]);
+
+  const SLUG = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+  const STAGE = {
+    "organic-rankings":       ["Stage 4", "Search Console", "Ranking movement per keyword, weighted by the revenue of the page that holds it."],
+    "compare-domains":        ["Stage 12", "a data provider", "Side-by-side against johnbuysbayareahouses.com and the other Bay Area cash buyers you track."],
+    "keyword-gap":            ["Stage 12", "a data provider", "Keywords competitors rank for that you do not."],
+    "backlink-gap":           ["Stage 12", "a data provider", "Referring domains pointing at rivals but not at you."],
+    "keyword-overview":       ["Stage 11", "Search Console", "Volume, difficulty, and intent for a single keyword."],
+    "keyword-magic-tool":     ["Stage 11", "a data provider", "Keyword discovery across the seller-intent cluster."],
+    "backlinks":              ["Stage 12", "a data provider", "Every link pointing at the site."],
+    "referring-domains":      ["Stage 12", "a data provider", "Unique domains linking to you, and what you lost."],
+    "backlink-audit":         ["Stage 12", "a data provider", "Toxic links worth disavowing."],
+    "on-page-seo-checker":    ["Stage 11", "Search Console", "Per-page recommendations, each tagged with its risk tier."],
+    "organic-traffic-insights": ["Stage 5", "GA4 + Search Console", "The joined landing-page dataset that replaces guessed revenue weights."],
+    "listing-management":     ["Stage 10", "Google Business Profile", "Citation consistency across directories."],
+    "review-management":      ["Stage 10", "Google Business Profile", "Reviews, rating trend, and unanswered reviews."],
+    "gbp-optimization":       ["Stage 10", "Google Business Profile", "Profile completeness and local pack visibility."],
+    "map-rank-tracker":       ["Stage 10", "Google Business Profile", "Grid rankings per Bay Area city."],
+    "roas-tracker":           ["Stage 6", "CRM + GA4", "Current ROAS against your target, and the gap."],
+    "lead-attribution":       ["Stage 6", "CallRail + CRM", "Which page and channel produced each seller lead."],
+    "money-page-monitor":     ["Stage 3", "nothing - already built", "The 5-minute heartbeat and hourly visual check, as a live view."],
+    "daily-prioritized-digest": ["Stage 7", "nothing - already built", "The 7am digest, rendered as a page instead of a Chat message."],
+    "incident-history":       ["Stage 7", "nothing - already built", "Every incident, when it opened, and when it recovered."]
+  };
+
+  function showView(name, label) {
+    const target = VIEWS.has(name) ? name : "stub";
+    document.querySelectorAll(".view").forEach((v) =>
+      v.dataset.active = v.dataset.view === target ? "1" : "0");
+
+    if (target === "stub") {
+      const [stage, needs, blurb] =
+        STAGE[name] || ["a later stage", "a data source it does not have yet", ""];
+      document.getElementById("stub-title").textContent = label || "Not built";
+      document.getElementById("stub-crumb").textContent = "twinhomebuyer.com";
+      document.getElementById("stub-h2").textContent = `Planned for ${stage}`;
+      document.getElementById("stub-p").textContent =
+        blurb || "This screen belongs to a stage the system has not reached yet.";
+      document.getElementById("stub-need").textContent = needs;
+      document.getElementById("stub-list").innerHTML =
+        `<li>Belongs to <strong>${esc(stage)}</strong> of the build plan</li>` +
+        `<li>Nothing is shown here because the data does not exist yet</li>` +
+        `<li>Showing an estimate instead would break the system's core rule</li>`;
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // Nav links route; the flyout closes behind them.
+  flyout.addEventListener("click", (ev) => {
+    const link = ev.target.closest("a");
+    if (!link) return;
+    ev.preventDefault();
+    const label = link.textContent.trim();
+    showView(SLUG(label), label);
+    setNav(null);
+  });
+
+
+  /* ======================================================================
+     Site Audit — the one view backed by real data today.
+     AUDIT is written by tools/build_audit.py from an actual crawl.
+     ====================================================================== */
+  const AUDIT = window.__AUDIT__ || null;
+
+  function renderAudit() {
+    if (!AUDIT) return;
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    const n = (v) => Number(v).toLocaleString();
+
+    set("au-when", AUDIT.crawled_at);
+    set("au-score", AUDIT.health);
+    set("au-pages", n(AUDIT.pages));
+    set("au-cov", `${n(AUDIT.pages)} of 669`);
+    set("au-redir", n(AUDIT.redirects));
+    set("au-ferr", n(AUDIT.fetch_errors));
+    set("au-err", n(AUDIT.errors));
+    set("au-warn", n(AUDIT.warnings));
+    set("au-note", n(AUDIT.notices));
+    set("au-verdict", AUDIT.verdict);
+    set("au-blurb", AUDIT.blurb);
+
+    // Health ring.
+    const svg = document.getElementById("au-ring");
+    if (svg) {
+      const r = 49, c = 59, circ = 2 * Math.PI * r;
+      const tone = css(AUDIT.health >= 85 ? "--green" : AUDIT.health >= 65 ? "--amber" : "--red");
+      svg.replaceChildren();
+      svg.append(el("circle", { cx: c, cy: c, r, fill: "none",
+                                stroke: css("--grey-soft"), "stroke-width": "11" }));
+      svg.append(el("circle", { cx: c, cy: c, r, fill: "none", stroke: tone,
+                                "stroke-width": "11", "stroke-linecap": "round",
+                                "stroke-dasharray": `${circ * AUDIT.health / 100} ${circ}`,
+                                transform: `rotate(-90 ${c} ${c})` }));
+    }
+
+    // Issues, ranked by business impact.
+    const body = document.getElementById("au-issues");
+    if (body) {
+      body.innerHTML = AUDIT.issues.length
+        ? AUDIT.issues.map((i) => {
+            const cls = { critical: "pill-crit", high: "pill-crit", medium: "pill-warn" }[i.severity] || "pill-idle";
+            return `<tr><td class="kw">${esc(i.problem)}</td>` +
+                   `<td class="sev"><span class="pill ${cls}">${esc(i.severity)}</span></td>` +
+                   `<td class="num">${i.pages}</td>` +
+                   `<td class="num">${i.weight}</td>` +
+                   `<td class="num"><strong>${i.score}</strong></td></tr>`;
+          }).join("")
+        : `<tr><td colspan="5" style="padding:22px 0;text-align:center;color:var(--green)">` +
+          `<strong>No defects found.</strong> Every crawled page returned 200 with a title, ` +
+          `meta description, H1, and a self-referencing canonical.</td></tr>`;
+    }
+
+    const themes = document.getElementById("au-themes");
+    if (themes) {
+      themes.innerHTML = AUDIT.themes.map(([name, pct]) => {
+        const tone = pct >= 90 ? "--green" : pct >= 70 ? "--amber" : "--red";
+        return `<div class="theme-row"><span class="theme-name">${esc(name)}</span>` +
+               `<span class="theme-track"><span class="theme-fill" style="width:${pct}%;background:var(${tone})"></span></span>` +
+               `<span class="theme-pct">${pct}%</span></div>`;
+      }).join("");
+    }
+  }
+  renderAudit();
+
+  showView("home");
 
   /* Coach mark */
   const coach = document.getElementById("coach");
