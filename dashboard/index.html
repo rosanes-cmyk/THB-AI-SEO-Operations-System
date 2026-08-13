@@ -8,816 +8,805 @@
 
 /* ==========================================================================
    Twin Home Buyer — Command Center
-   Semrush's dashboard, rebuilt around revenue instead of SEO metrics.
+   A rebuild of the current Semrush home screen, renamed for THB.
 
-   Palette and type extracted from Semrush's own served stylesheets:
-     fonts   Factor A (display) + Lazzer (body), fallback "Inter, sans-serif"
-     orange  #ff7f00        text    #181e15 / #2d2e33 / #62646e / #6c6e79
-     rules   #e0e1e9 / #d1d2d5      grounds #f4f5f9 / #f6f7f8
-     status  #1d9c00 green · #ed2d2d red · #006dca blue
+   Matched to the live UI: white chrome, black Analyze button, violet
+   accents, indigo metric figures, toolkit card rail, Copilot strip,
+   Folders table with per-project metric columns, and the SEO flyout nav.
 
-   Factor A and Lazzer are licensed to Semrush and are NOT redistributed here.
-   Inter is Semrush's own declared fallback and is OFL-licensed, so it is
-   embedded above as a subsetted data URI.
+   Type: Semrush serves Factor A + Lazzer (licensed to them, not
+   redistributed here) and declares "Inter, sans-serif" as its fallback.
+   Inter is OFL-licensed, so it is embedded above as a subsetted data URI.
    ========================================================================== */
 
 :root {
-  /* --- Semrush values, verbatim --- */
-  --orange:      #ff7f00;
-  --orange-mid:  #ff9a33;
-  --orange-soft: #fff1e0;
-
-  --ink:    #181e15;
-  --ink-2:  #2d2e33;
-  --ink-3:  #62646e;
-  --ink-4:  #6c6e79;
-
-  --rule:        #e0e1e9;
-  --rule-strong: #d1d2d5;
-  --page:        #f4f5f9;
-  --sunk:        #f6f7f8;
+  --bg:          #f4f4f6;
   --surface:     #ffffff;
+  --sunk:        #fafafb;
+  --border:      #e4e4e9;
+  --border-2:    #d3d3db;
 
-  --green:      #1d9c00;
-  --green-mid:  #4fae33;
-  --green-soft: #e8f6e4;
-  --red:        #ed2d2d;
-  --red-soft:   #fde8e8;
-  --blue:       #006dca;
-  --blue-2:     #008ff8;
-  --blue-soft:  #d6edff;
-  --purple:     #b072ff;
-  --purple-soft:#f0e6ff;
-  --mint:       #dceeeb;
-  --grey-soft:  #eef0f4;
+  --ink:         #1b1b1f;
+  --ink-2:       #4b4b55;
+  --ink-3:       #78787f;
+  --ink-4:       #9a9aa3;
 
-  /* Sequential ramp on Semrush blue, light -> dark. Buckets only. */
-  --seq-1: #cfe6fa;
-  --seq-2: #9ccdf5;
-  --seq-3: #5aa9e8;
-  --seq-4: #2b94e1;
-  --seq-5: #006dca;
+  --data:        #1a1f71;   /* metric figures */
+  --link:        #2563eb;   /* domain + action links */
+  --violet:      #7c3aed;   /* badges, help FAB, active nav */
+  --violet-soft: #ede4fd;
+  --violet-line: #cdb4fb;
 
-  --shadow: 0 1px 2px rgba(24,30,21,.05), 0 2px 8px rgba(24,30,21,.04);
+  --green:       #0f9d58;
+  --green-soft:  #e6f6ed;
+  --red:         #d92d20;
+  --red-soft:    #fdeceb;
+  --amber:       #f79009;
+  --amber-bg:    #fef9ec;
+  --btn:         #17171c;
+
+  --teal-ico:    #0fae8e;
+  --pink-ico:    #e8467c;
+  --blue-ico:    #2f6fed;
+  --lime-ico:    #7cb342;
+
+  --shadow:   0 1px 2px rgba(16,16,24,.05);
+  --shadow-2: 0 4px 16px rgba(16,16,24,.10);
+  --shadow-3: 0 12px 40px rgba(16,16,24,.18);
 
   --ui:   "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-/* Dark, for the un-stamped default (system preference). */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --orange:      #ff9433;
-    --orange-mid:  #ffab5c;
-    --orange-soft: #33220d;
+    --bg:          #0e0e12;
+    --surface:     #17171d;
+    --sunk:        #1c1c23;
+    --border:      #2a2a33;
+    --border-2:    #3a3a45;
 
-    --ink:    #eef0ec;
-    --ink-2:  #c8cbd2;
-    --ink-3:  #9a9da7;
-    --ink-4:  #8b8e99;
+    --ink:         #ececf0;
+    --ink-2:       #c2c2cc;
+    --ink-3:       #93939e;
+    --ink-4:       #75757f;
 
-    --rule:        #2a2c33;
-    --rule-strong: #3b3e47;
-    --page:        #101116;
-    --sunk:        #171920;
-    --surface:     #1a1c23;
+    --data:        #9db2ff;
+    --link:        #6a9bff;
+    --violet:      #a78bfa;
+    --violet-soft: #241a3a;
+    --violet-line: #4c3a78;
 
-    --green:      #5ec93f;
-    --green-mid:  #4fae33;
-    --green-soft: #16290f;
-    --red:        #ff5c5c;
-    --red-soft:   #331616;
-    --blue:       #4da6f0;
-    --blue-2:     #008ff8;
-    --blue-soft:  #12283a;
-    --purple:     #c190ff;
-    --purple-soft:#241a33;
-    --mint:       #17302c;
-    --grey-soft:  #22242c;
+    --green:       #35c07d;
+    --green-soft:  #10281c;
+    --red:         #f97066;
+    --red-soft:    #2c1512;
+    --amber:       #fdb022;
+    --amber-bg:    #2a2010;
+    --btn:         #ececf0;
 
-    --seq-1: #143a52;
-    --seq-2: #1c5b7f;
-    --seq-3: #2b7fae;
-    --seq-4: #4da6f0;
-    --seq-5: #9ccdf5;
-
-    --shadow: 0 1px 2px rgba(0,0,0,.5), 0 2px 10px rgba(0,0,0,.35);
+    --shadow:   0 1px 2px rgba(0,0,0,.5);
+    --shadow-2: 0 4px 16px rgba(0,0,0,.45);
+    --shadow-3: 0 12px 40px rgba(0,0,0,.6);
   }
 }
 
-/* Dark, when explicitly chosen. */
 :root[data-theme="dark"] {
-  --orange:      #ff9433;
-  --orange-mid:  #ffab5c;
-  --orange-soft: #33220d;
+  --bg:          #0e0e12;
+  --surface:     #17171d;
+  --sunk:        #1c1c23;
+  --border:      #2a2a33;
+  --border-2:    #3a3a45;
 
-  --ink:    #eef0ec;
-  --ink-2:  #c8cbd2;
-  --ink-3:  #9a9da7;
-  --ink-4:  #8b8e99;
+  --ink:         #ececf0;
+  --ink-2:       #c2c2cc;
+  --ink-3:       #93939e;
+  --ink-4:       #75757f;
 
-  --rule:        #2a2c33;
-  --rule-strong: #3b3e47;
-  --page:        #101116;
-  --sunk:        #171920;
-  --surface:     #1a1c23;
+  --data:        #9db2ff;
+  --link:        #6a9bff;
+  --violet:      #a78bfa;
+  --violet-soft: #241a3a;
+  --violet-line: #4c3a78;
 
-  --green:      #5ec93f;
-  --green-mid:  #4fae33;
-  --green-soft: #16290f;
-  --red:        #ff5c5c;
-  --red-soft:   #331616;
-  --blue:       #4da6f0;
-  --blue-2:     #008ff8;
-  --blue-soft:  #12283a;
-  --purple:     #c190ff;
-  --purple-soft:#241a33;
-  --mint:       #17302c;
-  --grey-soft:  #22242c;
+  --green:       #35c07d;
+  --green-soft:  #10281c;
+  --red:         #f97066;
+  --red-soft:    #2c1512;
+  --amber:       #fdb022;
+  --amber-bg:    #2a2010;
+  --btn:         #ececf0;
 
-  --seq-1: #143a52;
-  --seq-2: #1c5b7f;
-  --seq-3: #2b7fae;
-  --seq-4: #4da6f0;
-  --seq-5: #9ccdf5;
-
-  --shadow: 0 1px 2px rgba(0,0,0,.5), 0 2px 10px rgba(0,0,0,.35);
+  --shadow:   0 1px 2px rgba(0,0,0,.5);
+  --shadow-2: 0 4px 16px rgba(0,0,0,.45);
+  --shadow-3: 0 12px 40px rgba(0,0,0,.6);
 }
 
 * { box-sizing: border-box; }
 
 body {
-  margin: 0;
-  background: var(--page);
-  color: var(--ink);
-  font-family: var(--ui);
-  font-size: 14px;
-  line-height: 1.45;
-  -webkit-font-smoothing: antialiased;
-  letter-spacing: -.006em;
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--ui); font-size: 14px; line-height: 1.45;
+  -webkit-font-smoothing: antialiased; letter-spacing: -.005em;
+}
+:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+button { font-family: inherit; font-size: inherit; cursor: pointer; }
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ============ LEFT ICON RAIL ============ */
+.rail {
+  position: fixed; inset: 0 auto 0 0; width: 46px; z-index: 60;
+  background: var(--surface); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 8px 0; gap: 2px;
+}
+.rail-btn {
+  width: 34px; height: 34px; border: 0; border-radius: 8px; background: transparent;
+  color: var(--ink-3); display: grid; place-items: center; flex: none;
+}
+.rail-btn:hover { background: var(--bg); color: var(--ink); }
+.rail-btn[aria-expanded="true"] { background: var(--violet-soft); color: var(--violet); }
+.rail-sep { width: 22px; height: 1px; background: var(--border); margin: 5px 0; flex: none; }
+
+/* ============ SEO FLYOUT NAV ============ */
+.flyout {
+  position: fixed; top: 0; left: 46px; bottom: 0; width: 264px; z-index: 59;
+  background: var(--surface); border-right: 1px solid var(--border);
+  box-shadow: var(--shadow-3); overflow-y: auto; padding: 18px 0 24px;
+  transform: translateX(-108%); transition: transform .17s ease; visibility: hidden;
+}
+.flyout[data-open="1"] { transform: none; visibility: visible; }
+.flyout h2 { font-size: 17px; font-weight: 700; margin: 0 0 4px; padding: 0 20px; letter-spacing: -.3px; }
+.flyout-group {
+  font-size: 11.5px; font-weight: 600; color: var(--ink-3);
+  padding: 16px 20px 5px; letter-spacing: .01em;
+}
+.flyout a {
+  display: block; padding: 6px 20px; color: var(--ink); font-size: 14px;
+}
+.flyout a:hover { background: var(--bg); text-decoration: none; color: var(--link); }
+.flyout a.top { color: var(--link); padding-top: 2px; }
+.scrim {
+  position: fixed; inset: 0; z-index: 58; background: rgba(16,16,24,.28);
+  opacity: 0; pointer-events: none; transition: opacity .17s;
+}
+.scrim[data-open="1"] { opacity: 1; pointer-events: auto; }
+
+/* ============ TOP BAR ============ */
+.topbar {
+  position: sticky; top: 0; z-index: 40; background: var(--surface);
+  border-bottom: 1px solid var(--border); margin-left: 46px;
+}
+.topbar-in {
+  display: flex; align-items: center; gap: 16px; padding: 10px 20px; flex-wrap: wrap;
+}
+.searchbox { display: flex; flex: none; }
+.searchbox input {
+  width: 340px; max-width: 46vw; padding: 8px 13px; font-family: inherit; font-size: 14px;
+  border: 1px solid var(--border-2); border-right: 0; border-radius: 6px 0 0 6px;
+  background: var(--surface); color: var(--ink);
+}
+.searchbox input::placeholder { color: var(--ink-4); }
+.searchbox button {
+  padding: 8px 18px; border: 0; border-radius: 0 6px 6px 0;
+  background: var(--btn); color: var(--surface); font-weight: 600;
+}
+.topnav { margin-left: auto; display: flex; align-items: center; gap: 22px; }
+.topnav a, .topnav button {
+  color: var(--ink); font-size: 14px; background: none; border: 0; padding: 0;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.topnav a:hover, .topnav button:hover { color: var(--link); text-decoration: none; }
+.avatar {
+  width: 30px; height: 30px; border-radius: 50%; background: var(--violet); color: #fff;
+  display: grid; place-items: center; font-weight: 600; font-size: 13px; flex: none;
 }
 
-:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 4px; }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+/* ============ PAGE ============ */
+.page { margin-left: 46px; padding: 16px 20px 80px; }
 
-.wrap { max-width: 1440px; margin: 0 auto; padding: 0 20px 64px; }
+/* --- Toolkit card rail --- */
+.kits-hold { position: relative; }
+.kits {
+  display: flex; gap: 14px; overflow-x: auto; padding-bottom: 4px;
+  scroll-behavior: smooth; scrollbar-width: none;
+}
+.kits::-webkit-scrollbar { display: none; }
+.kit {
+  position: relative; flex: 0 0 258px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 10px; padding: 15px 16px 17px;
+  box-shadow: var(--shadow);
+}
+.kit-ico {
+  width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center;
+  margin-bottom: 9px;
+}
+.kit h3 { font-size: 15px; font-weight: 600; margin: 0 0 6px; letter-spacing: -.2px; }
+.kit p { margin: 0; font-size: 13px; color: var(--ink-2); line-height: 1.4; }
+.kit-tag {
+  position: absolute; top: 0; right: 30px;
+  background: var(--violet); color: #fff; font-size: 11.5px; font-weight: 500;
+  padding: 3px 9px; border-radius: 0 0 5px 5px;
+}
+.kit-x, .kit-ok {
+  position: absolute; top: 6px; right: 8px; width: 18px; height: 18px;
+  border: 0; background: none; color: var(--ink-3); display: grid; place-items: center;
+  border-radius: 4px;
+}
+.kit-ok { background: var(--green-soft); color: var(--green); top: 0; right: 0; border-radius: 0 9px 0 8px; width: 26px; height: 22px; }
+.kits-next {
+  position: absolute; right: -6px; top: 50%; transform: translateY(-50%);
+  width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--border-2);
+  background: var(--surface); color: var(--ink-2); display: grid; place-items: center;
+  box-shadow: var(--shadow-2); z-index: 2;
+}
 
-/* --- Top bar: Semrush's dark chrome ------------------------------------- */
-.topbar { background: var(--ink); color: #fff; }
-.topbar-inner {
-  max-width: 1440px; margin: 0 auto; padding: 11px 20px;
-  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+/* --- Panels --- */
+.panel {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; box-shadow: var(--shadow); margin-top: 16px;
 }
-.brand { display: flex; align-items: center; gap: 10px; }
-.brand-mark {
-  width: 30px; height: 30px; border-radius: 6px; flex: none;
-  background: var(--orange); color: #fff;
-  display: grid; place-items: center;
-  font-size: 12px; font-weight: 700; letter-spacing: -.4px;
+.panel-head {
+  display: flex; align-items: center; gap: 10px; padding: 14px 18px;
 }
-.brand-name { font-size: 16px; font-weight: 700; letter-spacing: -.4px; line-height: 1.15; }
-.brand-sub { font-size: 10.5px; color: rgba(255,255,255,.62); letter-spacing: .02em; }
-.spacer { flex: 1; }
-.topbar .chip {
+.panel-title { font-size: 16px; font-weight: 700; letter-spacing: -.3px; }
+.panel-title sup { font-size: 9.5px; color: var(--violet); font-weight: 700; }
+.panel-note { color: var(--ink-3); font-weight: 400; font-size: 14px; }
+.panel-act {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: 0; color: var(--ink); font-size: 14px;
+}
+
+/* --- Notice --- */
+.notice {
+  margin: 0 14px 14px; border: 1px solid var(--amber); border-left-width: 4px;
+  background: var(--amber-bg); border-radius: 7px; padding: 12px 14px;
+  display: flex; gap: 11px; align-items: flex-start;
+}
+.notice-body { flex: 1; min-width: 0; }
+.notice-title { font-weight: 700; font-size: 14px; }
+.notice p { margin: 2px 0 0; font-size: 13.5px; color: var(--ink-2); }
+.notice-x { border: 0; background: none; color: var(--amber); font-size: 15px; line-height: 1; padding: 2px 4px; border-radius: 4px; }
+
+/* --- Filter row --- */
+.filters {
+  display: flex; align-items: center; gap: 9px; padding: 0 18px 14px; flex-wrap: wrap;
+}
+.field {
   display: inline-flex; align-items: center; gap: 7px;
-  border: 1px solid rgba(255,255,255,.2); border-radius: 6px;
-  padding: 5px 11px; font-size: 12.5px; color: rgba(255,255,255,.9);
+  border: 1px solid var(--border-2); border-radius: 6px; padding: 6px 11px;
+  background: var(--surface); color: var(--ink-2); font-size: 13.5px;
 }
-.dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
-.dot-good { background: var(--green-mid); }
-.dot-warn { background: var(--orange); }
-.dot-crit { background: var(--red); }
-.dot-idle { background: var(--ink-4); }
+.field input { border: 0; outline: 0; background: none; font-family: inherit; font-size: 13.5px; width: 168px; color: var(--ink); }
+.field input::placeholder { color: var(--ink-4); }
+.field.sel { cursor: pointer; }
+.field .pip { width: 7px; height: 7px; border-radius: 50%; background: var(--violet); }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--border-2);
+  background: var(--surface); color: var(--ink); border-radius: 6px; padding: 6px 13px; font-size: 13.5px;
+}
+.btn-ghost:hover { border-color: var(--ink-4); }
+.toggle-wrap { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-2); font-size: 13.5px; }
+.toggle {
+  width: 32px; height: 18px; border-radius: 999px; background: var(--border-2);
+  border: 0; padding: 0; position: relative; flex: none;
+}
+.toggle::after {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px;
+  border-radius: 50%; background: var(--surface); transition: left .15s;
+}
+.toggle[aria-pressed="true"] { background: var(--violet); }
+.toggle[aria-pressed="true"]::after { left: 16px; }
 
-.range { display: flex; border: 1px solid rgba(255,255,255,.2); border-radius: 6px; overflow: hidden; }
-.range button {
-  border: 0; background: transparent; color: rgba(255,255,255,.75);
-  font-family: var(--ui); font-size: 12px; font-weight: 500;
-  padding: 5px 12px; cursor: pointer; border-right: 1px solid rgba(255,255,255,.16);
+/* --- Project rows --- */
+.proj { border-top: 1px solid var(--border); }
+.proj-head {
+  display: flex; align-items: center; gap: 9px; padding: 14px 18px 4px;
 }
-.range button:last-child { border-right: 0; }
-.range button[aria-pressed="true"] { background: var(--orange); color: #fff; }
+.proj-name { font-size: 15px; font-weight: 600; color: var(--link); }
+.proj-url { color: var(--ink-3); font-size: 13.5px; }
+.proj-kebab { margin-left: auto; border: 0; background: none; color: var(--ink-3); padding: 4px 6px; border-radius: 5px; }
+.proj-kebab:hover { background: var(--bg); }
 
-/* --- Provenance banner -------------------------------------------------- */
-.banner {
-  margin: 18px 0 0; border: 1px solid var(--orange); border-left-width: 4px;
-  background: var(--orange-soft); border-radius: 8px; padding: 13px 16px;
+.metrics {
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px; padding: 6px 18px 12px;
 }
-.banner strong { font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--orange); font-weight: 700; }
-.banner p { margin: 4px 0 0; font-size: 13px; color: var(--ink-2); max-width: 92ch; }
+.metric { min-width: 0; }
+.metric-label { font-size: 13px; color: var(--ink-2); }
+.metric-value {
+  font-size: 20px; font-weight: 700; color: var(--data);
+  letter-spacing: -.5px; font-variant-numeric: tabular-nums; margin-top: 2px;
+}
+.metric-value.na { color: var(--ink-3); font-weight: 400; display: flex; align-items: center; gap: 8px; }
+.metric-sub { font-size: 12.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.metric-sub.up { color: var(--green); font-weight: 600; }
+.metric-sub.down { color: var(--red); font-weight: 600; }
+.metric .setup {
+  margin-top: 3px; display: inline-block; background: var(--btn); color: var(--surface);
+  border-radius: 6px; padding: 5px 13px; font-size: 13px; font-weight: 600; border: 0;
+}
 
-/* --- Sections ----------------------------------------------------------- */
-.section-head {
-  display: flex; align-items: baseline; gap: 12px;
-  margin: 30px 0 12px;
+.proj-foot {
+  display: flex; align-items: center; gap: 8px 18px; flex-wrap: wrap;
+  padding: 10px 18px; border-top: 1px solid var(--border);
+  font-size: 13.5px; color: var(--ink-2);
 }
-.section-head h2 { font-size: 19px; font-weight: 700; margin: 0; letter-spacing: -.5px; }
-.section-head .note { font-size: 12px; color: var(--ink-3); margin-left: auto; text-align: right; }
+.proj-foot b { font-weight: 600; color: var(--ink-2); }
 
-/* --- Revenue chain ------------------------------------------------------ */
-.chain {
-  background: var(--surface); border: 1px solid var(--rule);
-  border-radius: 10px; box-shadow: var(--shadow); padding: 4px; overflow-x: auto;
-}
-.chain-track { display: flex; min-width: 980px; }
-.chain-step { flex: 1; padding: 12px 13px; border-right: 1px solid var(--rule); }
-.chain-step:last-child { border-right: 0; }
-.chain-step.terminal { background: var(--orange-soft); border-radius: 7px; }
-.chain-label {
-  font-size: 10px; letter-spacing: .05em; text-transform: uppercase;
-  color: var(--ink-3); white-space: nowrap; font-weight: 600;
-}
-.chain-value {
-  font-size: 20px; font-weight: 700; margin-top: 5px;
-  letter-spacing: -.7px; font-variant-numeric: tabular-nums;
-}
-.chain-step.terminal .chain-value { color: var(--orange); }
-.chain-delta { font-size: 11px; margin-top: 2px; font-weight: 500; font-variant-numeric: tabular-nums; }
-.up { color: var(--green); } .down { color: var(--red); } .flat { color: var(--ink-3); }
+/* --- Health ring --- */
+.ring { flex: none; }
 
-/* --- Grid --------------------------------------------------------------- */
-.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
-.card {
-  grid-column: span 4; background: var(--surface); border: 1px solid var(--rule);
-  border-radius: 10px; box-shadow: var(--shadow);
-  padding: 16px 17px 17px; min-width: 0; display: flex; flex-direction: column;
+/* --- Tooltip coach mark --- */
+.coach {
+  position: absolute; z-index: 45; width: 348px; max-width: 86vw;
+  background: var(--violet-soft); border: 1px solid var(--violet-line);
+  border-radius: 10px; padding: 15px 17px; box-shadow: var(--shadow-2);
 }
-.card.w6 { grid-column: span 6; } .card.w8 { grid-column: span 8; } .card.w12 { grid-column: span 12; }
+.coach h4 { margin: 0 0 5px; font-size: 15px; font-weight: 700; }
+.coach p { margin: 0 0 12px; font-size: 13.5px; color: var(--ink-2); }
+.coach-btns { display: flex; align-items: center; gap: 14px; }
+.coach-ok { background: var(--surface); border: 1px solid var(--border-2); border-radius: 6px; padding: 6px 15px; font-weight: 600; font-size: 13.5px; color: var(--ink); }
+.coach-later { background: none; border: 0; color: var(--ink-2); font-size: 13.5px; }
+.coach-x { position: absolute; top: 9px; right: 10px; border: 0; background: none; color: var(--ink-3); font-size: 15px; line-height: 1; }
 
-.card-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
-.card-title { font-size: 15px; font-weight: 700; margin: 0; letter-spacing: -.3px; line-height: 1.3; }
-.card-sub { font-size: 11.5px; color: var(--ink-3); margin-top: 3px; }
+/* --- Help FAB --- */
+.fab {
+  position: fixed; right: 22px; bottom: 22px; z-index: 50;
+  width: 50px; height: 50px; border-radius: 50%; border: 0;
+  background: var(--violet); color: #fff; font-size: 22px; font-weight: 600;
+  box-shadow: var(--shadow-2);
+}
 
+/* --- Provenance --- */
+.srcbar {
+  display: flex; gap: 8px 20px; flex-wrap: wrap; align-items: center;
+  margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border);
+  font-size: 12.5px; color: var(--ink-3);
+}
 .src {
-  margin-left: auto; flex: none; white-space: nowrap; font-size: 9.5px;
-  letter-spacing: .05em; text-transform: uppercase; font-weight: 700;
-  padding: 3px 8px; border-radius: 4px; border: 1px solid transparent;
+  font-size: 10px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700;
+  padding: 2px 7px; border-radius: 4px; border: 1px solid transparent;
 }
 .src-live    { background: var(--green-soft); color: var(--green); border-color: var(--green); }
-.src-pending { background: var(--grey-soft); color: var(--ink-4); border-color: var(--rule-strong); }
+.src-pending { background: var(--bg); color: var(--ink-3); border-color: var(--border-2); }
 
-/* --- KPI tiles ---------------------------------------------------------- */
-.kpi-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
-.kpi {
-  background: var(--surface); border: 1px solid var(--rule); border-radius: 10px;
-  box-shadow: var(--shadow); padding: 14px 15px 12px; min-width: 0;
+.preview-strip {
+  background: var(--amber-bg); border: 1px solid var(--amber); border-left-width: 4px;
+  border-radius: 8px; padding: 11px 15px; margin-bottom: 16px;
 }
-.kpi-label { font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
-.kpi-value { font-size: 27px; font-weight: 700; letter-spacing: -1.2px; margin-top: 5px; font-variant-numeric: tabular-nums; line-height: 1.1; }
-.kpi-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; margin-top: 3px; }
-.kpi-delta { font-size: 11.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.preview-strip strong { font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--amber); }
+.preview-strip p { margin: 3px 0 0; font-size: 13px; color: var(--ink-2); max-width: 96ch; }
 
-/* --- Stat rows ---------------------------------------------------------- */
-dl { margin: 0; }
-.stat-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--rule); }
-.stat-row:last-child { border-bottom: 0; }
-.stat-row dt { color: var(--ink-3); font-size: 13px; }
-.stat-row dd { margin: 0; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
-
-/* --- Gauge -------------------------------------------------------------- */
-.gauge-row { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
-.gauge { position: relative; flex: none; }
-.gauge-center { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
-.gauge-num { font-size: 24px; font-weight: 700; letter-spacing: -1px; line-height: 1; font-variant-numeric: tabular-nums; }
-.gauge-unit { font-size: 9px; color: var(--ink-3); letter-spacing: .08em; font-weight: 600; }
-
-/* --- Distribution ------------------------------------------------------- */
-.dist { display: flex; height: 30px; border-radius: 5px; overflow: hidden; gap: 2px; margin: 4px 0 10px; }
-.dist span { display: grid; place-items: center; font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.dist-key { display: flex; flex-wrap: wrap; gap: 4px 14px; }
-.dist-key div { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--ink-3); }
-.swatch { width: 9px; height: 9px; border-radius: 2px; flex: none; }
-
-/* --- Tables ------------------------------------------------------------- */
-.table-scroll { overflow-x: auto; margin: 0 -17px -17px; padding: 0 17px 17px; }
-table { border-collapse: collapse; width: 100%; font-size: 13px; }
-th {
-  text-align: left; font-size: 10px; letter-spacing: .05em; text-transform: uppercase;
-  color: var(--ink-3); font-weight: 700; padding: 7px 10px 7px 0;
-  border-bottom: 1px solid var(--rule-strong); white-space: nowrap;
-}
-td { padding: 9px 10px 9px 0; border-bottom: 1px solid var(--rule); vertical-align: middle; }
-tr:last-child td { border-bottom: 0; }
-.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.kw { font-weight: 500; }
-.path { font-family: var(--mono); font-size: 12px; color: var(--blue); }
-
-.pos-badge {
-  display: inline-grid; place-items: center; min-width: 27px; height: 21px;
-  border-radius: 4px; font-size: 11.5px; font-weight: 700; padding: 0 6px;
-  font-variant-numeric: tabular-nums;
-}
-.pos-1 { background: var(--seq-5); color: #fff; }
-.pos-2 { background: var(--seq-3); color: #fff; }
-.pos-3 { background: var(--grey-soft); color: var(--ink-3); }
-
-.weight-cell { display: inline-flex; align-items: center; gap: 7px; justify-content: flex-end; font-weight: 600; }
-.weight-bar { width: 42px; height: 5px; border-radius: 3px; background: var(--grey-soft); overflow: hidden; flex: none; }
-.weight-fill { height: 100%; background: var(--orange); border-radius: 3px; }
-
-/* --- Pills -------------------------------------------------------------- */
-.pill {
-  display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px;
-  letter-spacing: .03em; text-transform: uppercase; font-weight: 700;
-  padding: 3px 9px; border-radius: 999px; border: 1px solid transparent; white-space: nowrap;
-}
-.pill-good { background: var(--green-soft); color: var(--green); border-color: var(--green); }
-.pill-warn { background: var(--orange-soft); color: var(--orange); border-color: var(--orange); }
-.pill-crit { background: var(--red-soft);   color: var(--red);   border-color: var(--red); }
-.pill-idle { background: var(--grey-soft);  color: var(--ink-4); border-color: var(--rule-strong); }
-
-.issue { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--rule); }
-.issue:last-child { border-bottom: 0; }
-.issue-stripe { width: 3px; align-self: stretch; border-radius: 2px; flex: none; min-height: 30px; }
-.stripe-crit { background: var(--red); }
-.stripe-warn { background: var(--orange); }
-.stripe-good { background: var(--green); }
-.stripe-idle { background: var(--rule-strong); }
-.issue-body { min-width: 0; flex: 1; }
-.issue-title { font-size: 13px; font-weight: 500; }
-.issue-meta { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
-.issue-num { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
-
-/* --- Thematic bars ------------------------------------------------------ */
-.theme-row { display: flex; align-items: center; gap: 10px; padding: 5px 0; }
-.theme-name { font-size: 13px; flex: 1; min-width: 0; color: var(--ink-2); }
-.theme-track { width: 88px; height: 6px; border-radius: 3px; background: var(--grey-soft); overflow: hidden; flex: none; }
-.theme-fill { height: 100%; border-radius: 3px; }
-.theme-pct { font-size: 12px; width: 38px; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
-
-/* --- Empty state -------------------------------------------------------- */
-.empty { border: 1px dashed var(--rule-strong); border-radius: 8px; padding: 18px 16px; text-align: center; color: var(--ink-3); background: var(--sunk); }
-.empty-title { font-size: 11px; letter-spacing: .05em; text-transform: uppercase; font-weight: 700; }
-.empty p { margin: 6px auto 0; font-size: 12.5px; max-width: 46ch; line-height: 1.45; }
-
-/* --- Tooltip ------------------------------------------------------------ */
-.chart-hold { position: relative; }
-.tip {
-  position: absolute; pointer-events: none; opacity: 0;
-  background: var(--ink); color: #fff; border-radius: 6px; padding: 7px 10px;
-  font-size: 11.5px; white-space: nowrap; transform: translate(-50%, -120%);
-  transition: opacity .1s; z-index: 5; line-height: 1.5; font-variant-numeric: tabular-nums;
-}
-.tip[data-on="1"] { opacity: 1; }
-
-footer {
-  margin-top: 38px; padding-top: 18px; border-top: 1px solid var(--rule);
-  font-size: 11.5px; color: var(--ink-3); display: flex; gap: 10px 26px; flex-wrap: wrap; align-items: center;
-}
-
-@media (max-width: 1180px) {
-  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
-  .card, .card.w6, .card.w8 { grid-column: span 6; }
-}
-@media (max-width: 720px) {
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-  .card, .card.w6, .card.w8, .card.w12 { grid-column: span 12; }
-}
+@media (max-width: 1080px) { .metrics { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px)  { .metrics { grid-template-columns: repeat(2, 1fr); } .searchbox input { width: 190px; } .topnav { gap: 14px; } }
 </style>
 
+
+<!-- ================= LEFT ICON RAIL ================= -->
+<nav class="rail" aria-label="Toolkits">
+  <button class="rail-btn" type="button" title="Home" aria-label="Home">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+  </button>
+  <button class="rail-btn" id="seo-toggle" type="button" aria-expanded="false" aria-controls="seo-flyout" title="SEO" aria-label="SEO">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 21v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+  </button>
+  <button class="rail-btn" type="button" title="Advertising" aria-label="Advertising">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.6 6.1 6.4.5-4.9 4.2 1.5 6.2L12 16.8 6.4 20l1.5-6.2L3 9.6l6.4-.5z"/></svg>
+  </button>
+  <button class="rail-btn" type="button" title="Traffic &amp; Market" aria-label="Traffic and Market">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>
+  </button>
+  <button class="rail-btn" type="button" title="Local" aria-label="Local">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+  </button>
+  <button class="rail-btn" type="button" title="AI Visibility" aria-label="AI Visibility">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.5 9h17M3.5 15h17"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg>
+  </button>
+  <div class="rail-sep"></div>
+  <button class="rail-btn" type="button" title="Content" aria-label="Content">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+  </button>
+  <button class="rail-btn" type="button" title="AI PR" aria-label="AI PR">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4h4l6 4V6L7 10Z"/><path d="M17.5 9a4 4 0 0 1 0 6"/></svg>
+  </button>
+  <button class="rail-btn" type="button" title="Social" aria-label="Social">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5.2A8 8 0 1 1 21 12Z"/></svg>
+  </button>
+  <button class="rail-btn" type="button" title="Reports" aria-label="Reports">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 14 3.5-3.5 3 3L18 8"/></svg>
+  </button>
+  <button class="rail-btn" type="button" title="All tools" aria-label="All tools">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
+  </button>
+</nav>
+
+<!-- ================= SEO FLYOUT ================= -->
+<div class="scrim" id="scrim"></div>
+<nav class="flyout" id="seo-flyout" data-open="0" aria-label="SEO navigation">
+  <h2>SEO</h2>
+  <a class="top" href="#">Dashboard</a>
+
+  <div class="flyout-group">Site Performance</div>
+  <a href="#">Site Audit</a>
+  <a href="#">Position Tracking</a>
+
+  <div class="flyout-group">Competitive Analysis</div>
+  <a href="#">Domain Overview</a>
+  <a href="#">Organic Rankings</a>
+  <a href="#">Top Pages</a>
+  <a href="#">Compare Domains</a>
+  <a href="#">Keyword Gap</a>
+  <a href="#">Backlink Gap</a>
+
+  <div class="flyout-group">Keyword Research</div>
+  <a href="#">Keyword Overview</a>
+  <a href="#">Keyword Magic Tool</a>
+  <a href="#">Keyword Strategy Builder</a>
+
+  <div class="flyout-group">Content Ideas</div>
+  <a href="#">SEO Writing Assistant</a>
+  <a href="#">Topic Research</a>
+  <a href="#">SEO Content Template</a>
+
+  <div class="flyout-group">Revenue</div>
+  <a href="#">Revenue Chain</a>
+  <a href="#">ROAS Tracker</a>
+  <a href="#">Lead Attribution</a>
+</nav>
+
+<!-- ================= TOP BAR ================= -->
 <header class="topbar">
-  <div class="topbar-inner">
-    <div class="brand">
-      <div class="brand-mark">THB</div>
-      <div>
-        <div class="brand-name">Twin Home Buyer</div>
-        <div class="brand-sub">Command Center</div>
-      </div>
-    </div>
-    <div class="spacer"></div>
-    <div class="chip"><span class="dot dot-good"></span>twinhomebuyer.com</div>
-    <div class="range" role="group" aria-label="Comparison window">
-      <button type="button" aria-pressed="false">7d</button>
-      <button type="button" aria-pressed="true">28d</button>
-      <button type="button" aria-pressed="false">90d</button>
-    </div>
+  <div class="topbar-in">
+    <form class="searchbox" onsubmit="return false">
+      <input type="text" placeholder="Enter website or keyword" aria-label="Enter website or keyword">
+      <button type="submit">Analyze</button>
+    </form>
+    <nav class="topnav">
+      <a href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Invite users</a>
+      <a href="#">Pricing</a>
+      <a href="#">Enterprise</a>
+      <button type="button">More <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7 7 7-7"/></svg></button>
+      <span class="avatar">T</span>
+    </nav>
   </div>
 </header>
 
-<div class="wrap">
+<main class="page">
 
-  <div class="banner">
+  <div class="preview-strip">
     <strong>Preview — figures are sample data</strong>
     <p>
-      Every number below is illustrative, shown so the layout can be reviewed. The system does not
-      invent metrics: once connected, each widget draws from the source named on its badge, and any
-      widget whose source is missing shows an empty state instead of an estimate.
-      <strong>Live</strong> badges mark widgets already fed by agents that exist today.
+      The layout mirrors the live Semrush home screen so it can be reviewed side by side. Numbers are
+      illustrative. Once sources are connected, each figure draws from the source named at the bottom
+      of this page, and anything without a source shows an empty state rather than an estimate.
     </p>
   </div>
 
-  <!-- ================= REVENUE CHAIN ================= -->
-  <div class="section-head">
-    <h2>Revenue chain</h2>
-    <div class="note">Spend → closings · month to date</div>
-  </div>
+  <!-- ---------- Toolkit rail ---------- -->
+  <div class="kits-hold">
+    <div class="kits" id="kits">
 
-  <div class="chain">
-    <div class="chain-track">
-      <div class="chain-step"><div class="chain-label">Marketing spend</div><div class="chain-value">$41,200</div><div class="chain-delta flat">— vs prior</div></div>
-      <div class="chain-step"><div class="chain-label">Visitors</div><div class="chain-value">18,940</div><div class="chain-delta up">▲ 6.2%</div></div>
-      <div class="chain-step"><div class="chain-label">Leads</div><div class="chain-value">412</div><div class="chain-delta up">▲ 3.1%</div></div>
-      <div class="chain-step"><div class="chain-label">Qualified</div><div class="chain-value">168</div><div class="chain-delta down">▼ 4.5%</div></div>
-      <div class="chain-step"><div class="chain-label">Appointments</div><div class="chain-value">74</div><div class="chain-delta up">▲ 2.8%</div></div>
-      <div class="chain-step"><div class="chain-label">Offers</div><div class="chain-value">39</div><div class="chain-delta flat">— 0.0%</div></div>
-      <div class="chain-step"><div class="chain-label">Contracts</div><div class="chain-value">11</div><div class="chain-delta up">▲ 1</div></div>
-      <div class="chain-step"><div class="chain-label">Closings</div><div class="chain-value">8</div><div class="chain-delta up">▲ 2</div></div>
-      <div class="chain-step"><div class="chain-label">Gross profit</div><div class="chain-value">$246,000</div><div class="chain-delta up">▲ 9.4%</div></div>
-      <div class="chain-step terminal"><div class="chain-label">ROAS · target 5.0</div><div class="chain-value">5.97</div><div class="chain-delta up">▲ 0.42 · on pace</div></div>
-    </div>
-  </div>
-
-  <!-- ================= DOMAIN OVERVIEW ================= -->
-  <div class="section-head">
-    <h2>Domain overview</h2>
-    <div class="note">28 days vs prior 28</div>
-  </div>
-
-  <div class="kpi-grid">
-    <div class="kpi">
-      <div class="kpi-label">Site Authority</div><div class="kpi-value">38</div>
-      <div class="kpi-foot"><span class="kpi-delta up">▲ 2</span>
-        <svg class="spark" data-spark="30,31,31,33,34,34,36,36,37,38" data-tone="good" width="72" height="24" aria-hidden="true"></svg></div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Organic traffic</div><div class="kpi-value">9,840</div>
-      <div class="kpi-foot"><span class="kpi-delta up">▲ 6.2%</span>
-        <svg class="spark" data-spark="8100,8340,8220,8610,8900,8760,9120,9400,9610,9840" data-tone="good" width="72" height="24" aria-hidden="true"></svg></div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Organic keywords</div><div class="kpi-value">2,417</div>
-      <div class="kpi-foot"><span class="kpi-delta up">▲ 148</span>
-        <svg class="spark" data-spark="2100,2140,2180,2205,2260,2288,2310,2360,2390,2417" data-tone="good" width="72" height="24" aria-hidden="true"></svg></div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Traffic value</div><div class="kpi-value">$27.4k</div>
-      <div class="kpi-foot"><span class="kpi-delta up">▲ 8.1%</span>
-        <svg class="spark" data-spark="22100,22800,23400,23100,24600,25200,25900,26400,26900,27400" data-tone="good" width="72" height="24" aria-hidden="true"></svg></div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Referring domains</div><div class="kpi-value">614</div>
-      <div class="kpi-foot"><span class="kpi-delta down">▼ 9</span>
-        <svg class="spark" data-spark="631,629,630,627,624,623,620,618,617,614" data-tone="crit" width="72" height="24" aria-hidden="true"></svg></div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Backlinks</div><div class="kpi-value">11,205</div>
-      <div class="kpi-foot"><span class="kpi-delta up">▲ 1.4%</span>
-        <svg class="spark" data-spark="10820,10910,10880,10960,11010,11060,11090,11140,11180,11205" data-tone="good" width="72" height="24" aria-hidden="true"></svg></div>
-    </div>
-  </div>
-
-  <!-- ================= WIDGETS ================= -->
-  <div class="section-head">
-    <h2>Search performance</h2>
-    <div class="note">Ordered by revenue weight, not search volume</div>
-  </div>
-
-  <div class="grid">
-
-    <section class="card w8">
-      <div class="card-head">
-        <div><h3 class="card-title">Organic sessions &amp; leads</h3><div class="card-sub">Daily · last 30 days</div></div>
-        <span class="src src-pending">Needs GA4</span>
-      </div>
-      <div class="chart-hold">
-        <svg id="trend" width="100%" height="196" role="img"
-             aria-label="Organic sessions over the last 30 days, rising from about 250 to about 380 per day."></svg>
-        <div class="tip" id="trend-tip"></div>
-      </div>
-    </section>
-
-    <section class="card">
-      <div class="card-head">
-        <div><h3 class="card-title">Position tracking</h3><div class="card-sub">184 tracked keywords</div></div>
-        <span class="src src-pending">Needs GSC</span>
-      </div>
-      <dl>
-        <div class="stat-row"><dt>Visibility</dt><dd>14.8% <span class="up">▲ 1.2</span></dd></div>
-        <div class="stat-row"><dt>Average position</dt><dd>18.4 <span class="up">▲ 2.1</span></dd></div>
-        <div class="stat-row"><dt>Estimated traffic</dt><dd>3,910</dd></div>
-      </dl>
-      <div style="margin-top:12px">
-        <div class="card-sub" style="margin-bottom:5px;font-weight:600">Ranking distribution</div>
-        <div class="dist">
-          <span style="flex:9;  background:var(--seq-5); color:#fff">9</span>
-          <span style="flex:24; background:var(--seq-4); color:#fff">24</span>
-          <span style="flex:31; background:var(--seq-3); color:#fff">31</span>
-          <span style="flex:68; background:var(--seq-2); color:var(--ink)">68</span>
-          <span style="flex:52; background:var(--seq-1); color:var(--ink)">52</span>
+      <article class="kit">
+        <span class="kit-tag">For you</span>
+        <button class="kit-x" type="button" aria-label="Dismiss">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+        <div class="kit-ico" style="background:var(--green-soft);color:var(--lime-ico)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="13.5" rx="6.5" ry="8"/><path d="M12 10.5v6"/></svg>
         </div>
-        <div class="dist-key">
-          <div><i class="swatch" style="background:var(--seq-5)"></i>Top 3</div>
-          <div><i class="swatch" style="background:var(--seq-4)"></i>4–10</div>
-          <div><i class="swatch" style="background:var(--seq-3)"></i>11–20</div>
-          <div><i class="swatch" style="background:var(--seq-2)"></i>21–50</div>
-          <div><i class="swatch" style="background:var(--seq-1)"></i>51–100</div>
+        <h3>Conversion Heatmaps</h3>
+        <p>See what drives or blocks seller form submissions with heatmaps and session recordings.</p>
+      </article>
+
+      <article class="kit">
+        <div class="kit-ico" style="background:#e6f7f3;color:var(--teal-ico)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
         </div>
-      </div>
-    </section>
+        <h3>Content</h3>
+        <p>Create seller-intent content with AI and competitive data from cash-buyer rivals.</p>
+      </article>
 
-    <section class="card">
-      <div class="card-head">
-        <div><h3 class="card-title">Site audit</h3><div class="card-sub">148 pages crawled · 4h ago</div></div>
-        <span class="src src-live">Live</span>
-      </div>
-      <div class="gauge-row">
-        <div class="gauge">
-          <svg width="86" height="86" id="health" aria-hidden="true"></svg>
-          <div class="gauge-center"><div class="gauge-num">86</div><div class="gauge-unit">HEALTH</div></div>
+      <article class="kit">
+        <div class="kit-ico" style="background:var(--red-soft);color:var(--pink-ico)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4h4l6 4V6L7 10Z"/><path d="M17.5 9a4 4 0 0 1 0 6"/></svg>
         </div>
-        <dl style="flex:1">
-          <div class="stat-row"><dt><span class="pill pill-crit">Errors</span></dt><dd>7</dd></div>
-          <div class="stat-row"><dt><span class="pill pill-warn">Warnings</span></dt><dd>34</dd></div>
-          <div class="stat-row"><dt><span class="pill pill-idle">Notices</span></dt><dd>61</dd></div>
-        </dl>
-      </div>
-      <div class="card-sub" style="margin-bottom:4px;font-weight:600">Thematic reports</div>
-      <div class="theme-row"><span class="theme-name">Crawlability</span><span class="theme-track"><span class="theme-fill" style="width:92%;background:var(--green)"></span></span><span class="theme-pct">92%</span></div>
-      <div class="theme-row"><span class="theme-name">HTTPS</span><span class="theme-track"><span class="theme-fill" style="width:100%;background:var(--green)"></span></span><span class="theme-pct">100%</span></div>
-      <div class="theme-row"><span class="theme-name">Core Web Vitals</span><span class="theme-track"><span class="theme-fill" style="width:58%;background:var(--orange)"></span></span><span class="theme-pct">58%</span></div>
-      <div class="theme-row"><span class="theme-name">Internal linking</span><span class="theme-track"><span class="theme-fill" style="width:74%;background:var(--orange)"></span></span><span class="theme-pct">74%</span></div>
-      <div class="theme-row"><span class="theme-name">Markup</span><span class="theme-track"><span class="theme-fill" style="width:88%;background:var(--green)"></span></span><span class="theme-pct">88%</span></div>
-    </section>
+        <h3>AI PR</h3>
+        <p>Get local press coverage that shapes Twin Home Buyer's visibility in LLMs.</p>
+      </article>
 
-    <section class="card w6">
-      <div class="card-head">
-        <div><h3 class="card-title">Top organic keywords</h3><div class="card-sub">By contribution to seller leads</div></div>
-        <span class="src src-pending">Needs GSC</span>
-      </div>
-      <div class="table-scroll">
-        <table>
-          <thead><tr><th>Keyword</th><th class="num">Pos.</th><th class="num">Vol.</th><th class="num">Clicks</th><th class="num">Leads</th></tr></thead>
-          <tbody>
-            <tr><td class="kw">sell my house fast</td><td class="num"><span class="pos-badge pos-1">2</span></td><td class="num">8,100</td><td class="num">1,240</td><td class="num">61</td></tr>
-            <tr><td class="kw">we buy houses</td><td class="num"><span class="pos-badge pos-1">3</span></td><td class="num">6,600</td><td class="num">890</td><td class="num">44</td></tr>
-            <tr><td class="kw">cash home buyers near me</td><td class="num"><span class="pos-badge pos-2">6</span></td><td class="num">4,400</td><td class="num">520</td><td class="num">38</td></tr>
-            <tr><td class="kw">sell house without realtor</td><td class="num"><span class="pos-badge pos-2">9</span></td><td class="num">2,900</td><td class="num">310</td><td class="num">19</td></tr>
-            <tr><td class="kw">sell inherited house</td><td class="num"><span class="pos-badge pos-3">14</span></td><td class="num">1,900</td><td class="num">142</td><td class="num">12</td></tr>
-            <tr><td class="kw">avoid foreclosure sell home</td><td class="num"><span class="pos-badge pos-3">17</span></td><td class="num">1,300</td><td class="num">96</td><td class="num">9</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+      <article class="kit">
+        <div class="kit-ico" style="background:var(--violet-soft);color:var(--violet)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5.2A8 8 0 1 1 21 12Z"/></svg>
+        </div>
+        <h3>Social</h3>
+        <p>Manage the entire social cycle: create, schedule, analyze.</p>
+      </article>
 
-    <section class="card w6">
-      <div class="card-head">
-        <div><h3 class="card-title">Top pages</h3><div class="card-sub">Revenue weight is set in config, not inferred</div></div>
-        <span class="src src-pending">Needs GA4</span>
-      </div>
-      <div class="table-scroll">
-        <table>
-          <thead><tr><th>Page</th><th class="num">Sessions</th><th class="num">Leads</th><th class="num">CVR</th><th class="num">Weight</th></tr></thead>
-          <tbody>
-            <tr><td class="path">/</td><td class="num">6,120</td><td class="num">184</td><td class="num">3.0%</td><td class="num"><span class="weight-cell"><span class="weight-bar"><span class="weight-fill" style="width:95%"></span></span>95</span></td></tr>
-            <tr><td class="path">/contact/</td><td class="num">2,410</td><td class="num">142</td><td class="num">5.9%</td><td class="num"><span class="weight-cell"><span class="weight-bar"><span class="weight-fill" style="width:90%"></span></span>90</span></td></tr>
-            <tr><td class="path">/sell-inherited-house/</td><td class="num">1,180</td><td class="num">44</td><td class="num">3.7%</td><td class="num"><span class="weight-cell"><span class="weight-bar"><span class="weight-fill" style="width:70%"></span></span>70</span></td></tr>
-            <tr><td class="path">/foreclosure-help/</td><td class="num">890</td><td class="num">28</td><td class="num">3.1%</td><td class="num"><span class="weight-cell"><span class="weight-bar"><span class="weight-fill" style="width:65%"></span></span>65</span></td></tr>
-            <tr><td class="path">/blog/</td><td class="num">3,240</td><td class="num">6</td><td class="num">0.2%</td><td class="num"><span class="weight-cell"><span class="weight-bar"><span class="weight-fill" style="width:10%"></span></span>10</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+      <article class="kit">
+        <span class="kit-ok" aria-label="Active">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4.5 4.5L19 7"/></svg>
+        </span>
+        <div class="kit-ico" style="background:#e8eefd;color:var(--blue-ico)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 14 9l6 2-6 2-2 6-2-6-6-2 6-2z"/></svg>
+        </div>
+        <h3>AI Visibility</h3>
+        <p>Get discovered in ChatGPT, Google AI, and other AI search engines.</p>
+      </article>
 
-    <section class="card">
-      <div class="card-head">
-        <div><h3 class="card-title">Backlink analytics</h3><div class="card-sub">Provider-supplied</div></div>
-        <span class="src src-pending">Needs provider</span>
-      </div>
-      <dl>
-        <div class="stat-row"><dt>Total backlinks</dt><dd>11,205</dd></div>
-        <div class="stat-row"><dt>Referring domains</dt><dd>614 <span class="down">▼ 9</span></dd></div>
-        <div class="stat-row"><dt>Follow / nofollow</dt><dd>68% / 32%</dd></div>
-        <div class="stat-row"><dt>Toxicity score</dt><dd><span class="pill pill-warn">14 · elevated</span></dd></div>
-        <div class="stat-row"><dt>New / lost (28d)</dt><dd><span class="up">+142</span> / <span class="down">−171</span></dd></div>
-      </dl>
-    </section>
+      <article class="kit">
+        <div class="kit-ico" style="background:#eef0f6;color:var(--data)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>
+        </div>
+        <h3>Traffic &amp; Market</h3>
+        <p>Track competing cash-buyer markets and uncover seller demand you are missing.</p>
+      </article>
 
-    <section class="card">
-      <div class="card-head">
-        <div><h3 class="card-title">Competitor gap</h3><div class="card-sub">Keywords rivals rank for and we do not</div></div>
-        <span class="src src-pending">Needs provider</span>
-      </div>
-      <div class="table-scroll">
-        <table>
-          <thead><tr><th>Competitor</th><th class="num">Shared</th><th class="num">Missing</th></tr></thead>
-          <tbody>
-            <tr><td class="kw">opendoor.com</td><td class="num">318</td><td class="num">1,940</td></tr>
-            <tr><td class="kw">webuyuglyhouses.com</td><td class="num">402</td><td class="num">870</td></tr>
-            <tr><td class="kw">offerpad.com</td><td class="num">241</td><td class="num">1,120</td></tr>
-            <tr><td class="kw">housebuyernetwork.com</td><td class="num">186</td><td class="num">430</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="card">
-      <div class="card-head">
-        <div><h3 class="card-title">On-page ideas</h3><div class="card-sub">Every idea gated by risk tier</div></div>
-        <span class="src src-pending">Needs GSC</span>
-      </div>
-      <div class="issue"><span class="issue-stripe stripe-warn"></span><span class="issue-body"><span class="issue-title">Meta description missing on /contact/</span><span class="issue-meta">APPROVAL required · weight 90</span></span><span class="issue-num">1</span></div>
-      <div class="issue"><span class="issue-stripe stripe-warn"></span><span class="issue-body"><span class="issue-title">Thin content on 4 city pages</span><span class="issue-meta">HUMAN ONLY · weight 40–65</span></span><span class="issue-num">4</span></div>
-      <div class="issue"><span class="issue-stripe stripe-idle"></span><span class="issue-body"><span class="issue-title">Internal link opportunities</span><span class="issue-meta">APPROVAL required</span></span><span class="issue-num">12</span></div>
-      <div class="issue"><span class="issue-stripe stripe-idle"></span><span class="issue-body"><span class="issue-title">Image alt text incomplete</span><span class="issue-meta">APPROVAL required</span></span><span class="issue-num">23</span></div>
-    </section>
-
-    <section class="card">
-      <div class="card-head">
-        <div><h3 class="card-title">Local &amp; Google Business Profile</h3><div class="card-sub">Reviews, rating, visibility</div></div>
-        <span class="src src-pending">Needs GBP</span>
-      </div>
-      <div class="empty">
-        <div class="empty-title">No source connected</div>
-        <p>Connect the Google Business Profile API to populate rating, review velocity, unanswered reviews, and local pack visibility.</p>
-      </div>
-    </section>
-
-    <section class="card">
-      <div class="card-head">
-        <div><h3 class="card-title">Channel mix</h3><div class="card-sub">Sessions by source</div></div>
-        <span class="src src-pending">Needs GA4</span>
-      </div>
-      <div class="theme-row"><span class="theme-name">Organic search</span><span class="theme-track"><span class="theme-fill" style="width:52%;background:var(--seq-5)"></span></span><span class="theme-pct">52%</span></div>
-      <div class="theme-row"><span class="theme-name">Paid search</span><span class="theme-track"><span class="theme-fill" style="width:21%;background:var(--seq-4)"></span></span><span class="theme-pct">21%</span></div>
-      <div class="theme-row"><span class="theme-name">Direct</span><span class="theme-track"><span class="theme-fill" style="width:14%;background:var(--seq-3)"></span></span><span class="theme-pct">14%</span></div>
-      <div class="theme-row"><span class="theme-name">Referral</span><span class="theme-track"><span class="theme-fill" style="width:8%;background:var(--seq-2)"></span></span><span class="theme-pct">8%</span></div>
-      <div class="theme-row"><span class="theme-name">Social</span><span class="theme-track"><span class="theme-fill" style="width:5%;background:var(--seq-1)"></span></span><span class="theme-pct">5%</span></div>
-    </section>
-
-    <section class="card">
-      <div class="card-head">
-        <div><h3 class="card-title">Agent status</h3><div class="card-sub">Last successful run</div></div>
-        <span class="src src-live">Live</span>
-      </div>
-      <div class="issue"><span class="issue-stripe stripe-good"></span><span class="issue-body"><span class="issue-title">Site Guardian</span><span class="issue-meta">2 money pages · every 5 min</span></span><span class="pill pill-good"><i class="dot dot-good"></i>2m ago</span></div>
-      <div class="issue"><span class="issue-stripe stripe-good"></span><span class="issue-body"><span class="issue-title">Vision</span><span class="issue-meta">mobile + desktop · hourly</span></span><span class="pill pill-good"><i class="dot dot-good"></i>24m ago</span></div>
-      <div class="issue"><span class="issue-stripe stripe-good"></span><span class="issue-body"><span class="issue-title">Technical crawl</span><span class="issue-meta">148 pages · every 6h</span></span><span class="pill pill-good"><i class="dot dot-good"></i>4h ago</span></div>
-      <div class="issue"><span class="issue-stripe stripe-idle"></span><span class="issue-body"><span class="issue-title">PageSpeed</span><span class="issue-meta">no API key configured</span></span><span class="pill pill-idle">Idle</span></div>
-      <div class="issue"><span class="issue-stripe stripe-idle"></span><span class="issue-body"><span class="issue-title">Remediation</span><span class="issue-meta">production writes disabled</span></span><span class="pill pill-idle">Off</span></div>
-    </section>
-
-    <section class="card w8">
-      <div class="card-head">
-        <div><h3 class="card-title">Open incidents</h3><div class="card-sub">Ranked by business impact, not technical severity</div></div>
-        <span class="src src-live">Live</span>
-      </div>
-      <div class="table-scroll">
-        <table>
-          <thead><tr><th>Incident</th><th>Page</th><th>Detected by</th><th class="num">Seen</th><th class="num">Score</th><th>State</th></tr></thead>
-          <tbody>
-            <tr><td class="kw">Phone CTA not visible on mobile</td><td class="path">/contact/</td><td>vision</td><td class="num">6</td><td class="num">142</td><td><span class="pill pill-crit">Blocking</span></td></tr>
-            <tr><td class="kw">LCP 6.2s on mobile</td><td class="path">/</td><td>pagespeed</td><td class="num">3</td><td class="num">78</td><td><span class="pill pill-warn">Persistent</span></td></tr>
-            <tr><td class="kw">Meta description missing</td><td class="path">/contact/</td><td>technical_seo</td><td class="num">2</td><td class="num">61</td><td><span class="pill pill-warn">Open</span></td></tr>
-            <tr><td class="kw">Duplicate title across 3 blog posts</td><td class="path">/blog/*</td><td>technical_seo</td><td class="num">9</td><td class="num">9</td><td><span class="pill pill-idle">Monitor</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="card">
-      <div class="card-head">
-        <div><h3 class="card-title">Agent actions</h3><div class="card-sub">Nothing writes without four gates</div></div>
-        <span class="src src-live">Live</span>
-      </div>
-      <dl>
-        <div class="stat-row"><dt>Automatic (safe)</dt><dd>128</dd></div>
-        <div class="stat-row"><dt>Proposals prepared</dt><dd>40</dd></div>
-        <div class="stat-row"><dt>Awaiting approval</dt><dd><span class="pill pill-warn">40</span></dd></div>
-        <div class="stat-row"><dt>Executed</dt><dd>0</dd></div>
-        <div class="stat-row"><dt>Rolled back</dt><dd>0</dd></div>
-      </dl>
-      <div class="empty" style="margin-top:12px">
-        <div class="empty-title">Approvals not yet possible</div>
-        <p>Google Chat uses a one-way incoming webhook, so it cannot collect an authenticated approval. That needs a real control plane.</p>
-      </div>
-    </section>
-
+    </div>
+    <button class="kits-next" id="kits-next" type="button" aria-label="Scroll toolkits right">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+    </button>
   </div>
 
-  <footer>
-    <span><i class="swatch" style="background:var(--green);display:inline-block;vertical-align:middle;margin-right:5px"></i>Live — fed by an agent that exists today</span>
-    <span><i class="swatch" style="background:var(--rule-strong);display:inline-block;vertical-align:middle;margin-right:5px"></i>Pending — awaiting a data source</span>
+  <!-- ---------- Copilot ---------- -->
+  <section class="panel">
+    <div class="panel-head">
+      <span class="panel-title">Copilot<sup>AI</sup></span>
+      <span class="panel-note">— your personal recommendations</span>
+      <button class="panel-act" type="button">Open
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></svg>
+      </button>
+    </div>
+    <div class="notice">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 10v4.5M12 17.5v.01"/></svg>
+      <div class="notice-body">
+        <div class="notice-title">Approvals are not yet available</div>
+        <p>Alerts are delivered through a one-way Google Chat webhook, which cannot collect an authenticated approval. Prepared changes stay queued in the Project Dashboard until a control plane exists.</p>
+      </div>
+      <button class="notice-x" type="button" aria-label="Dismiss">✕</button>
+    </div>
+  </section>
+
+  <!-- ---------- Folders ---------- -->
+  <section class="panel" style="position:relative">
+    <div class="panel-head">
+      <span class="panel-title">Folders</span>
+      <a href="#" style="font-size:13.5px">Hide filters and view</a>
+      <span style="margin-left:auto;display:flex;gap:9px">
+        <button class="btn-ghost" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M12 3v13M8 7l4-4 4 4"/></svg>
+          Share
+        </button>
+        <button class="btn-ghost" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Create Folder
+        </button>
+      </span>
+    </div>
+
+    <div class="filters">
+      <span class="field">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="text" placeholder="Website or folder name" aria-label="Website or folder name">
+      </span>
+      <button class="field sel" type="button">Ownership <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7 7 7-7"/></svg></button>
+      <button class="field sel" type="button">Tags <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7 7 7-7"/></svg></button>
+      <button class="field sel" type="button">Toolkits shown: 4 selected <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7 7 7-7"/></svg> <i class="pip"></i></button>
+      <span class="toggle-wrap">
+        <button class="toggle" id="tableview" type="button" aria-pressed="false" aria-label="Table view, SEO only"></button>
+        Table view (SEO only)
+      </span>
+    </div>
+
+    <!-- Project 1 -->
+    <div class="proj">
+      <div class="proj-head">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+        <a class="proj-name" href="#">twinhomebuyer.com</a>
+        <span class="proj-url">twinhomebuyer.com</span>
+        <button class="proj-kebab" type="button" aria-label="Project options">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>
+        </button>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-label">AI Visibility</div>
+          <div class="metric-value na">n/a <svg class="ring" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8.5" fill="none" stroke="var(--border-2)" stroke-width="3"/></svg></div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Mentions</div>
+          <div class="metric-value">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Site Health</div>
+          <div class="metric-value" style="display:flex;align-items:center;gap:9px">
+            86%
+            <svg class="ring" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+              <circle cx="13" cy="13" r="10" fill="none" stroke="var(--border-2)" stroke-width="3"/>
+              <circle cx="13" cy="13" r="10" fill="none" stroke="var(--green)" stroke-width="3"
+                      stroke-linecap="round" stroke-dasharray="54 63" transform="rotate(-90 13 13)"/>
+            </svg>
+          </div>
+          <div class="metric-sub"><a href="#">Reload</a></div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Organic Traffic</div>
+          <div class="metric-value">9,840</div>
+          <div class="metric-sub up">+6.2%</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Organic Keywords</div>
+          <div class="metric-value">2,417</div>
+          <div class="metric-sub up">+148</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Backlinks</div>
+          <div class="metric-value">11,205</div>
+          <div class="metric-sub up">+1.4%</div>
+        </div>
+      </div>
+      <div class="proj-foot">
+        <span><b>Local:</b> <a href="#">+ Add a location</a></span>
+        <span><b>Advertising:</b> <a href="#">+ Manage Google ads</a></span>
+        <span><b>Paid Traffic:</b> 4,120 (21%)</span>
+        <span style="margin-left:auto"><b>Leads MTD:</b> 412 · <b>Contracts:</b> 11 · <b>ROAS:</b> 5.97</span>
+      </div>
+    </div>
+
+    <!-- Project 2 -->
+    <div class="proj">
+      <div class="proj-head">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+        <a class="proj-name" href="#">equitytrackinc.com</a>
+        <span class="proj-url">equitytrackinc.com</span>
+        <button class="proj-kebab" type="button" aria-label="Project options">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>
+        </button>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-label">AI Visibility</div>
+          <div class="metric-value na">n/a <svg class="ring" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8.5" fill="none" stroke="var(--border-2)" stroke-width="3"/></svg></div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Mentions</div>
+          <div class="metric-value">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Site Health</div>
+          <div class="metric-sub"><a href="#">Reload</a></div>
+          <button class="setup" type="button">Set up</button>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Organic Traffic</div>
+          <div class="metric-value">2</div>
+          <div class="metric-sub">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Organic Keywords</div>
+          <div class="metric-value">1</div>
+          <div class="metric-sub">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Backlinks</div>
+          <div class="metric-value">232</div>
+          <div class="metric-sub up">+16%</div>
+        </div>
+      </div>
+      <div class="proj-foot">
+        <span><b>Local:</b> <a href="#">+ Add a location</a></span>
+        <span><b>Advertising:</b> <a href="#">+ Manage Google ads</a></span>
+        <span><b>Paid Traffic:</b> 0 (0)</span>
+      </div>
+    </div>
+
+    <!-- Project 3 -->
+    <div class="proj">
+      <div class="proj-head">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+        <a class="proj-name" href="#">matrixgroupone.com</a>
+        <span class="proj-url">matrixgroupone.com</span>
+        <button class="proj-kebab" type="button" aria-label="Project options">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>
+        </button>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-label">AI Visibility</div>
+          <div class="metric-value na">n/a <svg class="ring" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8.5" fill="none" stroke="var(--border-2)" stroke-width="3"/></svg></div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Mentions</div>
+          <div class="metric-value">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Site Health</div>
+          <div class="metric-sub"><a href="#">Reload</a></div>
+          <button class="setup" type="button">Set up</button>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Organic Traffic</div>
+          <div class="metric-value">0</div>
+          <div class="metric-sub">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Organic Keywords</div>
+          <div class="metric-value">0</div>
+          <div class="metric-sub">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Backlinks</div>
+          <div class="metric-value">18</div>
+          <div class="metric-sub">0</div>
+        </div>
+      </div>
+      <div class="proj-foot">
+        <span><b>Local:</b> <a href="#">+ Add a location</a></span>
+        <span><b>Advertising:</b> <a href="#">+ Manage Google ads</a></span>
+        <span><b>Paid Traffic:</b> 0 (0)</span>
+      </div>
+    </div>
+
+    <!-- Coach mark -->
+    <div class="coach" id="coach" style="top:210px;left:44%">
+      <button class="coach-x" type="button" id="coach-x" aria-label="Close">✕</button>
+      <h4>Control the data you see</h4>
+      <p>Select the toolkits you want to see on your homepage.</p>
+      <div class="coach-btns">
+        <button class="coach-ok" type="button" id="coach-ok">Got it</button>
+        <button class="coach-later" type="button" id="coach-later">Remind me later</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- Provenance ---------- -->
+  <div class="srcbar">
+    <span><span class="src src-live">Live</span> Site Health · Incidents · Agent status — fed by agents that exist today</span>
+    <span><span class="src src-pending">Pending</span> Organic Traffic &amp; Keywords (Search Console) · Paid Traffic &amp; Leads (GA4) · Backlinks (provider) · AI Visibility · Mentions</span>
     <span style="margin-left:auto">Twin Home Buyer · Command Center</span>
-  </footer>
-</div>
+  </div>
+</main>
+
+<button class="fab" type="button" aria-label="Help">?</button>
 
 <script>
 (() => {
   "use strict";
-  const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-  const SVG = "http://www.w3.org/2000/svg";
-  const el = (n, a = {}) => {
-    const node = document.createElementNS(SVG, n);
-    for (const [k, v] of Object.entries(a)) node.setAttribute(k, v);
-    return node;
+
+  /* SEO flyout */
+  const toggle = document.getElementById("seo-toggle");
+  const flyout = document.getElementById("seo-flyout");
+  const scrim  = document.getElementById("scrim");
+
+  const setNav = (open) => {
+    flyout.dataset.open = open ? "1" : "0";
+    scrim.dataset.open  = open ? "1" : "0";
+    toggle.setAttribute("aria-expanded", String(open));
   };
+  toggle.addEventListener("click", () => setNav(flyout.dataset.open !== "1"));
+  scrim.addEventListener("click", () => setNav(false));
+  addEventListener("keydown", (e) => { if (e.key === "Escape") setNav(false); });
 
-  function sparkline(svg) {
-    const pts = svg.dataset.spark.split(",").map(Number);
-    const w = +svg.getAttribute("width"), h = +svg.getAttribute("height"), pad = 3;
-    const lo = Math.min(...pts), hi = Math.max(...pts), span = (hi - lo) || 1;
-    const x = (i) => pad + (i / (pts.length - 1)) * (w - pad * 2);
-    const y = (v) => h - pad - ((v - lo) / span) * (h - pad * 2);
-    const tone = css(svg.dataset.tone === "crit" ? "--red" : "--green");
-    svg.replaceChildren();
-    const line = pts.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
-    svg.append(el("path", { d: `${line} L${x(pts.length - 1).toFixed(1)},${h - pad} L${x(0).toFixed(1)},${h - pad} Z`,
-                            fill: tone, "fill-opacity": ".12" }));
-    svg.append(el("path", { d: line, fill: "none", stroke: tone, "stroke-width": "2",
-                            "stroke-linecap": "round", "stroke-linejoin": "round" }));
-    svg.append(el("circle", { cx: x(pts.length - 1), cy: y(pts.at(-1)), r: "2.8",
-                              fill: tone, stroke: css("--surface"), "stroke-width": "1.5" }));
-  }
-
-  function gauge(svg, pct) {
-    const size = +svg.getAttribute("width"), r = size / 2 - 7, c = size / 2;
-    const circ = 2 * Math.PI * r;
-    const tone = css(pct >= 85 ? "--green" : pct >= 65 ? "--orange" : "--red");
-    svg.replaceChildren();
-    svg.append(el("circle", { cx: c, cy: c, r, fill: "none", stroke: css("--grey-soft"), "stroke-width": "8" }));
-    svg.append(el("circle", { cx: c, cy: c, r, fill: "none", stroke: tone, "stroke-width": "8",
-                              "stroke-linecap": "round", "stroke-dasharray": `${(circ * pct) / 100} ${circ}`,
-                              transform: `rotate(-90 ${c} ${c})` }));
-  }
-
-  const SESSIONS = [248,262,255,271,289,264,243,276,298,311,305,288,262,301,324,336,318,297,272,315,342,351,338,320,296,344,358,366,372,381];
-  const LEADS    = [7,9,8,10,11,9,7,10,12,13,12,11,8,11,14,15,13,12,9,13,15,16,15,14,11,15,17,17,18,19];
-
-  function trend() {
-    const svg = document.getElementById("trend");
-    const tip = document.getElementById("trend-tip");
-    if (!svg) return;
-    const w = svg.clientWidth || 700, h = 196;
-    const m = { t: 12, r: 14, b: 26, l: 42 };
-    const iw = w - m.l - m.r, ih = h - m.t - m.b;
-    const hi = Math.max(...SESSIONS) * 1.08;
-    const x = (i) => m.l + (i / (SESSIONS.length - 1)) * iw;
-    const y = (v) => m.t + ih - (v / hi) * ih;
-
-    svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
-    svg.replaceChildren();
-
-    for (let g = 0; g <= 3; g++) {
-      const v = (hi / 3) * g, yy = y(v);
-      svg.append(el("line", { x1: m.l, x2: w - m.r, y1: yy, y2: yy, stroke: css("--rule"), "stroke-width": "1" }));
-      const t = el("text", { x: m.l - 8, y: yy + 4, "text-anchor": "end", fill: css("--ink-3"),
-                             "font-size": "10.5", "font-family": css("--ui") });
-      t.textContent = Math.round(v);
-      svg.append(t);
-    }
-
-    const path = SESSIONS.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
-    const tone = css("--orange");
-    svg.append(el("path", { d: `${path} L${x(SESSIONS.length - 1)},${y(0)} L${x(0)},${y(0)} Z`,
-                            fill: tone, "fill-opacity": ".13" }));
-    svg.append(el("path", { d: path, fill: "none", stroke: tone, "stroke-width": "2",
-                            "stroke-linejoin": "round", "stroke-linecap": "round" }));
-
-    ["Day 1", "Day 15", "Day 30"].forEach((label, i) => {
-      const idx = [0, 14, 29][i];
-      const t = el("text", { x: x(idx), y: h - 8,
-                             "text-anchor": i === 0 ? "start" : i === 2 ? "end" : "middle",
-                             fill: css("--ink-3"), "font-size": "10.5", "font-family": css("--ui") });
-      t.textContent = label;
-      svg.append(t);
-    });
-
-    const cross = el("line", { y1: m.t, y2: m.t + ih, stroke: css("--rule-strong"), "stroke-width": "1", opacity: "0" });
-    const dot = el("circle", { r: "4.5", fill: tone, stroke: css("--surface"), "stroke-width": "2", opacity: "0" });
-    svg.append(cross, dot);
-
-    svg.addEventListener("pointermove", (ev) => {
-      const box = svg.getBoundingClientRect();
-      const px = ((ev.clientX - box.left) / box.width) * w;
-      let i = Math.round(((px - m.l) / iw) * (SESSIONS.length - 1));
-      i = Math.max(0, Math.min(SESSIONS.length - 1, i));
-      cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("opacity", "1");
-      dot.setAttribute("cx", x(i)); dot.setAttribute("cy", y(SESSIONS[i])); dot.setAttribute("opacity", "1");
-      tip.innerHTML = `Day ${i + 1}<br>${SESSIONS[i]} sessions<br>${LEADS[i]} leads`;
-      tip.style.left = `${(x(i) / w) * 100}%`;
-      tip.style.top = `${y(SESSIONS[i])}px`;
-      tip.dataset.on = "1";
-    });
-    svg.addEventListener("pointerleave", () => {
-      cross.setAttribute("opacity", "0"); dot.setAttribute("opacity", "0"); tip.dataset.on = "0";
-    });
-  }
-
-  function render() {
-    document.querySelectorAll(".spark").forEach(sparkline);
-    const g = document.getElementById("health");
-    if (g) gauge(g, 86);
-    trend();
-  }
-
-  render();
-  addEventListener("resize", trend);
-  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
-
-  document.querySelectorAll(".range button").forEach((b) => {
-    b.addEventListener("click", () => {
-      document.querySelectorAll(".range button").forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
-    });
+  /* Toolkit rail */
+  const kits = document.getElementById("kits");
+  document.getElementById("kits-next").addEventListener("click", () => {
+    const atEnd = kits.scrollLeft + kits.clientWidth >= kits.scrollWidth - 8;
+    kits.scrollBy({ left: atEnd ? -kits.scrollLeft : 272, behavior: "smooth" });
   });
+  kits.querySelectorAll(".kit-x").forEach((b) =>
+    b.addEventListener("click", () => b.closest(".kit").remove()));
+
+  /* Table view toggle */
+  const tv = document.getElementById("tableview");
+  tv.addEventListener("click", () =>
+    tv.setAttribute("aria-pressed", tv.getAttribute("aria-pressed") === "true" ? "false" : "true"));
+
+  /* Coach mark */
+  const coach = document.getElementById("coach");
+  ["coach-x", "coach-ok", "coach-later"].forEach((id) =>
+    document.getElementById(id).addEventListener("click", () => coach.remove()));
 })();
 </script>
