@@ -33,12 +33,13 @@ foundation that Stage 1 audits and Stage 2 hardens.
 | Daily prioritized digest | Built, tested |
 | Risk policy + audit journal + rollback | Built, tested |
 | WordPress writes | **Disabled.** Four gates, all closed. |
-| Search Console (Stage 4) | Not started |
-| GA4 (Stage 5) | Not started |
-| Revenue attribution / ROAS (Stage 6) | Not started |
+| Search Console (Stage 4) | Built, tested (needs a service account, else *unavailable*) |
+| GA4 (Stage 5) | Built, tested (needs a service account + property ID) |
+| Revenue attribution / ROAS (Stage 6) | Built, tested (reads CSV exports; API adapters declared, not implemented) |
+| Unified priority engine (Stage 7) | Built, tested |
 | Approval control plane (Stage 9) | Not started |
 | Local SEO (Stage 10) | Not started |
-| Dashboard (Stage 13) | Not started |
+| Dashboard (Stage 13) | Shell built against real crawl data; not yet fed by Stages 4–7 |
 
 ---
 
@@ -73,6 +74,10 @@ For production, run it under systemd — **not** from a terminal. See
 | `vision` | One visual inspection pass (`--no-ai` for evidence only) |
 | `crawl` | One technical crawl (`--max-pages N`) |
 | `pagespeed` | One PageSpeed pass |
+| `search-console` | One Search Console pull (28-day window vs the prior 28) |
+| `ga4` | One GA4 conversion pull |
+| `revenue` | One revenue attribution / ROAS pass over the CSV exports |
+| `board` | Print the priority board and send nothing (`--no-ai` for the deterministic ranking alone) |
 | `digest` | Build and send the prioritized digest |
 | `once` | Run every currently-due task once |
 | `run` | The never-stop loop (systemd runs this) |
@@ -123,6 +128,62 @@ conversion-blocking defect gets a hard floor so it can never sort below a
 cosmetic issue on a higher-weighted page. Deterministic scoring runs *first*,
 and Claude reasons across those pre-computed signals — it never invents
 priority from nothing.
+
+### The priority board (Stage 7)
+
+`analysis/priority_engine.py` reasons across all seven agents at once and does
+three things a per-agent report cannot.
+
+**It correlates.** When the vision agent sees a broken form on the seller page
+and GA4 sees conversions collapse on that same page, those are not two
+findings — they are one problem with a cause and a consequence. They merge
+into a single item that names the pattern, and corroborated items outrank
+isolated ones. Two guards: the *same* agent reporting twice is not
+corroboration, and a genuine second defect from the leading agent stays its own
+item rather than being absorbed.
+
+**It buckets deterministically.** CRITICAL NOW / FIX NEXT / GROWTH
+OPPORTUNITIES / MONITOR / NO ACTION are decided in plain Python, and every item
+carries the reasons it landed where it did. Claude narrates the result; it
+cannot change it. Any line the model returns that does not map to a real
+finding is discarded, and a narration failure leaves the board intact.
+
+**It reports what it could not see.** Coverage is computed from the collectors'
+own statuses. A board built while three collectors were down says so in its
+headline, before anything else — "nothing actionable found in what could be
+checked" is a different statement from "all clear", and the system is not
+allowed to confuse them.
+
+```bash
+python main.py board --no-ai      # the deterministic ranking, nothing sent
+```
+
+### Revenue attribution (Stage 6)
+
+```
+Channel Spend → Lead → Qualified Lead → Appointment → Offer
+              → Contract → Closing → Gross Profit
+```
+
+Four rules govern what this agent will and will not say:
+
+1. **Unattributed deals stay unattributed.** They are their own bucket, sorted
+   last, never spread across channels. Redistributing unknowns inflates every
+   channel at once and the inflation is invisible.
+2. **No spend record means null ROAS** — not zero, not infinity — with the
+   reason attached. A channel that cost something we did not record has an
+   *unknown* return.
+3. **Gross profit counts on closing only.** A projected margin on an open
+   contract is a forecast, and forecasts do not belong in a ROAS numerator.
+4. **Attribution quality gates the verdict.** Past the configured unknown-share
+   threshold, the report says the numbers are unreliable *before* reporting
+   them, and confidence scales with attribution quality — a last-touch guess
+   never outranks a seller who said where they came from.
+
+Drop `deals.csv` and `spend.csv` into `data/revenue/input/`. Column names are
+matched loosely across CRM wordings; rows that cannot be parsed are reported
+with a line number and reason, never dropped and never defaulted. Those files
+contain seller records — `data/` is gitignored and must stay that way.
 
 ---
 
