@@ -8,5 +8,11 @@ PyYAML>=6.0.1
 # if Playwright is not installed, per Rule 8).
 playwright>=1.47.0
 
+# Search Console (Stage 4) and GA4 (Stage 5).
+# Optional: without them both collectors report "unavailable" rather than failing.
+google-api-python-client>=2.145.0
+google-auth>=2.35.0
+google-analytics-data>=0.18.10
+
 # Tests
 pytest>=8.3.0

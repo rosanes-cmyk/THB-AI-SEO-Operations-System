@@ -24,6 +24,7 @@ SECRET_ENV_KEYS = (
     "PAGESPEED_API_KEY",
     "WORDPRESS_APP_PASSWORD",
     "WORDPRESS_USERNAME",
+    "GOOGLE_APPLICATION_CREDENTIALS",
     "THB_HEALTHCHECK_PING_URL",
 )
 
@@ -117,6 +118,9 @@ class Secrets:
     wordpress_username: str = ""
     wordpress_app_password: str = ""
     healthcheck_ping_url: str = ""
+    google_credentials_path: str = ""
+    search_console_property: str = ""
+    ga4_property_id: str = ""
 
     def __repr__(self) -> str:  # pragma: no cover - trivial
         present = [
@@ -129,6 +133,9 @@ class Secrets:
                 ("wordpress_username", self.wordpress_username),
                 ("wordpress_app_password", self.wordpress_app_password),
                 ("healthcheck_ping_url", self.healthcheck_ping_url),
+                ("google_credentials_path", self.google_credentials_path),
+                ("search_console_property", self.search_console_property),
+                ("ga4_property_id", self.ga4_property_id),
             )
             if value
         ]
@@ -332,6 +339,9 @@ def load_settings(config_path: str | Path | None = None) -> Settings:
             wordpress_username=os.getenv("WORDPRESS_USERNAME", ""),
             wordpress_app_password=os.getenv("WORDPRESS_APP_PASSWORD", ""),
             healthcheck_ping_url=os.getenv("THB_HEALTHCHECK_PING_URL", ""),
+            google_credentials_path=os.getenv("GOOGLE_APPLICATION_CREDENTIALS", ""),
+            search_console_property=os.getenv("THB_SEARCH_CONSOLE_PROPERTY", ""),
+            ga4_property_id=os.getenv("THB_GA4_PROPERTY_ID", ""),
         ),
         data_dir=data_dir,
         reports_dir=_dir_from_env("THB_REPORTS_DIR", "reports"),
