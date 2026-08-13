@@ -187,6 +187,7 @@ def cmd_selftest(_args: argparse.Namespace) -> int:
     collector, a corrupt state file, and an unreachable Chat webhook must all
     leave the service running.
     """
+    import logging
     import tempfile
     from pathlib import Path
 
@@ -195,6 +196,11 @@ def cmd_selftest(_args: argparse.Namespace) -> int:
     from notifications.google_chat import GoogleChatNotifier
 
     checks: list[dict[str, Any]] = []
+
+    # Every failure below is injected on purpose. Logging them as errors makes
+    # a passing selftest look like a broken system, and buries the JSON result
+    # under tracebacks the operator is meant to ignore.
+    logging.disable(logging.CRITICAL)
 
     def check(name: str, passed: bool, detail: str = "") -> None:
         checks.append({"check": name, "passed": passed, "detail": detail})
@@ -279,8 +285,16 @@ def cmd_selftest(_args: argparse.Namespace) -> int:
             "no webhook configured; message retained",
         )
 
+    logging.disable(logging.NOTSET)
     passed = all(c["passed"] for c in checks)
-    _print({"passed": passed, "checks": checks})
+    _print(
+        {
+            "passed": passed,
+            "note": "every failure below was injected deliberately; "
+                    "passed=true means the system isolated all of them",
+            "checks": checks,
+        }
+    )
     return 0 if passed else 1
 
 
