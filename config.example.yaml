@@ -64,6 +64,39 @@ limits:
   vision_max_pages: 8
   claude_max_calls_per_hour: 60
 
+# ---------------------------------------------------------------------------
+# Revenue attribution (Stage 6).
+#
+# Data comes from CSV exports dropped in data/revenue/input/:
+#
+#   deals.csv  deal_id, channel, attribution, stage, created_on,
+#              closed_on, gross_profit, landing_page
+#   spend.csv  channel, period_start, period_end, amount
+#
+# Column names are matched loosely, so a raw CRM export usually works as-is.
+# `stage` must be one of: lead, qualified_lead, appointment, offer, contract,
+# closing (common CRM wordings like "Closed Won" and "Under Contract" are
+# recognized). `attribution` must be one of: manually_verified,
+# source_reported, last_touch, first_touch, unknown — anything else is read as
+# unknown rather than guessed at.
+#
+# Those CSVs contain seller records. data/ is gitignored; keep it that way.
+# ---------------------------------------------------------------------------
+revenue:
+  # The return the business is actually managing to. Every channel verdict is
+  # measured against this number, not an invented industry benchmark.
+  target_roas: 3.0
+  window_days: 90
+  # Below this many deals, one closing either way swings the ratio, so the
+  # channel is reported without a verdict.
+  min_deals_for_roas: 5
+  # Above this share of deals with no recorded source, the report says the
+  # numbers are unreliable before it reports them.
+  max_unknown_share: 0.30
+  # Channels where zero recorded spend is expected rather than missing.
+  organic_channels: ["seo", "organic", "direct", "referral"]
+  currency: "USD"
+
 # Viewports used by the vision collector.
 viewports:
   - name: mobile

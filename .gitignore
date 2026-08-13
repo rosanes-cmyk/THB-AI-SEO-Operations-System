@@ -11,7 +11,9 @@ gcp-*.json
 # Local config may contain internal URLs / tuning; ship the example instead.
 config.yaml
 
-# Runtime state and artifacts
+# Runtime state and artifacts.
+# data/revenue/input/ holds CRM exports containing seller records. It is
+# covered by the wildcard below; do not add an exception for it.
 data/*
 !data/.gitkeep
 !data/screenshots/

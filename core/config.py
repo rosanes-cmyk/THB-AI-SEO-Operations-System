@@ -93,6 +93,27 @@ class RetentionConfig:
 
 
 @dataclass(frozen=True)
+class RevenueConfig:
+    """Stage 6 — revenue attribution thresholds.
+
+    `target_roas` is the number the business is actually managing to; every
+    channel verdict is measured against it rather than an invented benchmark.
+    """
+
+    target_roas: float = 3.0
+    window_days: int = 90
+    # Below this many deals, a channel's ROAS is one lucky closing away from
+    # meaningless, so it is reported without a verdict.
+    min_deals_for_roas: int = 5
+    # Above this share of unattributed deals, every channel number is suspect
+    # and the report says so before it says anything else.
+    max_unknown_share: float = 0.30
+    # Channels where zero recorded spend is expected, not a missing record.
+    organic_channels: tuple[str, ...] = ("seo", "organic", "direct", "referral")
+    currency: str = "USD"
+
+
+@dataclass(frozen=True)
 class LimitsConfig:
     http_timeout_seconds: int = 20
     crawl_max_pages: int = 150
@@ -169,6 +190,7 @@ class Settings:
     incidents: IncidentConfig
     retention: RetentionConfig
     limits: LimitsConfig
+    revenue: RevenueConfig
     secrets: Secrets
     data_dir: Path
     reports_dir: Path
@@ -321,6 +343,15 @@ def load_settings(config_path: str | Path | None = None) -> Settings:
 
     data_dir = _dir_from_env("THB_DATA_DIR", "data")
 
+    revenue_raw = dict(section("revenue"))
+    organic = revenue_raw.pop("organic_channels", None)
+    revenue = RevenueConfig(
+        organic_channels=tuple(str(c) for c in (organic or RevenueConfig.organic_channels)),
+        **revenue_raw,
+    )
+    if revenue.target_roas <= 0:
+        raise ConfigError("revenue.target_roas must be greater than 0")
+
     return Settings(
         site_name=str(site.get("name") or base_url),
         base_url=str(base_url).rstrip("/") or str(base_url),
@@ -331,6 +362,7 @@ def load_settings(config_path: str | Path | None = None) -> Settings:
         incidents=IncidentConfig(**section("incidents")),
         retention=RetentionConfig(**section("retention")),
         limits=LimitsConfig(**section("limits")),
+        revenue=revenue,
         secrets=Secrets(
             anthropic_api_key=os.getenv("ANTHROPIC_API_KEY", ""),
             google_chat_webhook_url=os.getenv("GOOGLE_CHAT_WEBHOOK_URL", ""),
