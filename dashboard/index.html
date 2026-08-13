@@ -8,15 +8,21 @@
 
 /* ==========================================================================
    Twin Home Buyer — Command Center
-   A rebuild of the current Semrush home screen, renamed for THB.
 
-   Matched to the live UI: white chrome, black Analyze button, violet
-   accents, indigo metric figures, toolkit card rail, Copilot strip,
-   Folders table with per-project metric columns, and the SEO flyout nav.
+   Started as a rebuild of the Semrush home screen and has since been cut
+   down to what this business actually runs on. Everything that needed a
+   paid third-party dataset THB does not buy, or belonged to a different
+   marketing discipline entirely, is gone. What is left is one site, its
+   health, its search performance, and the money.
 
-   Type: Semrush serves Factor A + Lazzer (licensed to them, not
-   redistributed here) and declares "Inter, sans-serif" as its fallback.
-   Inter is OFL-licensed, so it is embedded above as a subsetted data URI.
+   The visual language is still Semrush's, because it is a good, familiar
+   dense-data UI: white chrome, black action button, violet accents, indigo
+   figures, left rail with flyout navigation.
+
+   Type: Semrush serves Factor A + Lazzer, which are licensed to them and
+   are NOT redistributed here. Their declared fallback is "Inter,
+   sans-serif"; Inter is OFL-licensed, so it is embedded above as a
+   subsetted data URI.
    ========================================================================== */
 
 :root {
@@ -530,36 +536,18 @@ a:hover { text-decoration: underline; }
   <button class="rail-btn" data-nav="home" type="button" aria-expanded="false" aria-controls="flyout" title="Home" aria-label="Home">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
   </button>
-  <button class="rail-btn" data-nav="seo" type="button" aria-expanded="false" aria-controls="flyout" title="SEO" aria-label="SEO">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 21v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+  <button class="rail-btn" data-nav="site" type="button" aria-expanded="false" aria-controls="flyout" title="Site" aria-label="Site">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.5 9h17M3.5 15h17"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg>
   </button>
-  <button class="rail-btn" data-nav="advertising" type="button" aria-expanded="false" aria-controls="flyout" title="Advertising" aria-label="Advertising">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.6 6.1 6.4.5-4.9 4.2 1.5 6.2L12 16.8 6.4 20l1.5-6.2L3 9.6l6.4-.5z"/></svg>
-  </button>
-  <button class="rail-btn" data-nav="traffic" type="button" aria-expanded="false" aria-controls="flyout" title="Traffic &amp; Market" aria-label="Traffic and Market">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>
+  <button class="rail-btn" data-nav="revenue" type="button" aria-expanded="false" aria-controls="flyout" title="Revenue" aria-label="Revenue">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-8"/><path d="M14 7h6v6"/></svg>
   </button>
   <button class="rail-btn" data-nav="local" type="button" aria-expanded="false" aria-controls="flyout" title="Local" aria-label="Local">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
   </button>
-  <button class="rail-btn" data-nav="aivis" type="button" aria-expanded="false" aria-controls="flyout" title="AI Visibility" aria-label="AI Visibility">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.5 9h17M3.5 15h17"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg>
-  </button>
   <div class="rail-sep"></div>
-  <button class="rail-btn" data-nav="content" type="button" aria-expanded="false" aria-controls="flyout" title="Content" aria-label="Content">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
-  </button>
-  <button class="rail-btn" data-nav="aipr" type="button" aria-expanded="false" aria-controls="flyout" title="AI PR" aria-label="AI PR">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4h4l6 4V6L7 10Z"/><path d="M17.5 9a4 4 0 0 1 0 6"/></svg>
-  </button>
-  <button class="rail-btn" data-nav="social" type="button" aria-expanded="false" aria-controls="flyout" title="Social" aria-label="Social">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5.2A8 8 0 1 1 21 12Z"/></svg>
-  </button>
   <button class="rail-btn" data-nav="reports" type="button" aria-expanded="false" aria-controls="flyout" title="Reports" aria-label="Reports">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 14 3.5-3.5 3 3L18 8"/></svg>
-  </button>
-  <button class="rail-btn" data-nav="alltools" type="button" aria-expanded="false" aria-controls="flyout" title="All tools" aria-label="All tools">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
   </button>
 </nav>
 
@@ -575,10 +563,7 @@ a:hover { text-decoration: underline; }
       <button type="submit">Analyze</button>
     </form>
     <nav class="topnav">
-      <a href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Invite users</a>
-      <a href="#">Pricing</a>
-      <a href="#">Enterprise</a>
-      <button type="button">More <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7 7 7-7"/></svg></button>
+      <span style="font-size:13.5px;color:var(--ink-3)">Twin Home Buyer</span>
       <span class="avatar">T</span>
     </nav>
   </div>
@@ -588,288 +573,22 @@ a:hover { text-decoration: underline; }
 <section class="view" data-view="home">
 
   <div class="preview-strip">
-    <strong>Preview — figures are sample data</strong>
+    <strong>Not built yet</strong>
     <p>
-      The layout mirrors the live Semrush home screen so it can be reviewed side by side. Numbers are
-      illustrative. Once sources are connected, each figure draws from the source named at the bottom
-      of this page, and anything without a source shows an empty state rather than an estimate.
+      Run <code>python tools/build_dashboard.py</code> to fill this page from the agents.
+      Every figure comes from an agent that measured it, or shows the reason it could not.
     </p>
   </div>
 
-  <!-- ---------- Toolkit rail ---------- -->
-  <div class="kits-hold">
-    <div class="kits" id="kits">
 
-      <article class="kit">
-        <span class="kit-tag">For you</span>
-        <button class="kit-x" type="button" aria-label="Dismiss">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
-        </button>
-        <div class="kit-ico" style="background:var(--green-soft);color:var(--lime-ico)">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="13.5" rx="6.5" ry="8"/><path d="M12 10.5v6"/></svg>
-        </div>
-        <h3>Conversion Heatmaps</h3>
-        <p>See what drives or blocks seller form submissions with heatmaps and session recordings.</p>
-      </article>
-
-      <article class="kit">
-        <div class="kit-ico" style="background:#e6f7f3;color:var(--teal-ico)">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
-        </div>
-        <h3>Content</h3>
-        <p>Create seller-intent content with AI and competitive data from cash-buyer rivals.</p>
-      </article>
-
-      <article class="kit">
-        <div class="kit-ico" style="background:var(--red-soft);color:var(--pink-ico)">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4h4l6 4V6L7 10Z"/><path d="M17.5 9a4 4 0 0 1 0 6"/></svg>
-        </div>
-        <h3>AI PR</h3>
-        <p>Get local press coverage that shapes Twin Home Buyer's visibility in LLMs.</p>
-      </article>
-
-      <article class="kit">
-        <div class="kit-ico" style="background:var(--violet-soft);color:var(--violet)">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5.2A8 8 0 1 1 21 12Z"/></svg>
-        </div>
-        <h3>Social</h3>
-        <p>Manage the entire social cycle: create, schedule, analyze.</p>
-      </article>
-
-      <article class="kit">
-        <span class="kit-ok" aria-label="Active">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4.5 4.5L19 7"/></svg>
-        </span>
-        <div class="kit-ico" style="background:#e8eefd;color:var(--blue-ico)">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 14 9l6 2-6 2-2 6-2-6-6-2 6-2z"/></svg>
-        </div>
-        <h3>AI Visibility</h3>
-        <p>Get discovered in ChatGPT, Google AI, and other AI search engines.</p>
-      </article>
-
-      <article class="kit">
-        <div class="kit-ico" style="background:#eef0f6;color:var(--data)">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>
-        </div>
-        <h3>Traffic &amp; Market</h3>
-        <p>Track competing cash-buyer markets and uncover seller demand you are missing.</p>
-      </article>
-
-    </div>
-    <button class="kits-next" id="kits-next" type="button" aria-label="Scroll toolkits right">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </button>
-  </div>
-
-  <!-- ---------- Copilot ---------- -->
+  <!-- ---------- The one site this system monitors ---------- -->
   <section class="panel">
     <div class="panel-head">
-      <span class="panel-title">Copilot<sup>AI</sup></span>
-      <span class="panel-note">— your personal recommendations</span>
-      <button class="panel-act" type="button">Open
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></svg>
-      </button>
+      <span class="panel-title">twinhomebuyer.com</span>
+      <span class="panel-note">the domain that produces seller contracts</span>
     </div>
-    <div class="notice">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 10v4.5M12 17.5v.01"/></svg>
-      <div class="notice-body">
-        <div class="notice-title">Approvals are not yet available</div>
-        <p>Alerts are delivered through a one-way Google Chat webhook, which cannot collect an authenticated approval. Prepared changes stay queued in the Project Dashboard until a control plane exists.</p>
-      </div>
-      <button class="notice-x" type="button" aria-label="Dismiss">✕</button>
-    </div>
-  </section>
-
-  <!-- ---------- Folders ---------- -->
-  <section class="panel" style="position:relative">
-    <div class="panel-head">
-      <span class="panel-title">Folders</span>
-      <a href="#" style="font-size:13.5px">Hide filters and view</a>
-      <span style="margin-left:auto;display:flex;gap:9px">
-        <button class="btn-ghost" type="button">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M12 3v13M8 7l4-4 4 4"/></svg>
-          Share
-        </button>
-        <button class="btn-ghost" type="button">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-          Create Folder
-        </button>
-      </span>
-    </div>
-
-    <div class="filters">
-      <span class="field">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input type="text" placeholder="Website or folder name" aria-label="Website or folder name">
-      </span>
-      <button class="field sel" type="button">Ownership <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7 7 7-7"/></svg></button>
-      <button class="field sel" type="button">Tags <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7 7 7-7"/></svg></button>
-      <button class="field sel" type="button">Toolkits shown: 4 selected <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7 7 7-7"/></svg> <i class="pip"></i></button>
-      <span class="toggle-wrap">
-        <button class="toggle" id="tableview" type="button" aria-pressed="false" aria-label="Table view, SEO only"></button>
-        Table view (SEO only)
-      </span>
-    </div>
-
-    <!-- Project 1 -->
-    <div class="proj">
-      <div class="proj-head">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
-        <a class="proj-name" href="#">twinhomebuyer.com</a>
-        <span class="proj-url">twinhomebuyer.com</span>
-        <button class="proj-kebab" type="button" aria-label="Project options">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>
-        </button>
-      </div>
-      <div class="metrics">
-        <div class="metric">
-          <div class="metric-label">AI Visibility</div>
-          <div class="metric-value na">n/a <svg class="ring" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8.5" fill="none" stroke="var(--border-2)" stroke-width="3"/></svg></div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Mentions</div>
-          <div class="metric-value">0</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Site Health</div>
-          <div class="metric-value" style="display:flex;align-items:center;gap:9px">
-            81%
-            <svg class="ring" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
-              <circle cx="13" cy="13" r="10" fill="none" stroke="var(--border-2)" stroke-width="3"/>
-              <circle cx="13" cy="13" r="10" fill="none" stroke="var(--green)" stroke-width="3"
-                      stroke-linecap="round" stroke-dasharray="51 63" transform="rotate(-90 13 13)"/>
-            </svg>
-          </div>
-          <div class="metric-sub"><a href="#">Reload</a></div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Organic Traffic</div>
-          <div class="metric-value">9,840</div>
-          <div class="metric-sub up">+6.2%</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Organic Keywords</div>
-          <div class="metric-value">2,417</div>
-          <div class="metric-sub up">+148</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Backlinks</div>
-          <div class="metric-value">11,205</div>
-          <div class="metric-sub up">+1.4%</div>
-        </div>
-      </div>
-      <div class="proj-foot">
-        <span><b>Local:</b> <a href="#">+ Add a location</a></span>
-        <span><b>Advertising:</b> <a href="#">+ Manage Google ads</a></span>
-        <span><b>Paid Traffic:</b> 4,120 (21%)</span>
-        <span style="margin-left:auto"><b>Leads MTD:</b> 412 · <b>Contracts:</b> 11 · <b>ROAS:</b> 5.97</span>
-      </div>
-    </div>
-
-    <!-- Project 2 -->
-    <div class="proj">
-      <div class="proj-head">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
-        <a class="proj-name" href="#">equitytrackinc.com</a>
-        <span class="proj-url">equitytrackinc.com</span>
-        <button class="proj-kebab" type="button" aria-label="Project options">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>
-        </button>
-      </div>
-      <div class="metrics">
-        <div class="metric">
-          <div class="metric-label">AI Visibility</div>
-          <div class="metric-value na">n/a <svg class="ring" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8.5" fill="none" stroke="var(--border-2)" stroke-width="3"/></svg></div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Mentions</div>
-          <div class="metric-value">0</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Site Health</div>
-          <div class="metric-sub"><a href="#">Reload</a></div>
-          <button class="setup" type="button">Set up</button>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Organic Traffic</div>
-          <div class="metric-value">2</div>
-          <div class="metric-sub">0</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Organic Keywords</div>
-          <div class="metric-value">1</div>
-          <div class="metric-sub">0</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Backlinks</div>
-          <div class="metric-value">232</div>
-          <div class="metric-sub up">+16%</div>
-        </div>
-      </div>
-      <div class="proj-foot">
-        <span><b>Local:</b> <a href="#">+ Add a location</a></span>
-        <span><b>Advertising:</b> <a href="#">+ Manage Google ads</a></span>
-        <span><b>Paid Traffic:</b> 0 (0)</span>
-      </div>
-    </div>
-
-    <!-- Project 3 -->
-    <div class="proj">
-      <div class="proj-head">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
-        <a class="proj-name" href="#">matrixgroupone.com</a>
-        <span class="proj-url">matrixgroupone.com</span>
-        <button class="proj-kebab" type="button" aria-label="Project options">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>
-        </button>
-      </div>
-      <div class="metrics">
-        <div class="metric">
-          <div class="metric-label">AI Visibility</div>
-          <div class="metric-value na">n/a <svg class="ring" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8.5" fill="none" stroke="var(--border-2)" stroke-width="3"/></svg></div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Mentions</div>
-          <div class="metric-value">0</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Site Health</div>
-          <div class="metric-sub"><a href="#">Reload</a></div>
-          <button class="setup" type="button">Set up</button>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Organic Traffic</div>
-          <div class="metric-value">0</div>
-          <div class="metric-sub">0</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Organic Keywords</div>
-          <div class="metric-value">0</div>
-          <div class="metric-sub">0</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Backlinks</div>
-          <div class="metric-value">18</div>
-          <div class="metric-sub">0</div>
-        </div>
-      </div>
-      <div class="proj-foot">
-        <span><b>Local:</b> <a href="#">+ Add a location</a></span>
-        <span><b>Advertising:</b> <a href="#">+ Manage Google ads</a></span>
-        <span><b>Paid Traffic:</b> 0 (0)</span>
-      </div>
-    </div>
-
-    <!-- Coach mark -->
-    <div class="coach" id="coach" style="top:210px;left:44%">
-      <button class="coach-x" type="button" id="coach-x" aria-label="Close">✕</button>
-      <h4>Control the data you see</h4>
-      <p>Select the toolkits you want to see on your homepage.</p>
-      <div class="coach-btns">
-        <button class="coach-ok" type="button" id="coach-ok">Got it</button>
-        <button class="coach-later" type="button" id="coach-later">Remind me later</button>
-      </div>
-    </div>
+    <div id="hm-metrics"></div>
+    <div class="proj-foot" id="hm-foot"></div>
   </section>
 
   <!-- ---------- Provenance ---------- -->
@@ -966,29 +685,6 @@ a:hover { text-decoration: underline; }
   </div>
 </section>
 
-<!-- ==================== DOMAIN OVERVIEW ==================== -->
-<section class="view" data-view="domain-overview">
-  <div class="viewhead">
-    <div><h1>Domain Overview</h1><div class="crumb">twinhomebuyer.com</div></div>
-    <div class="right"><span class="src src-pending">Needs Search Console + provider</span></div>
-  </div>
-  <div class="stub">
-    <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.5 9h17M3.5 15h17"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg></div>
-    <h2>Not connected yet</h2>
-    <p>Authority Score, organic traffic, and backlink counts come from a third-party dataset. Search Console covers clicks, impressions, and position — it does not publish authority or backlinks.</p>
-    <div class="stub-card">
-      <h3>What this will show</h3>
-      <ul>
-        <li>Organic clicks, impressions, CTR, average position — from Search Console</li>
-        <li>Traffic value and keyword count — needs a data provider</li>
-        <li>Backlinks and referring domains — needs a data provider</li>
-        <li>Authority score — proprietary to each provider; will be labelled by source</li>
-      </ul>
-      <div class="stub-need"><span class="src src-pending">Needs</span> Search Console, plus a backlink provider for the rest</div>
-    </div>
-  </div>
-</section>
-
 <!-- ==================== TOP PAGES ==================== -->
 <section class="view" data-view="top-pages">
   <div class="viewhead">
@@ -1016,7 +712,7 @@ a:hover { text-decoration: underline; }
 <!-- ==================== REVENUE CHAIN (THB) ==================== -->
 <section class="view" data-view="revenue-chain">
   <div class="viewhead">
-    <div><h1>Revenue Chain</h1><div class="crumb">Spend → closings · no Semrush equivalent</div></div>
+    <div><h1>Revenue Chain</h1><div class="crumb">Spend → closings · the question this system exists to answer</div></div>
     <div class="right"><span class="src src-pending">Needs CRM + GA4</span></div>
   </div>
   <div class="stub">
@@ -1129,19 +825,18 @@ a:hover { text-decoration: underline; }
 
 
   <div class="srcbar">
-    <span><span class="src src-live">Live</span> Site Health · Incidents · Agent status — fed by agents that exist today</span>
-    <span><span class="src src-pending">Pending</span> Organic Traffic &amp; Keywords (Search Console) · Paid Traffic &amp; Leads (GA4) · Backlinks (provider) · AI Visibility · Mentions</span>
+    <span><span class="src src-live">Live</span> Site Audit · Money Page Monitor · Priority Board — agents running today</span>
+    <span><span class="src src-pending">Pending</span> Organic Rankings &amp; Traffic Insights (Search Console + GA4) · ROAS &amp; Attribution (CRM export) · Local (Google Business Profile)</span>
     <span style="margin-left:auto">Twin Home Buyer · Command Center</span>
   </div>
 </main>
 
-<button class="fab" type="button" aria-label="Help">?</button>
 
 <!--@AUDIT@-->
 <script>window.__AUDIT__ = {"crawled_at":"2026-08-13 17:44 UTC","pages":153,"health":100,"errors":0,"warnings":0,"notices":0,"redirects":12,"fetch_errors":0,"throttled":10,"verdict":"No defects found","blurb":"All 153 crawled pages returned 200 and carry a title, meta description, H1, and a self-referencing canonical. The crawl stopped early after 10 throttled responses \u2014 the host returned 503 under sustained crawling, so coverage is partial. That is a server-load signal, not a page defect.","issues":[],"themes":[["Crawlability",100],["Titles",100],["Meta descriptions",100],["H1 present",100],["Canonical self-referencing",100],["Indexable",100]]};</script>
 <!--@/AUDIT@-->
 <!--@THB@-->
-<script>window.__THB__ = {"generated_at":"2026-08-13 18:46 UTC","site":"Twin Home Buyer","base_url":"https://www.twinhomebuyer.com","row_cap":40,"board":{"generated_at":"2026-08-13T18:46:31.820352+00:00","headline":"Incomplete picture: 4 of 4 agents did not report (ga4, revenue, search_console, technical_seo). Anything absent from this board may simply not have been measured.","counts":{"critical_now":0,"fix_next":0,"growth_opportunities":0,"monitor":0,"no_action":0},"coverage":{"ran":[],"unavailable":{"technical_seo":"skipped: --offline was passed, so the site was not crawled","search_console":"GOOGLE_APPLICATION_CREDENTIALS is not set","ga4":"THB_GA4_PROPERTY_ID is not set","revenue":"no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input."},"failed":{},"complete":false,"blind_spots":["ga4: THB_GA4_PROPERTY_ID is not set","revenue: no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input.","search_console: GOOGLE_APPLICATION_CREDENTIALS is not set","technical_seo: skipped: --offline was passed, so the site was not crawled"],"caveat":"Incomplete picture: 4 of 4 agents did not report (ga4, revenue, search_console, technical_seo). Anything absent from this board may simply not have been measured."},"buckets":{"critical_now":[],"fix_next":[],"growth_opportunities":[],"monitor":[],"no_action":[]},"top_action":null,"narrative":{}},"search":{"status":"unavailable","reason":"GOOGLE_APPLICATION_CREDENTIALS is not set","findings":0},"ga4":{"status":"unavailable","reason":"THB_GA4_PROPERTY_ID is not set","findings":0},"revenue":{"status":"unavailable","reason":"no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input.","findings":0},"joined":[],"joined_count":0,"crawl":{"status":"unavailable","reason":"skipped: --offline was passed, so the site was not crawled","findings":0}};</script>
+<script>window.__THB__ = {"generated_at":"2026-08-13 19:07 UTC","site":"Twin Home Buyer","base_url":"https://www.twinhomebuyer.com","row_cap":40,"board":{"generated_at":"2026-08-13T19:07:27.783201+00:00","headline":"Incomplete picture: 4 of 4 agents did not report (ga4, revenue, search_console, technical_seo). Anything absent from this board may simply not have been measured.","counts":{"critical_now":0,"fix_next":0,"growth_opportunities":0,"monitor":0,"no_action":0},"coverage":{"ran":[],"unavailable":{"technical_seo":"skipped: --offline was passed, so the site was not crawled","search_console":"GOOGLE_APPLICATION_CREDENTIALS is not set","ga4":"THB_GA4_PROPERTY_ID is not set","revenue":"no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input."},"failed":{},"complete":false,"blind_spots":["ga4: THB_GA4_PROPERTY_ID is not set","revenue: no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input.","search_console: GOOGLE_APPLICATION_CREDENTIALS is not set","technical_seo: skipped: --offline was passed, so the site was not crawled"],"caveat":"Incomplete picture: 4 of 4 agents did not report (ga4, revenue, search_console, technical_seo). Anything absent from this board may simply not have been measured."},"buckets":{"critical_now":[],"fix_next":[],"growth_opportunities":[],"monitor":[],"no_action":[]},"top_action":null,"narrative":{}},"search":{"status":"unavailable","reason":"GOOGLE_APPLICATION_CREDENTIALS is not set","findings":0},"ga4":{"status":"unavailable","reason":"THB_GA4_PROPERTY_ID is not set","findings":0},"revenue":{"status":"unavailable","reason":"no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input.","findings":0},"joined":[],"joined_count":0,"crawl":{"status":"unavailable","reason":"skipped: --offline was passed, so the site was not crawled","findings":0}};</script>
 <!--@/THB@-->
 <script>
 (() => {
@@ -1150,116 +845,43 @@ a:hover { text-decoration: underline; }
   /* ======================================================================
      Toolkit navigation.
 
-     `verified: true` means the menu was transcribed from a screenshot of
-     the live account and is exact. Everything else is reconstructed from
-     the published Semrush toolkit structure and is marked in the UI as
-     needing confirmation — so nothing here silently claims to be verified
-     when it is not.
+     Five toolkits, not Semrush's eleven. An entry earns its place only if
+     it is either backed by an agent today or reachable from a source THB
+     already owns — Search Console, GA4, Google Business Profile, or the
+     CRM. Competitor research, backlink tooling, keyword volume, content
+     generation, social and PR all needed a dataset nobody here buys, so a
+     menu item for them would have been a permanent dead end.
      ====================================================================== */
   const NAV = {
-    seo: {
-      title: "SEO", verified: true, top: "Dashboard",
+    home: {
+      title: "Home", top: "Overview",
+      groups: [["", ["All Projects", "Recent Activity"]]]
+    },
+    site: {
+      title: "Site", top: "Site Audit",
       groups: [
-        ["Site Performance", ["Site Audit", "Position Tracking"]],
-        ["Competitive Analysis", ["Domain Overview", "Organic Rankings", "Top Pages",
-                                  "Compare Domains", "Keyword Gap", "Backlink Gap"]],
-        ["Keyword Research", ["Keyword Overview", "Keyword Magic Tool",
-                              "Keyword Strategy Builder"]],
-        ["Content Ideas", ["SEO Writing Assistant", "Topic Research",
-                           "SEO Content Template"]],
-        ["Link Building", ["Backlinks", "Referring Domains", "Backlink Audit"]],
-        ["Extras", ["Sensor", "SEOquake", "Semrush Rank"]],
-        ["Other", ["On Page SEO Checker", "Organic Traffic Insights", "Link Building",
-                   "Log File Analyzer"]],
-        ["Revenue \u00b7 THB", ["Revenue Chain", "ROAS Tracker", "Lead Attribution",
-                                 "Money Page Monitor"]]
+        ["Health", ["Site Audit", "Money Page Monitor"]],
+        ["Search", ["Organic Rankings", "Position Tracking", "Top Pages",
+                    "Organic Traffic Insights"]]
+      ]
+    },
+    revenue: {
+      title: "Revenue", top: "Priority Board",
+      groups: [
+        ["Money", ["ROAS Tracker", "Lead Attribution", "Revenue Chain"]],
+        ["Ranking", ["Priority Board"]]
       ]
     },
     local: {
-      title: "Local", verified: true, top: "Dashboard",
+      title: "Local", top: "GBP Optimization",
       groups: [
-        ["", ["Listing Management", "Review Management", "GBP Optimization"]],
-        ["Automations", ["GBP AI Agent"]],
-        ["Competitive Analysis", ["Map Rank Tracker"]],
-        ["Revenue \u00b7 THB", ["Per-City Lead Volume"]]
-      ]
-    },
-    advertising: {
-      title: "Advertising", verified: true, top: "Get Started",
-      groups: [
-        ["", ["Ads Launch Assistant", "Ads AI Agent", "Advertising Research",
-              "Ads History", "PLA Research", "PPC Keyword Tool", "AdClarity"]],
-        ["Revenue \u00b7 THB", ["Cost per Contract", "Channel ROAS"]]
-      ]
-    },
-    traffic: {
-      title: "Traffic & Market", verified: true, top: "Traffic Analytics",
-      groups: [
-        ["Pages and Categories", ["Subfolders & Subdomains", "Page Groups"]],
-        ["Regional Trends", ["USA", "Countries", "Business Regions",
-                             "Geographical Regions"]],
-        ["Audience Profile", ["Demographics", "Audience Overlap", "Socioeconomics",
-                              "Behavior"]],
-        ["Advanced", ["Daily Trends", "Industry & Bulk Analysis", "Trends API",
-                      "Trending Websites"]],
-        ["Revenue \u00b7 THB", ["Seller Demand by Metro"]]
-      ]
-    },
-    aivis: {
-      title: "AI Visibility", verified: true, top: "Visibility Overview",
-      groups: [
-        ["AI Analysis", ["Visibility Overview", "Competitor Research", "Prompt Research"]],
-        ["Brand Performance", ["Brand Performance", "Perception", "Narrative Drivers",
-                               "Questions"]],
-        ["Boost & Monitor", ["Site Audit", "Prompt Tracking", "Content Creation"]]
-      ]
-    },
-    content: {
-      title: "Content", verified: true, top: "Dashboard",
-      groups: [
-        ["", ["AI Article Generator", "Content Optimizer", "Content Repurposing",
-              "Topic Finder", "SEO Brief Generator"]],
-        ["Library", ["My Content"]],
-        ["Revenue \u00b7 THB", ["Content \u2192 Lead Attribution"]]
-      ]
-    },
-    aipr: {
-      title: "AI PR", top: "AI PR Dashboard",
-      groups: [
-        ["Outreach", ["Prowly Press Releases", "Media Database", "Pitch Builder"]],
-        ["Measure", ["Coverage Monitoring", "Brand Mentions"]]
-      ]
-    },
-    social: {
-      title: "Social", top: "Social Dashboard",
-      groups: [
-        ["Publish", ["Social Poster", "Social Content AI"]],
-        ["Measure", ["Social Analytics", "Social Tracker", "Influencer Analytics"]],
-        ["Engage", ["Social Inbox"]]
+        ["Profile", ["GBP Optimization", "Review Management", "Listing Management"]],
+        ["Visibility", ["Map Rank Tracker", "Per-City Lead Volume"]]
       ]
     },
     reports: {
-      title: "Reports", verified: true, top: "My Reports",
-      groups: [
-        ["Recently updated", ["Organic Research: Position Changes",
-                              "Domain Overview (twinhomebuyer.com)"]],
-        ["Top Templates", ["Google Analytics 4", "Google Search Console", "Monthly SEO"]],
-        ["", ["Create report", "Templates", "Themes", "About My Reports Suite"]],
-        ["Revenue \u00b7 THB", ["Daily Prioritized Digest", "Incident History"]]
-      ]
-    },
-    home: {
-      title: "Home", top: "Projects",
-      groups: [["Overview", ["All Projects", "Folders", "Recent Activity"]]]
-    },
-    alltools: {
-      title: "App Center", verified: true, top: "Store",
-      groups: [
-        ["", ["My Apps"]],
-        ["Active", ["AdClarity - Advertising Intelligence"]],
-        ["Try for free", ["AI Website Testing", "SERP Gap Analyzer", "CallRail",
-                          "Influencer Analytics", "Exploding Topics", "AdCreative.ai"]]
-      ]
+      title: "Reports", top: "Daily Prioritized Digest",
+      groups: [["", ["Daily Prioritized Digest", "Incident History"]]]
     }
   };
 
@@ -1324,16 +946,15 @@ a:hover { text-decoration: underline; }
   function paint(key) {
     const kit = NAV[key];
     if (!kit) return;
-    const flag = kit.verified
-      ? '<div class="verified ok">Transcribed from your screenshot</div>'
-      : '<div class="verified todo">Reconstructed — send a screenshot to confirm</div>';
     flyout.innerHTML =
       `<h2>${esc(kit.title)}</h2>` +
       `<a class="top" href="#">${esc(kit.top)}</a>` +
-      flag +
       kit.groups.map(([name, items]) =>
         (name ? `<div class="flyout-group">${esc(name)}</div>` : "") +
-        items.map((i) => `<a href="#">${esc(i)}</a>`).join("")
+        // `top` is already rendered above as the toolkit's headline link;
+        // repeating it inside a group listed it twice.
+        items.filter((i) => i !== kit.top)
+             .map((i) => `<a href="#">${esc(i)}</a>`).join("")
       ).join("");
   }
 
@@ -1351,19 +972,6 @@ a:hover { text-decoration: underline; }
   scrim.addEventListener("click", () => setNav(null));
   addEventListener("keydown", (e) => { if (e.key === "Escape") setNav(null); });
 
-  /* Toolkit rail */
-  const kits = document.getElementById("kits");
-  document.getElementById("kits-next").addEventListener("click", () => {
-    const atEnd = kits.scrollLeft + kits.clientWidth >= kits.scrollWidth - 8;
-    kits.scrollBy({ left: atEnd ? -kits.scrollLeft : 272, behavior: "smooth" });
-  });
-  kits.querySelectorAll(".kit-x").forEach((b) =>
-    b.addEventListener("click", () => b.closest(".kit").remove()));
-
-  /* Table view toggle */
-  const tv = document.getElementById("tableview");
-  tv.addEventListener("click", () =>
-    tv.setAttribute("aria-pressed", tv.getAttribute("aria-pressed") === "true" ? "false" : "true"));
 
 
   /* ======================================================================
@@ -1372,7 +980,7 @@ a:hover { text-decoration: underline; }
      the data source it needs rather than pretending to be a real screen.
      ====================================================================== */
   const VIEWS = new Set(["home", "site-audit", "position-tracking",
-                         "domain-overview", "top-pages", "revenue-chain",
+                         "top-pages", "revenue-chain",
                          // Stage 4-7, backed by the agents.
                          "priority-board", "roas-tracker", "lead-attribution",
                          "organic-rankings", "organic-traffic-insights"]);
@@ -1386,20 +994,14 @@ a:hover { text-decoration: underline; }
   };
 
   const STAGE = {
-    "compare-domains":        ["Stage 12", "a data provider", "Side-by-side against johnbuysbayareahouses.com and the other Bay Area cash buyers you track."],
-    "keyword-gap":            ["Stage 12", "a data provider", "Keywords competitors rank for that you do not."],
-    "backlink-gap":           ["Stage 12", "a data provider", "Referring domains pointing at rivals but not at you."],
-    "keyword-overview":       ["Stage 11", "Search Console", "Volume, difficulty, and intent for a single keyword."],
-    "keyword-magic-tool":     ["Stage 11", "a data provider", "Keyword discovery across the seller-intent cluster."],
-    "backlinks":              ["Stage 12", "a data provider", "Every link pointing at the site."],
-    "referring-domains":      ["Stage 12", "a data provider", "Unique domains linking to you, and what you lost."],
-    "backlink-audit":         ["Stage 12", "a data provider", "Toxic links worth disavowing."],
-    "on-page-seo-checker":    ["Stage 11", "Search Console", "Per-page recommendations, each tagged with its risk tier."],
-    "listing-management":     ["Stage 10", "Google Business Profile", "Citation consistency across directories."],
-    "review-management":      ["Stage 10", "Google Business Profile", "Reviews, rating trend, and unanswered reviews."],
+    "listing-management":     ["Stage 10", "Google Business Profile", "Citation consistency across the directories sellers actually check."],
+    "review-management":      ["Stage 10", "Google Business Profile", "Reviews, rating trend, and anything left unanswered."],
     "gbp-optimization":       ["Stage 10", "Google Business Profile", "Profile completeness and local pack visibility."],
     "map-rank-tracker":       ["Stage 10", "Google Business Profile", "Grid rankings per Bay Area city."],
+    "per-city-lead-volume":   ["Stage 10", "GA4 + CRM", "Which Bay Area cities actually send sellers, against which ones have a page."],
     "money-page-monitor":     ["Stage 3", "nothing - already built", "The 5-minute heartbeat and hourly visual check, as a live view."],
+    "all-projects":           ["Stage 13", "nothing - already built", "One row per monitored site. Today the system monitors one."],
+    "recent-activity":        ["Stage 13", "nothing - already built", "Every agent run, in order, with what it found."]
   };
 
   function showView(rawName, label) {
@@ -1900,18 +1502,82 @@ a:hover { text-decoration: underline; }
         : "");
   }
 
+  /* The one site this system monitors.
+
+     Every metric here is drawn from an agent or shown as unmeasured with the
+     reason. There are no columns for numbers nobody can source -- authority
+     scores, backlink counts and mention volumes need a paid dataset THB does
+     not buy, and a column permanently reading "n/a" is just clutter that
+     teaches you to ignore the row. */
+  function renderHomeMetrics() {
+    const host = document.getElementById("hm-metrics");
+    const foot = document.getElementById("hm-foot");
+    if (!host) return;
+
+    const cell = (label, value, sub, pending) =>
+      `<div class="metric"><div class="metric-label">${esc(label)}</div>` +
+      (pending
+        ? `<div class="metric-value na">not connected</div>` +
+          `<div class="metric-sub">${esc(sub || "")}</div>`
+        : `<div class="metric-value">${value}</div>` +
+          (sub ? `<div class="metric-sub">${esc(sub)}</div>` : "")) +
+      `</div>`;
+
+    const search = THB && THB.search;
+    // Deliberately not named `money` -- that is the currency formatter.
+    const rev    = THB && THB.revenue;
+    const board  = THB && THB.board;
+
+    const cells = [];
+
+    // Dated deliberately: the audit block survives a --offline rebuild, so
+    // without the date a figure from last week reads as measured just now.
+    cells.push(AUDIT
+      ? cell("Site Health", `${AUDIT.health}%`,
+             `${Number(AUDIT.pages).toLocaleString()} pages · ${AUDIT.crawled_at}`)
+      : cell("Site Health", "", "run a crawl", true));
+
+    cells.push(board
+      ? cell("Needs action now", board.counts.critical_now,
+             `${board.counts.fix_next} queued behind it`)
+      : cell("Needs action now", "", "build the board", true));
+
+    cells.push(search && search.status === "ok"
+      ? cell("Organic clicks", num(search.totals.clicks),
+             `avg. position ${Number(search.totals.position || 0).toFixed(1)}`)
+      : cell("Organic clicks", "", "needs Search Console", true));
+
+    cells.push(rev && rev.status === "ok"
+      ? cell("Gross profit", money(rev.totals.total_gross_profit, rev.currency),
+             `blended ${rev.totals.blended_roas == null ? "—" : rev.totals.blended_roas.toFixed(2) + "x"}`)
+      : cell("Gross profit", "", "needs the CRM export", true));
+
+    cells.push(rev && rev.status === "ok"
+      ? cell("Closings", num(rev.funnel_totals.closing),
+             `from ${num(rev.funnel_totals.lead)} leads`)
+      : cell("Closings", "", "needs the CRM export", true));
+
+    host.className = "metrics";
+    host.style.gridTemplateColumns = "repeat(5, minmax(0,1fr))";
+    host.innerHTML = cells.join("");
+
+    if (foot) {
+      foot.innerHTML =
+        `<span><b>Last build:</b> ${esc((THB && THB.generated_at) || "never")}</span>` +
+        `<span><b>Monitored pages:</b> configured in config.yaml</span>` +
+        `<span><b>Production writes:</b> disabled</span>`;
+    }
+  }
+
   renderBoard();
   renderRoas();
   renderAttribution();
   renderSearch();
   renderJoined();
   renderHomeCoverage();
+  renderHomeMetrics();
 
   showView("home");
 
-  /* Coach mark */
-  const coach = document.getElementById("coach");
-  ["coach-x", "coach-ok", "coach-later"].forEach((id) =>
-    document.getElementById(id).addEventListener("click", () => coach.remove()));
 })();
 </script>
