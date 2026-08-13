@@ -1,0 +1,1097 @@
+<title>Twin Home Buyer Command Center</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+/* ==========================================================================
+   Twin Home Buyer — Command Center
+   Semrush's full widget set, rebuilt around revenue instead of SEO metrics.
+
+   Visual world: title company / county recorder. Cool teal-biased neutrals,
+   serif section heads, and every figure set in mono like a ledger entry.
+   ========================================================================== */
+
+/* --- Light palette: the complete set lives on bare :root ----------------- */
+:root {
+  --paper:        #F2F5F4;
+  --surface:      #FFFFFF;
+  --surface-sunk: #E9EEED;
+  --rule:         #D5DEDD;
+  --rule-strong:  #B9C6C5;
+
+  --ink:          #10201F;
+  --ink-2:        #3D5150;
+  --ink-3:        #6B7C7B;
+
+  --accent:       #0E5C5E;
+  --accent-soft:  #E2EFEE;
+
+  --good:         #226B4A;
+  --good-soft:    #E0EFE7;
+  --warn:         #8A5F0F;
+  --warn-soft:    #F6EBD6;
+  --crit:         #9C3325;
+  --crit-soft:    #F7E4E1;
+  --idle:         #5C6E6D;
+  --idle-soft:    #E7ECEB;
+
+  /* Sequential ramp, light -> dark. Position buckets only. */
+  --seq-1: #A8D5D2;
+  --seq-2: #6FBDB9;
+  --seq-3: #3E9E9C;
+  --seq-4: #1F7A7C;
+  --seq-5: #0E5C5E;
+
+  --shadow: 0 1px 2px rgba(16, 32, 31, .06), 0 4px 12px rgba(16, 32, 31, .04);
+
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --sans:  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --mono:  ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Dark, for viewers with no explicit choice (the un-stamped default). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:        #0C1413;
+    --surface:      #141D1C;
+    --surface-sunk: #1B2625;
+    --rule:         #263433;
+    --rule-strong:  #3A4B4A;
+
+    --ink:          #E7EFEE;
+    --ink-2:        #A9BAB8;
+    --ink-3:        #7B8D8C;
+
+    --accent:       #4FB3B2;
+    --accent-soft:  #12302F;
+
+    --good:         #5FBF8E;
+    --good-soft:    #122A20;
+    --warn:         #D6A342;
+    --warn-soft:    #2C2313;
+    --crit:         #E1705F;
+    --crit-soft:    #331A16;
+    --idle:         #8A9A99;
+    --idle-soft:    #1E2827;
+
+    --seq-1: #1F4645;
+    --seq-2: #2C6B6A;
+    --seq-3: #3E9E9C;
+    --seq-4: #6FBDB9;
+    --seq-5: #A8D5D2;
+
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+  }
+}
+
+/* Dark, when the viewer explicitly chose it. */
+:root[data-theme="dark"] {
+  --paper:        #0C1413;
+  --surface:      #141D1C;
+  --surface-sunk: #1B2625;
+  --rule:         #263433;
+  --rule-strong:  #3A4B4A;
+
+  --ink:          #E7EFEE;
+  --ink-2:        #A9BAB8;
+  --ink-3:        #7B8D8C;
+
+  --accent:       #4FB3B2;
+  --accent-soft:  #12302F;
+
+  --good:         #5FBF8E;
+  --good-soft:    #122A20;
+  --warn:         #D6A342;
+  --warn-soft:    #2C2313;
+  --crit:         #E1705F;
+  --crit-soft:    #331A16;
+  --idle:         #8A9A99;
+  --idle-soft:    #1E2827;
+
+  --seq-1: #1F4645;
+  --seq-2: #2C6B6A;
+  --seq-3: #3E9E9C;
+  --seq-4: #6FBDB9;
+  --seq-5: #A8D5D2;
+
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+.wrap { max-width: 1440px; margin: 0 auto; padding: 0 20px 64px; }
+
+/* --- Masthead ----------------------------------------------------------- */
+.masthead {
+  border-bottom: 1px solid var(--rule);
+  background: var(--surface);
+  position: sticky; top: 0; z-index: 20;
+}
+.masthead-inner {
+  max-width: 1440px; margin: 0 auto; padding: 14px 20px;
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 11px; }
+.brand-mark {
+  width: 34px; height: 34px; border-radius: 5px; flex: none;
+  background: var(--accent); color: #fff;
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: -.5px;
+}
+.brand-name {
+  font-family: var(--serif); font-size: 19px; font-weight: 600;
+  letter-spacing: -.2px; line-height: 1.1;
+}
+.brand-sub {
+  font-family: var(--mono); font-size: 10.5px; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: .1em;
+}
+.masthead-spacer { flex: 1; }
+
+.domain-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--rule); border-radius: 5px;
+  padding: 6px 11px; background: var(--surface);
+  font-family: var(--mono); font-size: 12px; color: var(--ink-2);
+}
+.dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.dot-good { background: var(--good); }
+.dot-crit { background: var(--crit); }
+.dot-warn { background: var(--warn); }
+.dot-idle { background: var(--idle); }
+
+.range { display: flex; border: 1px solid var(--rule); border-radius: 5px; overflow: hidden; }
+.range button {
+  border: 0; background: var(--surface); color: var(--ink-2);
+  font-family: var(--mono); font-size: 11.5px; padding: 6px 11px; cursor: pointer;
+  border-right: 1px solid var(--rule);
+}
+.range button:last-child { border-right: 0; }
+.range button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+
+/* --- Provenance banner -------------------------------------------------- */
+.banner {
+  margin: 18px 0 0;
+  border: 1px solid var(--warn); border-left-width: 4px;
+  background: var(--warn-soft); color: var(--ink);
+  border-radius: 6px; padding: 12px 15px;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.banner strong { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--warn); }
+.banner p { margin: 3px 0 0; font-size: 13px; color: var(--ink-2); max-width: 88ch; }
+
+/* --- Section headings --------------------------------------------------- */
+.section-head {
+  display: flex; align-items: baseline; gap: 12px;
+  margin: 34px 0 13px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+.section-head h2 {
+  font-family: var(--serif); font-size: 17px; font-weight: 600;
+  margin: 0; letter-spacing: -.15px;
+}
+.section-head .note {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  margin-left: auto; text-align: right;
+}
+
+/* --- Revenue chain ------------------------------------------------------ */
+.chain {
+  background: var(--surface); border: 1px solid var(--rule);
+  border-radius: 8px; box-shadow: var(--shadow);
+  padding: 4px; overflow-x: auto;
+}
+.chain-track { display: flex; align-items: stretch; min-width: 940px; }
+.chain-step {
+  flex: 1; padding: 13px 12px; position: relative;
+  border-right: 1px solid var(--rule);
+}
+.chain-step:last-child { border-right: 0; }
+.chain-step.terminal { background: var(--accent-soft); border-radius: 5px; }
+.chain-label {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink-3); white-space: nowrap;
+}
+.chain-value {
+  font-family: var(--mono); font-size: 19px; font-weight: 600;
+  margin-top: 5px; letter-spacing: -.4px; font-variant-numeric: tabular-nums;
+}
+.chain-step.terminal .chain-value { color: var(--accent); }
+.chain-delta { font-family: var(--mono); font-size: 10.5px; margin-top: 2px; }
+.up   { color: var(--good); }
+.down { color: var(--crit); }
+.flat { color: var(--ink-3); }
+
+/* --- Card grid ---------------------------------------------------------- */
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+.card {
+  grid-column: span 4;
+  background: var(--surface); border: 1px solid var(--rule);
+  border-radius: 8px; box-shadow: var(--shadow);
+  padding: 15px 16px 16px; min-width: 0;
+  display: flex; flex-direction: column;
+}
+.card.w6  { grid-column: span 6; }
+.card.w8  { grid-column: span 8; }
+.card.w12 { grid-column: span 12; }
+
+.card-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 13px; }
+.card-title {
+  font-family: var(--serif); font-size: 14.5px; font-weight: 600;
+  margin: 0; letter-spacing: -.1px; line-height: 1.3;
+}
+.card-sub {
+  font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: .07em; margin-top: 3px;
+}
+
+/* Provenance chip — which source feeds this widget, and does it exist yet */
+.src {
+  margin-left: auto; flex: none; white-space: nowrap;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .05em;
+  text-transform: uppercase; padding: 3px 7px; border-radius: 3px;
+  border: 1px solid transparent;
+}
+.src-live    { background: var(--good-soft); color: var(--good); border-color: var(--good); }
+.src-pending { background: var(--idle-soft); color: var(--idle); border-color: var(--rule-strong); }
+
+/* --- KPI tiles ---------------------------------------------------------- */
+.kpi-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+.kpi {
+  background: var(--surface); border: 1px solid var(--rule);
+  border-radius: 8px; box-shadow: var(--shadow); padding: 13px 14px 11px;
+  min-width: 0;
+}
+.kpi-label {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink-3);
+  display: flex; align-items: center; gap: 5px;
+}
+.kpi-value {
+  font-family: var(--mono); font-size: 25px; font-weight: 600;
+  letter-spacing: -.9px; margin-top: 6px; font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.kpi-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; margin-top: 4px; }
+.kpi-delta { font-family: var(--mono); font-size: 11px; font-variant-numeric: tabular-nums; }
+
+/* --- Stat rows ---------------------------------------------------------- */
+.stat-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; padding: 7px 0; border-bottom: 1px dotted var(--rule);
+}
+.stat-row:last-child { border-bottom: 0; }
+.stat-row dt { color: var(--ink-2); font-size: 13px; }
+.stat-row dd {
+  margin: 0; font-family: var(--mono); font-size: 13.5px; font-weight: 600;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+dl { margin: 0; }
+
+/* --- Gauge -------------------------------------------------------------- */
+.gauge-row { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+.gauge { position: relative; flex: none; }
+.gauge-center {
+  position: absolute; inset: 0; display: grid; place-content: center; text-align: center;
+}
+.gauge-num {
+  font-family: var(--mono); font-size: 23px; font-weight: 700;
+  letter-spacing: -.8px; line-height: 1; font-variant-numeric: tabular-nums;
+}
+.gauge-unit { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: .08em; }
+
+/* --- Distribution bar (sequential, direct-labelled) --------------------- */
+.dist { display: flex; height: 30px; border-radius: 4px; overflow: hidden; gap: 2px; margin: 4px 0 10px; }
+.dist span { display: grid; place-items: center; font-family: var(--mono); font-size: 10.5px; font-weight: 600; color: var(--ink); }
+.dist-key { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.dist-key div { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10.5px; color: var(--ink-2); }
+.swatch { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+
+/* --- Tables ------------------------------------------------------------- */
+.table-scroll { overflow-x: auto; margin: 0 -16px -16px; padding: 0 16px 16px; }
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+th {
+  text-align: left; font-family: var(--mono); font-size: 9.5px;
+  letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3);
+  font-weight: 500; padding: 7px 9px 7px 0; border-bottom: 1px solid var(--rule-strong);
+  white-space: nowrap;
+}
+td {
+  padding: 8px 9px 8px 0; border-bottom: 1px solid var(--rule);
+  vertical-align: middle;
+}
+tr:last-child td { border-bottom: 0; }
+.num { font-family: var(--mono); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.kw { font-weight: 500; }
+.path { font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); }
+
+.pos-badge {
+  display: inline-grid; place-items: center; min-width: 26px; height: 21px;
+  border-radius: 3px; font-family: var(--mono); font-size: 11px; font-weight: 600;
+  padding: 0 5px; font-variant-numeric: tabular-nums;
+}
+.pos-1 { background: var(--seq-5); color: var(--surface); }
+.pos-2 { background: var(--seq-3); color: var(--surface); }
+.pos-3 { background: var(--surface-sunk); color: var(--ink-2); }
+
+.weight-cell { display: flex; align-items: center; gap: 7px; justify-content: flex-end; }
+.weight-bar { width: 42px; height: 5px; border-radius: 3px; background: var(--surface-sunk); overflow: hidden; flex: none; }
+.weight-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+
+/* --- Pills & issue rows ------------------------------------------------- */
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .04em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 999px;
+  border: 1px solid transparent; white-space: nowrap;
+}
+.pill-good { background: var(--good-soft); color: var(--good); border-color: var(--good); }
+.pill-warn { background: var(--warn-soft); color: var(--warn); border-color: var(--warn); }
+.pill-crit { background: var(--crit-soft); color: var(--crit); border-color: var(--crit); }
+.pill-idle { background: var(--idle-soft); color: var(--idle); border-color: var(--rule-strong); }
+
+.issue { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dotted var(--rule); }
+.issue:last-child { border-bottom: 0; }
+.issue-stripe { width: 3px; align-self: stretch; border-radius: 2px; flex: none; min-height: 30px; }
+.stripe-crit { background: var(--crit); }
+.stripe-warn { background: var(--warn); }
+.stripe-good { background: var(--good); }
+.stripe-idle { background: var(--idle); }
+.issue-body { min-width: 0; flex: 1; }
+.issue-title { font-size: 13px; font-weight: 500; }
+.issue-meta { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); margin-top: 1px; }
+.issue-num { font-family: var(--mono); font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* --- Thematic bars ------------------------------------------------------ */
+.theme-row { display: flex; align-items: center; gap: 10px; padding: 5px 0; }
+.theme-name { font-size: 12.5px; flex: 1; min-width: 0; color: var(--ink-2); }
+.theme-track { width: 88px; height: 6px; border-radius: 3px; background: var(--surface-sunk); overflow: hidden; flex: none; }
+.theme-fill { height: 100%; border-radius: 3px; }
+.theme-pct { font-family: var(--mono); font-size: 11.5px; width: 38px; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* --- Empty state -------------------------------------------------------- */
+.empty {
+  border: 1px dashed var(--rule-strong); border-radius: 6px;
+  padding: 18px 16px; text-align: center; color: var(--ink-3);
+  background: var(--surface-sunk);
+}
+.empty-title { font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
+.empty p { margin: 6px 0 0; font-size: 12.5px; max-width: 44ch; margin-inline: auto; line-height: 1.45; }
+
+/* --- Chart tooltip ------------------------------------------------------ */
+.chart-hold { position: relative; }
+.tip {
+  position: absolute; pointer-events: none; opacity: 0;
+  background: var(--ink); color: var(--paper);
+  border-radius: 5px; padding: 7px 10px; font-family: var(--mono); font-size: 11px;
+  white-space: nowrap; transform: translate(-50%, -120%); transition: opacity .1s;
+  z-index: 5; line-height: 1.5;
+}
+.tip[data-on="1"] { opacity: 1; }
+
+footer {
+  margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--rule);
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  display: flex; gap: 10px 26px; flex-wrap: wrap; align-items: center;
+}
+
+@media (max-width: 1180px) {
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  .card, .card.w6, .card.w8 { grid-column: span 6; }
+}
+@media (max-width: 720px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .card, .card.w6, .card.w8, .card.w12 { grid-column: span 12; }
+  .masthead { position: static; }
+}
+</style>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand">
+      <div class="brand-mark">THB</div>
+      <div>
+        <div class="brand-name">Twin Home Buyer</div>
+        <div class="brand-sub">Command Center</div>
+      </div>
+    </div>
+    <div class="masthead-spacer"></div>
+    <div class="domain-chip"><span class="dot dot-good"></span>twinhomebuyer.com</div>
+    <div class="range" role="group" aria-label="Comparison window">
+      <button type="button" aria-pressed="false">7d</button>
+      <button type="button" aria-pressed="true">28d</button>
+      <button type="button" aria-pressed="false">90d</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="banner">
+    <div>
+      <strong>Preview — figures are sample data</strong>
+      <p>
+        Every number below is illustrative, shown so the layout can be reviewed. The system does
+        not invent metrics: once connected, each widget draws from the source named on its badge,
+        and any widget whose source is missing shows an empty state instead of an estimate.
+        <strong>Live</strong> badges mark widgets already fed by agents that exist today.
+      </p>
+    </div>
+  </div>
+
+  <!-- ================= REVENUE CHAIN ================= -->
+  <div class="section-head">
+    <h2>Revenue chain</h2>
+    <div class="note">Spend → closings · month to date</div>
+  </div>
+
+  <div class="chain">
+    <div class="chain-track">
+      <div class="chain-step">
+        <div class="chain-label">Marketing spend</div>
+        <div class="chain-value">$41,200</div>
+        <div class="chain-delta flat">— vs prior</div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-label">Visitors</div>
+        <div class="chain-value">18,940</div>
+        <div class="chain-delta up">▲ 6.2%</div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-label">Leads</div>
+        <div class="chain-value">412</div>
+        <div class="chain-delta up">▲ 3.1%</div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-label">Qualified</div>
+        <div class="chain-value">168</div>
+        <div class="chain-delta down">▼ 4.5%</div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-label">Appointments</div>
+        <div class="chain-value">74</div>
+        <div class="chain-delta up">▲ 2.8%</div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-label">Offers</div>
+        <div class="chain-value">39</div>
+        <div class="chain-delta flat">— 0.0%</div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-label">Contracts</div>
+        <div class="chain-value">11</div>
+        <div class="chain-delta up">▲ 1</div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-label">Closings</div>
+        <div class="chain-value">8</div>
+        <div class="chain-delta up">▲ 2</div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-label">Gross profit</div>
+        <div class="chain-value">$246,000</div>
+        <div class="chain-delta up">▲ 9.4%</div>
+      </div>
+      <div class="chain-step terminal">
+        <div class="chain-label">ROAS · target 5.0</div>
+        <div class="chain-value">5.97</div>
+        <div class="chain-delta up">▲ 0.42 · on pace</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= DOMAIN OVERVIEW ================= -->
+  <div class="section-head">
+    <h2>Domain overview</h2>
+    <div class="note">28 days vs prior 28</div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">Site Authority</div>
+      <div class="kpi-value">38</div>
+      <div class="kpi-foot">
+        <span class="kpi-delta up">▲ 2</span>
+        <svg class="spark" data-spark="30,31,31,33,34,34,36,36,37,38" data-tone="good" width="72" height="24" aria-hidden="true"></svg>
+      </div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Organic traffic</div>
+      <div class="kpi-value">9,840</div>
+      <div class="kpi-foot">
+        <span class="kpi-delta up">▲ 6.2%</span>
+        <svg class="spark" data-spark="8100,8340,8220,8610,8900,8760,9120,9400,9610,9840" data-tone="good" width="72" height="24" aria-hidden="true"></svg>
+      </div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Organic keywords</div>
+      <div class="kpi-value">2,417</div>
+      <div class="kpi-foot">
+        <span class="kpi-delta up">▲ 148</span>
+        <svg class="spark" data-spark="2100,2140,2180,2205,2260,2288,2310,2360,2390,2417" data-tone="good" width="72" height="24" aria-hidden="true"></svg>
+      </div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Traffic value</div>
+      <div class="kpi-value">$27.4k</div>
+      <div class="kpi-foot">
+        <span class="kpi-delta up">▲ 8.1%</span>
+        <svg class="spark" data-spark="22100,22800,23400,23100,24600,25200,25900,26400,26900,27400" data-tone="good" width="72" height="24" aria-hidden="true"></svg>
+      </div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Referring domains</div>
+      <div class="kpi-value">614</div>
+      <div class="kpi-foot">
+        <span class="kpi-delta down">▼ 9</span>
+        <svg class="spark" data-spark="631,629,630,627,624,623,620,618,617,614" data-tone="crit" width="72" height="24" aria-hidden="true"></svg>
+      </div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Backlinks</div>
+      <div class="kpi-value">11,205</div>
+      <div class="kpi-foot">
+        <span class="kpi-delta up">▲ 1.4%</span>
+        <svg class="spark" data-spark="10820,10910,10880,10960,11010,11060,11090,11140,11180,11205" data-tone="good" width="72" height="24" aria-hidden="true"></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CORE WIDGETS ================= -->
+  <div class="section-head">
+    <h2>Search performance</h2>
+    <div class="note">Ordered by revenue weight, not search volume</div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Organic traffic trend -->
+    <section class="card w8">
+      <div class="card-head">
+        <div>
+          <h3 class="card-title">Organic sessions &amp; leads</h3>
+          <div class="card-sub">Daily · last 30 days</div>
+        </div>
+        <span class="src src-pending">Needs GA4</span>
+      </div>
+      <div class="chart-hold">
+        <svg id="trend" width="100%" height="196" role="img"
+             aria-label="Organic sessions over the last 30 days, rising from about 250 to about 380 per day."></svg>
+        <div class="tip" id="trend-tip"></div>
+      </div>
+    </section>
+
+    <!-- Position tracking -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h3 class="card-title">Position tracking</h3>
+          <div class="card-sub">184 tracked keywords</div>
+        </div>
+        <span class="src src-pending">Needs GSC</span>
+      </div>
+      <dl>
+        <div class="stat-row"><dt>Visibility</dt><dd>14.8% <span class="up">▲ 1.2</span></dd></div>
+        <div class="stat-row"><dt>Average position</dt><dd>18.4 <span class="up">▲ 2.1</span></dd></div>
+        <div class="stat-row"><dt>Estimated traffic</dt><dd>3,910</dd></div>
+      </dl>
+      <div style="margin-top:12px">
+        <div class="card-sub" style="margin-bottom:5px">Ranking distribution</div>
+        <div class="dist">
+          <span style="flex:9;  background:var(--seq-5); color:var(--surface)">9</span>
+          <span style="flex:24; background:var(--seq-4); color:var(--surface)">24</span>
+          <span style="flex:31; background:var(--seq-3); color:var(--surface)">31</span>
+          <span style="flex:68; background:var(--seq-2)">68</span>
+          <span style="flex:52; background:var(--seq-1)">52</span>
+        </div>
+        <div class="dist-key">
+          <div><i class="swatch" style="background:var(--seq-5)"></i>Top 3</div>
+          <div><i class="swatch" style="background:var(--seq-4)"></i>4–10</div>
+          <div><i class="swatch" style="background:var(--seq-3)"></i>11–20</div>
+          <div><i class="swatch" style="background:var(--seq-2)"></i>21–50</div>
+          <div><i class="swatch" style="background:var(--seq-1)"></i>51–100</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Site audit -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h3 class="card-title">Site audit</h3>
+          <div class="card-sub">148 pages crawled · 4h ago</div>
+        </div>
+        <span class="src src-live">Live</span>
+      </div>
+      <div class="gauge-row">
+        <div class="gauge">
+          <svg width="86" height="86" id="health" aria-hidden="true"></svg>
+          <div class="gauge-center">
+            <div class="gauge-num">86</div>
+            <div class="gauge-unit">HEALTH</div>
+          </div>
+        </div>
+        <dl style="flex:1">
+          <div class="stat-row"><dt><span class="pill pill-crit">Errors</span></dt><dd>7</dd></div>
+          <div class="stat-row"><dt><span class="pill pill-warn">Warnings</span></dt><dd>34</dd></div>
+          <div class="stat-row"><dt><span class="pill pill-idle">Notices</span></dt><dd>61</dd></div>
+        </dl>
+      </div>
+      <div class="card-sub" style="margin-bottom:4px">Thematic reports</div>
+      <div class="theme-row"><span class="theme-name">Crawlability</span><span class="theme-track"><span class="theme-fill" style="width:92%;background:var(--good)"></span></span><span class="theme-pct">92%</span></div>
+      <div class="theme-row"><span class="theme-name">HTTPS</span><span class="theme-track"><span class="theme-fill" style="width:100%;background:var(--good)"></span></span><span class="theme-pct">100%</span></div>
+      <div class="theme-row"><span class="theme-name">Core Web Vitals</span><span class="theme-track"><span class="theme-fill" style="width:58%;background:var(--warn)"></span></span><span class="theme-pct">58%</span></div>
+      <div class="theme-row"><span class="theme-name">Internal linking</span><span class="theme-track"><span class="theme-fill" style="width:74%;background:var(--warn)"></span></span><span class="theme-pct">74%</span></div>
+      <div class="theme-row"><span class="theme-name">Markup</span><span class="theme-track"><span class="theme-fill" style="width:88%;background:var(--good)"></span></span><span class="theme-pct">88%</span></div>
+    </section>
+
+    <!-- Top keywords -->
+    <section class="card w6">
+      <div class="card-head">
+        <div>
+          <h3 class="card-title">Top organic keywords</h3>
+          <div class="card-sub">By contribution to seller leads</div>
+        </div>
+        <span class="src src-pending">Needs GSC</span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Keyword</th><th class="num">Pos.</th><th class="num">Vol.</th><th class="num">Clicks</th><th class="num">Leads</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="kw">sell my house fast</td><td class="num"><span class="pos-badge pos-1">2</span></td><td class="num">8,100</td><td class="num">1,240</td><td class="num">61</td></tr>
+            <tr><td class="kw">we buy houses</td><td class="num"><span class="pos-badge pos-1">3</span></td><td class="num">6,600</td><td class="num">890</td><td class="num">44</td></tr>
+            <tr><td class="kw">cash home buyers near me</td><td class="num"><span class="pos-badge pos-2">6</span></td><td class="num">4,400</td><td class="num">520</td><td class="num">38</td></tr>
+            <tr><td class="kw">sell house without realtor</td><td class="num"><span class="pos-badge pos-2">9</span></td><td class="num">2,900</td><td class="num">310</td><td class="num">19</td></tr>
+            <tr><td class="kw">sell inherited house</td><td class="num"><span class="pos-badge pos-3">14</span></td><td class="num">1,900</td><td class="num">142</td><td class="num">12</td></tr>
+            <tr><td class="kw">avoid foreclosure sell home</td><td class="num"><span class="pos-badge pos-3">17</span></td><td class="num">1,300</td><td class="num">96</td><td class="num">9</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Top pages, with revenue weight -->
+    <section class="card w6">
+      <div class="card-head">
+        <div>
+          <h3 class="card-title">Top pages</h3>
+          <div class="card-sub">Revenue weight is set in config, not inferred</div>
+        </div>
+        <span class="src src-pending">Needs GA4</span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Page</th><th class="num">Sessions</th><th class="num">Leads</th><th class="num">CVR</th><th class="num">Weight</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="path">/</td><td class="num">6,120</td><td class="num">184</td><td class="num">3.0%</td><td class="num"><span class="weight-cell"><span class="weight-bar"><span class="weight-fill" style="width:95%"></span></span>95</span></td></tr>
+            <tr><td class="path">/contact/</td><td class="num">2,410</td><td class="num">142</td><td class="num">5.9%</td><td class="num"><span class="weight-cell"><span class="weight-bar"><span class="weight-fill" style="width:90%"></span></span>90</span></td></tr>
+            <tr><td class="path">/sell-inherited-house/</td><td class="num">1,180</td><td class="num">44</td><td class="num">3.7%</td><td class="num"><span class="weight-cell"><span class="weight-bar"><span class="weight-fill" style="width:70%"></span></span>70</span></td></tr>
+            <tr><td class="path">/foreclosure-help/</td><td class="num">890</td><td class="num">28</td><td class="num">3.1%</td><td class="num"><span class="weight-cell"><span class="weight-bar"><span class="weight-fill" style="width:65%"></span></span>65</span></td></tr>
+            <tr><td class="path">/blog/</td><td class="num">3,240</td><td class="num">6</td><td class="num">0.2%</td><td class="num"><span class="weight-cell"><span class="weight-bar"><span class="weight-fill" style="width:10%"></span></span>10</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Backlinks -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h3 class="card-title">Backlink analytics</h3>
+          <div class="card-sub">Provider-supplied</div>
+        </div>
+        <span class="src src-pending">Needs provider</span>
+      </div>
+      <dl>
+        <div class="stat-row"><dt>Total backlinks</dt><dd>11,205</dd></div>
+        <div class="stat-row"><dt>Referring domains</dt><dd>614 <span class="down">▼ 9</span></dd></div>
+        <div class="stat-row"><dt>Follow / nofollow</dt><dd>68% / 32%</dd></div>
+        <div class="stat-row"><dt>Toxicity score</dt><dd><span class="pill pill-warn">14 · elevated</span></dd></div>
+        <div class="stat-row"><dt>New / lost (28d)</dt><dd><span class="up">+142</span> / <span class="down">−171</span></dd></div>
+      </dl>
+    </section>
+
+    <!-- Keyword gap -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h3 class="card-title">Competitor gap</h3>
+          <div class="card-sub">Keywords rivals rank for and we do not</div>
+        </div>
+        <span class="src src-pending">Needs provider</span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Competitor</th><th class="num">Shared</th><th class="num">Missing</th></tr></thead>
+          <tbody>
+            <tr><td class="kw">opendoor.com</td><td class="num">318</td><td class="num">1,940</td></tr>
+            <tr><td class="kw">webuyuglyhouses.com</td><td class="num">402</td><td class="num">870</td></tr>
+            <tr><td class="kw">offerpad.com</td><td class="num">241</td><td class="num">1,120</td></tr>
+            <tr><td class="kw">housebuyernetwork.com</td><td class="num">186</td><td class="num">430</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- On page -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h3 class="card-title">On-page ideas</h3>
+          <div class="card-sub">Every idea gated by risk tier</div>
+        </div>
+        <span class="src src-pending">Needs GSC</span>
+      </div>
+      <div class="issue">
+        <span class="issue-stripe stripe-warn"></span>
+        <span class="issue-body">
+          <span class="issue-title">Meta description missing on /contact/</span>
+          <span class="issue-meta">APPROVAL required · weight 90</span>
+        </span>
+        <span class="issue-num">1</span>
+      </div>
+      <div class="issue">
+        <span class="issue-stripe stripe-warn"></span>
+        <span class="issue-body">
+          <span class="issue-title">Thin content on 4 city pages</span>
+          <span class="issue-meta">HUMAN ONLY · weight 40–65</span>
+        </span>
+        <span class="issue-num">4</span>
+      </div>
+      <div class="issue">
+        <span class="issue-stripe stripe-idle"></span>
+        <span class="issue-body">
+          <span class="issue-title">Internal link opportunities</span>
+          <span class="issue-meta">APPROVAL required</span>
+        </span>
+        <span class="issue-num">12</span>
+      </div>
+      <div class="issue">
+        <span class="issue-stripe stripe-idle"></span>
+        <span class="issue-body">
+          <span class="issue-title">Image alt text incomplete</span>
+          <span class="issue-meta">APPROVAL required</span>
+        </span>
+        <span class="issue-num">23</span>
+      </div>
+    </section>
+
+    <!-- Local SEO -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h3 class="card-title">Local &amp; Google Business Profile</h3>
+          <div class="card-sub">Reviews, rating, visibility</div>
+        </div>
+        <span class="src src-pending">Needs GBP</span>
+      </div>
+      <div class="empty">
+        <div class="empty-title">No source connected</div>
+        <p>Connect the Google Business Profile API to populate rating, review velocity, unanswered reviews, and local pack visibility.</p>
+      </div>
+    </section>
+
+    <!-- Traffic analytics -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h3 class="card-title">Channel mix</h3>
+          <div class="card-sub">Sessions by source</div>
+        </div>
+        <span class="src src-pending">Needs GA4</span>
+      </div>
+      <div class="theme-row"><span class="theme-name">Organic search</span><span class="theme-track"><span class="theme-fill" style="width:52%;background:var(--seq-5)"></span></span><span class="theme-pct">52%</span></div>
+      <div class="theme-row"><span class="theme-name">Paid search</span><span class="theme-track"><span class="theme-fill" style="width:21%;background:var(--seq-4)"></span></span><span class="theme-pct">21%</span></div>
+      <div class="theme-row"><span class="theme-name">Direct</span><span class="theme-track"><span class="theme-fill" style="width:14%;background:var(--seq-3)"></span></span><span class="theme-pct">14%</span></div>
+      <div class="theme-row"><span class="theme-name">Referral</span><span class="theme-track"><span class="theme-fill" style="width:8%;background:var(--seq-2)"></span></span><span class="theme-pct">8%</span></div>
+      <div class="theme-row"><span class="theme-name">Social</span><span class="theme-track"><span class="theme-fill" style="width:5%;background:var(--seq-1)"></span></span><span class="theme-pct">5%</span></div>
+    </section>
+
+    <!-- Agent status: this is real today -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h3 class="card-title">Agent status</h3>
+          <div class="card-sub">Last successful run</div>
+        </div>
+        <span class="src src-live">Live</span>
+      </div>
+      <div class="issue">
+        <span class="issue-stripe stripe-good"></span>
+        <span class="issue-body">
+          <span class="issue-title">Site Guardian</span>
+          <span class="issue-meta">2 money pages · every 5 min</span>
+        </span>
+        <span class="pill pill-good"><i class="dot dot-good"></i>2m ago</span>
+      </div>
+      <div class="issue">
+        <span class="issue-stripe stripe-good"></span>
+        <span class="issue-body">
+          <span class="issue-title">Vision</span>
+          <span class="issue-meta">mobile + desktop · hourly</span>
+        </span>
+        <span class="pill pill-good"><i class="dot dot-good"></i>24m ago</span>
+      </div>
+      <div class="issue">
+        <span class="issue-stripe stripe-good"></span>
+        <span class="issue-body">
+          <span class="issue-title">Technical crawl</span>
+          <span class="issue-meta">148 pages · every 6h</span>
+        </span>
+        <span class="pill pill-good"><i class="dot dot-good"></i>4h ago</span>
+      </div>
+      <div class="issue">
+        <span class="issue-stripe stripe-idle"></span>
+        <span class="issue-body">
+          <span class="issue-title">PageSpeed</span>
+          <span class="issue-meta">no API key configured</span>
+        </span>
+        <span class="pill pill-idle">Idle</span>
+      </div>
+      <div class="issue">
+        <span class="issue-stripe stripe-idle"></span>
+        <span class="issue-body">
+          <span class="issue-title">Remediation</span>
+          <span class="issue-meta">production writes disabled</span>
+        </span>
+        <span class="pill pill-idle">Off</span>
+      </div>
+    </section>
+
+    <!-- Incidents: real today -->
+    <section class="card w8">
+      <div class="card-head">
+        <div>
+          <h3 class="card-title">Open incidents</h3>
+          <div class="card-sub">Ranked by business impact, not technical severity</div>
+        </div>
+        <span class="src src-live">Live</span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Incident</th><th>Page</th><th>Detected by</th><th class="num">Seen</th><th class="num">Score</th><th>State</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="kw">Phone CTA not visible on mobile</td>
+              <td class="path">/contact/</td><td class="path">vision</td>
+              <td class="num">6</td><td class="num">142</td>
+              <td><span class="pill pill-crit">Blocking</span></td>
+            </tr>
+            <tr>
+              <td class="kw">LCP 6.2s on mobile</td>
+              <td class="path">/</td><td class="path">pagespeed</td>
+              <td class="num">3</td><td class="num">78</td>
+              <td><span class="pill pill-warn">Persistent</span></td>
+            </tr>
+            <tr>
+              <td class="kw">Meta description missing</td>
+              <td class="path">/contact/</td><td class="path">technical_seo</td>
+              <td class="num">2</td><td class="num">61</td>
+              <td><span class="pill pill-warn">Open</span></td>
+            </tr>
+            <tr>
+              <td class="kw">Duplicate title across 3 blog posts</td>
+              <td class="path">/blog/*</td><td class="path">technical_seo</td>
+              <td class="num">9</td><td class="num">9</td>
+              <td><span class="pill pill-idle">Monitor</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h3 class="card-title">Agent actions</h3>
+          <div class="card-sub">Nothing writes without four gates</div>
+        </div>
+        <span class="src src-live">Live</span>
+      </div>
+      <dl>
+        <div class="stat-row"><dt>Automatic (safe)</dt><dd>128</dd></div>
+        <div class="stat-row"><dt>Proposals prepared</dt><dd>40</dd></div>
+        <div class="stat-row"><dt>Awaiting approval</dt><dd><span class="pill pill-warn">40</span></dd></div>
+        <div class="stat-row"><dt>Executed</dt><dd>0</dd></div>
+        <div class="stat-row"><dt>Rolled back</dt><dd>0</dd></div>
+      </dl>
+      <div class="empty" style="margin-top:12px">
+        <div class="empty-title">Approvals not yet possible</div>
+        <p>Google Chat uses a one-way incoming webhook, so it cannot collect an authenticated approval. That needs a real control plane.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <span><i class="swatch" style="background:var(--good);display:inline-block;vertical-align:middle;margin-right:5px"></i>Live — fed by an agent that exists today</span>
+    <span><i class="swatch" style="background:var(--idle);display:inline-block;vertical-align:middle;margin-right:5px"></i>Pending — awaiting a data source</span>
+    <span style="margin-left:auto">Twin Home Buyer · Command Center</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const SVG = "http://www.w3.org/2000/svg";
+  const el = (n, a = {}) => {
+    const node = document.createElementNS(SVG, n);
+    for (const [k, v] of Object.entries(a)) node.setAttribute(k, v);
+    return node;
+  };
+
+  /* --- Sparklines: single series, so no legend; endpoint emphasised ------ */
+  function sparkline(svg) {
+    const pts = svg.dataset.spark.split(",").map(Number);
+    const w = +svg.getAttribute("width"), h = +svg.getAttribute("height"), pad = 3;
+    const lo = Math.min(...pts), hi = Math.max(...pts), span = (hi - lo) || 1;
+    const x = (i) => pad + (i / (pts.length - 1)) * (w - pad * 2);
+    const y = (v) => h - pad - ((v - lo) / span) * (h - pad * 2);
+    const tone = css(svg.dataset.tone === "crit" ? "--crit" : "--good");
+
+    svg.replaceChildren();
+    const line = pts.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+    svg.append(el("path", {
+      d: `${line} L${x(pts.length - 1).toFixed(1)},${h - pad} L${x(0).toFixed(1)},${h - pad} Z`,
+      fill: tone, "fill-opacity": ".1"
+    }));
+    svg.append(el("path", { d: line, fill: "none", stroke: tone, "stroke-width": "2",
+                            "stroke-linecap": "round", "stroke-linejoin": "round" }));
+    svg.append(el("circle", { cx: x(pts.length - 1), cy: y(pts.at(-1)), r: "2.8",
+                              fill: tone, stroke: css("--surface"), "stroke-width": "1.5" }));
+  }
+
+  /* --- Health gauge: one value, status colour + always a printed number -- */
+  function gauge(svg, pct) {
+    const size = +svg.getAttribute("width"), r = size / 2 - 7, c = size / 2;
+    const circ = 2 * Math.PI * r;
+    const tone = css(pct >= 85 ? "--good" : pct >= 65 ? "--warn" : "--crit");
+    svg.replaceChildren();
+    svg.append(el("circle", { cx: c, cy: c, r, fill: "none",
+                              stroke: css("--surface-sunk"), "stroke-width": "8" }));
+    svg.append(el("circle", {
+      cx: c, cy: c, r, fill: "none", stroke: tone, "stroke-width": "8",
+      "stroke-linecap": "round", "stroke-dasharray": `${(circ * pct) / 100} ${circ}`,
+      transform: `rotate(-90 ${c} ${c})`
+    }));
+  }
+
+  /* --- Trend: area + crosshair tooltip ---------------------------------- */
+  const SESSIONS = [248,262,255,271,289,264,243,276,298,311,305,288,262,301,324,336,318,297,272,315,342,351,338,320,296,344,358,366,372,381];
+  const LEADS    = [7,9,8,10,11,9,7,10,12,13,12,11,8,11,14,15,13,12,9,13,15,16,15,14,11,15,17,17,18,19];
+
+  function trend() {
+    const svg = document.getElementById("trend");
+    const tip = document.getElementById("trend-tip");
+    if (!svg) return;
+    const w = svg.clientWidth || 700, h = 196;
+    const m = { t: 12, r: 14, b: 26, l: 40 };
+    const iw = w - m.l - m.r, ih = h - m.t - m.b;
+    const hi = Math.max(...SESSIONS) * 1.08, lo = 0;
+    const x = (i) => m.l + (i / (SESSIONS.length - 1)) * iw;
+    const y = (v) => m.t + ih - ((v - lo) / (hi - lo)) * ih;
+
+    svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    svg.replaceChildren();
+
+    // Recessive grid + axis labels.
+    for (let g = 0; g <= 3; g++) {
+      const v = (hi / 3) * g, yy = y(v);
+      svg.append(el("line", { x1: m.l, x2: w - m.r, y1: yy, y2: yy,
+                              stroke: css("--rule"), "stroke-width": "1" }));
+      const t = el("text", { x: m.l - 8, y: yy + 4, "text-anchor": "end",
+                             fill: css("--ink-3"), "font-size": "10",
+                             "font-family": css("--mono") });
+      t.textContent = Math.round(v);
+      svg.append(t);
+    }
+
+    const path = SESSIONS.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+    const accent = css("--accent");
+    svg.append(el("path", { d: `${path} L${x(SESSIONS.length - 1)},${y(0)} L${x(0)},${y(0)} Z`,
+                            fill: accent, "fill-opacity": ".12" }));
+    svg.append(el("path", { d: path, fill: "none", stroke: accent, "stroke-width": "2",
+                            "stroke-linejoin": "round", "stroke-linecap": "round" }));
+
+    ["Day 1", "Day 15", "Day 30"].forEach((label, i) => {
+      const idx = [0, 14, 29][i];
+      const t = el("text", { x: x(idx), y: h - 8,
+                             "text-anchor": i === 0 ? "start" : i === 2 ? "end" : "middle",
+                             fill: css("--ink-3"), "font-size": "10",
+                             "font-family": css("--mono") });
+      t.textContent = label;
+      svg.append(t);
+    });
+
+    const cross = el("line", { y1: m.t, y2: m.t + ih, stroke: css("--rule-strong"),
+                               "stroke-width": "1", opacity: "0" });
+    const dot = el("circle", { r: "4.5", fill: accent, stroke: css("--surface"),
+                               "stroke-width": "2", opacity: "0" });
+    svg.append(cross, dot);
+
+    svg.addEventListener("pointermove", (ev) => {
+      const box = svg.getBoundingClientRect();
+      const px = ((ev.clientX - box.left) / box.width) * w;
+      let i = Math.round(((px - m.l) / iw) * (SESSIONS.length - 1));
+      i = Math.max(0, Math.min(SESSIONS.length - 1, i));
+      cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i));
+      cross.setAttribute("opacity", "1");
+      dot.setAttribute("cx", x(i)); dot.setAttribute("cy", y(SESSIONS[i]));
+      dot.setAttribute("opacity", "1");
+      tip.innerHTML = `Day ${i + 1}<br>${SESSIONS[i]} sessions<br>${LEADS[i]} leads`;
+      tip.style.left = `${(x(i) / w) * 100}%`;
+      tip.style.top = `${y(SESSIONS[i])}px`;
+      tip.dataset.on = "1";
+    });
+    svg.addEventListener("pointerleave", () => {
+      cross.setAttribute("opacity", "0");
+      dot.setAttribute("opacity", "0");
+      tip.dataset.on = "0";
+    });
+  }
+
+  function render() {
+    document.querySelectorAll(".spark").forEach(sparkline);
+    const g = document.getElementById("health");
+    if (g) gauge(g, 86);
+    trend();
+  }
+
+  render();
+  addEventListener("resize", trend);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+
+  document.querySelectorAll(".range button").forEach((b) => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll(".range button")
+        .forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
+    });
+  });
+})();
+</script>
