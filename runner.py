@@ -27,13 +27,14 @@ from typing import Any
 
 import requests
 
-from analysis.claude_analyzer import ClaudeAnalyzer, PriorityReport
-from collectors import crawler, heartbeat, pagespeed, vision
+from analysis.claude_analyzer import ClaudeAnalyzer
+from analysis.priority_engine import Bucket, Coverage, PriorityBoard, build_board, narrate
+from collectors import crawler, ga4, heartbeat, pagespeed, revenue, search_console, vision
 from collectors.base import CollectorResult
 from core.config import Settings, load_settings
 from core.incidents import IncidentStore
 from core.logging_setup import setup_logging
-from core.models import Finding, iso, utcnow
+from core.models import CollectorStatus, Finding, iso, utcnow
 from core.retention import run_retention
 from core.scheduler import Scheduler, Task
 from core.state import StateStore, atomic_write_json, write_heartbeat
@@ -126,6 +127,33 @@ class OperationsRunner:
         )
         self.scheduler.add(
             Task(
+                name="search_console",
+                func=self.task_search_console,
+                interval_seconds=s.search_console_interval_seconds,
+                max_backoff_seconds=12 * 3600,
+                run_on_start=False,
+            )
+        )
+        self.scheduler.add(
+            Task(
+                name="ga4",
+                func=self.task_ga4,
+                interval_seconds=s.ga4_interval_seconds,
+                max_backoff_seconds=12 * 3600,
+                run_on_start=False,
+            )
+        )
+        self.scheduler.add(
+            Task(
+                name="revenue",
+                func=self.task_revenue,
+                interval_seconds=s.revenue_interval_seconds,
+                max_backoff_seconds=6 * 3600,
+                run_on_start=False,
+            )
+        )
+        self.scheduler.add(
+            Task(
                 name="retention",
                 func=self.task_retention,
                 interval_seconds=s.retention_interval_seconds,
@@ -150,12 +178,50 @@ class OperationsRunner:
         atomic_write_json(path, payload)
         return path
 
+    def _record_status(self, result: CollectorResult) -> None:
+        """Remember what each collector last reported.
+
+        Stage 7 builds its coverage from this, so the digest can state which
+        agents did not report rather than presenting a partial board as a
+        complete one. Persisted in state so a restart does not silently
+        promote every collector to "never had a problem".
+        """
+        statuses = self.state.counters.setdefault("collector_status", {})
+        if not isinstance(statuses, dict):  # a hand-edited state file
+            statuses = {}
+            self.state.counters["collector_status"] = statuses
+        statuses[result.agent] = {
+            "status": result.status.value,
+            "detail": result.error or result.reason,
+            "at": iso(utcnow()),
+        }
+
+    def _coverage(self) -> Coverage:
+        coverage = Coverage()
+        statuses = self.state.counters.get("collector_status") or {}
+        if not isinstance(statuses, dict):
+            return coverage
+        for agent, payload in statuses.items():
+            if not isinstance(payload, dict):
+                continue
+            status = str(payload.get("status", ""))
+            detail = str(payload.get("detail") or "no detail recorded")
+            if status == CollectorStatus.OK.value:
+                coverage.ran.append(agent)
+            elif status == CollectorStatus.UNAVAILABLE.value:
+                coverage.unavailable[agent] = detail
+            elif status == CollectorStatus.ERROR.value:
+                coverage.failed[agent] = detail
+        return coverage
+
     def _process(self, result: CollectorResult, scope: set[str]) -> dict[str, Any]:
         """Reconcile a collector's findings and deliver any resulting alerts.
 
         `scope` is the set of source agents this run covered, so recovery is
         only inferred for things this run actually looked at.
         """
+        self._record_status(result)
+
         if result.status.value != "ok":
             # An unavailable or failed collector must not be read as "all
             # clear" — reconciling here would recover incidents we did not
@@ -215,6 +281,18 @@ class OperationsRunner:
         result = pagespeed.run(self.settings)
         return self._process(result, scope={pagespeed.AGENT})
 
+    def task_search_console(self) -> dict[str, Any]:
+        result = search_console.run(self.settings)
+        return self._process(result, scope={search_console.AGENT})
+
+    def task_ga4(self) -> dict[str, Any]:
+        result = ga4.run(self.settings)
+        return self._process(result, scope={ga4.AGENT})
+
+    def task_revenue(self) -> dict[str, Any]:
+        result = revenue.run(self.settings)
+        return self._process(result, scope={revenue.AGENT})
+
     def task_retention(self) -> dict[str, Any]:
         report = run_retention(
             self.settings.retention,
@@ -233,87 +311,109 @@ class OperationsRunner:
         )
         return report
 
+    def build_board(self) -> PriorityBoard:
+        """The Stage 7 board over every currently-open incident.
+
+        Persistence counts come from the incident store, so an issue that has
+        survived several cycles outranks one seen once — the same logic Rule 9
+        applies to alerting, applied to ranking.
+        """
+        open_incidents = self.incidents.open_incidents()
+        findings: list[Finding] = [i.finding for i in open_incidents]
+        persistence = {i.fingerprint: i.persistence_count for i in open_incidents}
+        board = build_board(findings, self._coverage(), persistence=persistence)
+        narrate(
+            board,
+            self.analyzer,
+            {
+                "site": self.settings.site_name,
+                "open_incident_count": len(open_incidents),
+                "money_pages": [p.url for p in self.settings.money_pages],
+                "task_health": {
+                    name: task.to_dict() for name, task in self.state.tasks.items()
+                },
+            },
+        )
+        return board
+
     def task_digest(self) -> dict[str, Any]:
         """The 7 AM prioritized digest."""
         open_incidents = self.incidents.open_incidents()
-        findings: list[Finding] = [i.finding for i in open_incidents]
+        board = self.build_board()
 
-        priorities = PriorityReport(available=False, error=self.analyzer.unavailable_reason)
-        if self.analyzer.available:
-            priorities = self.analyzer.prioritize(
-                findings,
-                context={
-                    "site": self.settings.site_name,
-                    "open_incident_count": len(open_incidents),
-                    "money_pages": [p.url for p in self.settings.money_pages],
-                    "task_health": {
-                        name: task.to_dict()
-                        for name, task in self.state.tasks.items()
-                    },
-                },
-            )
-
-        text = self._format_digest(open_incidents, priorities)
+        text = self._format_digest(open_incidents, board)
         delivered = self.notifier.send_text(text, kind="digest")
 
         payload = {
             "generated_at": iso(utcnow()),
             "site": self.settings.site_name,
             "open_incidents": [i.to_dict() for i in open_incidents],
-            "priorities": priorities.to_dict(),
+            "board": board.to_dict(),
             "health": self.health(),
             "delivered": delivered,
         }
         path = self._write_report("digest", payload)
         self.state.save()
-        return {"open_incidents": len(open_incidents), "delivered": delivered, "report": str(path)}
+        return {
+            "open_incidents": len(open_incidents),
+            "critical_now": len(board.critical_now),
+            "coverage_complete": board.coverage.complete,
+            "delivered": delivered,
+            "report": str(path),
+        }
 
-    def _format_digest(self, incidents: list[Any], priorities: PriorityReport) -> str:
-        ranked = sorted(
-            incidents, key=lambda i: i.finding.priority_score(), reverse=True
-        )
+    def _format_digest(self, incidents: list[Any], board: PriorityBoard) -> str:
         lines = [
             f"📋 *Daily Digest — {self.settings.site_name}*",
             f"_{utcnow().strftime('%Y-%m-%d %H:%M UTC')}_",
             "",
+            board.headline(),
+            "",
             f"*Open incidents:* {len(incidents)}",
         ]
 
-        blocking = [i for i in ranked if i.finding.conversion_blocking]
-        if blocking:
-            lines.append("")
-            lines.append(f"🚨 *CONVERSION BLOCKED ({len(blocking)})*")
-            for incident in blocking[:5]:
-                f = incident.finding
-                lines.append(f"• {f.entity or f.url} — {f.problem}")
+        # Blind spots go near the top. A reader who does not know an agent was
+        # down will read this digest as a complete picture.
+        if board.coverage.blind_spots:
+            lines += ["", "⚠️ *Not measured this cycle*"]
+            lines += [f"• {spot}" for spot in board.coverage.blind_spots[:6]]
 
-        if priorities.available:
-            if priorities.headline:
-                lines += ["", f"*Assessment:* {priorities.headline}"]
-            for title, items in (
-                ("CRITICAL NOW", priorities.critical_now),
-                ("FIX NEXT", priorities.fix_next),
-                ("GROWTH OPPORTUNITIES", priorities.growth_opportunities),
-                ("MONITOR", priorities.monitor),
-            ):
-                if items:
-                    lines += ["", f"*{title}*"] + [f"• {i}" for i in items]
-            if priorities.single_highest_priority_action:
-                lines += [
-                    "",
-                    f"*Do this first:* {priorities.single_highest_priority_action}",
-                ]
-        else:
+        icons = {
+            Bucket.CRITICAL_NOW: "🚨",
+            Bucket.FIX_NEXT: "🔧",
+            Bucket.GROWTH: "📈",
+            Bucket.MONITOR: "👀",
+        }
+        for bucket in (Bucket.CRITICAL_NOW, Bucket.FIX_NEXT, Bucket.GROWTH, Bucket.MONITOR):
+            items = board.bucket(bucket)
+            if not items:
+                continue
+            lines += ["", f"{icons[bucket]} *{bucket.label} ({len(items)})*"]
+            for item in items[:5]:
+                f = item.finding
+                line = f"• [{item.score:.0f}] {f.entity or f.url} — {f.problem}"
+                if item.is_corroborated:
+                    line += f" _(also seen by {', '.join(item.corroborating_agents)})_"
+                lines.append(line)
+            for note in items[0].correlation_notes[:1]:
+                lines.append(f"  ↳ _{note}_")
+
+        no_action = len(board.bucket(Bucket.NO_ACTION))
+        if no_action:
+            lines += ["", f"_{no_action} further finding(s) need no action._"]
+
+        if board.top_action:
+            lines += ["", f"*Do this first:* {board.top_action.finding.recommended_action or board.top_action.finding.problem}"]
+
+        narrative = board.narrative or {}
+        if narrative.get("available") and narrative.get("headline"):
+            lines += ["", f"_Assessment: {narrative['headline']}_"]
+        elif not narrative.get("available"):
             lines += [
                 "",
-                f"_AI prioritization unavailable: {priorities.error or 'unknown'}._",
-                "_Findings below are ordered by deterministic business-impact score._",
+                f"_AI narration unavailable: {narrative.get('reason') or 'unknown'}. "
+                "Ranking above is deterministic and unaffected._",
             ]
-            for incident in ranked[:10]:
-                f = incident.finding
-                lines.append(
-                    f"• [{f.priority_score():.0f}] {f.entity or f.url} — {f.problem}"
-                )
 
         unhealthy = [
             name for name, task in self.state.tasks.items() if not task.healthy
@@ -323,7 +423,8 @@ class OperationsRunner:
 
         outbox = self.notifier.outbox_size()
         if outbox:
-            lines += ["", f"⚠️ *{outbox} messages were never delivered to Chat.*"]
+            plural = "message" if outbox == 1 else "messages"
+            lines += ["", f"⚠️ *{outbox} {plural} never delivered to Chat.*"]
 
         return "\n".join(lines)
 
@@ -334,8 +435,12 @@ class OperationsRunner:
             "site": self.settings.site_name,
             "running": self._running,
             "state": self.state.health_snapshot(),
-            "claude_available": self.analyzer.available,
-            "claude_reason": self.analyzer.unavailable_reason,
+            # `--no-ai` and tests replace the analyzer with None; health must
+            # report that state rather than crash on it.
+            "claude_available": bool(getattr(self.analyzer, "available", False)),
+            "claude_reason": getattr(
+                self.analyzer, "unavailable_reason", "no analyzer configured"
+            ),
             "chat_configured": self.notifier.configured,
             "chat_outbox": self.notifier.outbox_size(),
             "vision_available": vision.playwright_available(),

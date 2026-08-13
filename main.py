@@ -11,6 +11,10 @@ production content change.
     python main.py vision              one visual inspection pass
     python main.py crawl               one technical crawl
     python main.py pagespeed           one PageSpeed pass
+    python main.py search-console      one Search Console pull
+    python main.py ga4                 one GA4 conversion pull
+    python main.py revenue             one revenue attribution / ROAS pass
+    python main.py board               the priority board, printed, nothing sent
     python main.py digest              build and send the prioritized digest
     python main.py once                run every currently-due task once
     python main.py run                 the never-stop loop (use systemd)
@@ -143,6 +147,45 @@ def cmd_vision(args: argparse.Namespace) -> int:
                 file=sys.stderr,
             )
     _print(_collector_summary(vision.run(settings, analyzer=analyzer)))
+    return 0
+
+
+def cmd_search_console(_args: argparse.Namespace) -> int:
+    from collectors import search_console
+
+    _print(_collector_summary(search_console.run(load_settings())))
+    return 0
+
+
+def cmd_ga4(_args: argparse.Namespace) -> int:
+    from collectors import ga4
+
+    _print(_collector_summary(ga4.run(load_settings())))
+    return 0
+
+
+def cmd_revenue(_args: argparse.Namespace) -> int:
+    from collectors import revenue
+
+    result = revenue.run(load_settings())
+    summary = _collector_summary(result)
+    # Channel economics are the point of this command, so surface them rather
+    # than making someone open the JSON report to see a single ROAS figure.
+    summary["channels"] = result.data.get("channels", [])
+    summary["totals"] = result.data.get("totals", {})
+    summary["data_quality"] = result.data.get("data_quality", {})
+    _print(summary)
+    return 0
+
+
+def cmd_board(args: argparse.Namespace) -> int:
+    """Print the Stage 7 priority board without sending anything."""
+    from runner import OperationsRunner
+
+    runner = OperationsRunner()
+    if args.no_ai:
+        runner.analyzer = None
+    _print(runner.build_board().to_dict())
     return 0
 
 
@@ -285,6 +328,44 @@ def cmd_selftest(_args: argparse.Namespace) -> int:
             "no webhook configured; message retained",
         )
 
+        # 6. Collectors with no credentials must say "unavailable", not guess.
+        from collectors import ga4, revenue, search_console
+
+        settings = load_settings()
+        degraded = {
+            "search_console": search_console.run(settings, querier=None),
+            "ga4": ga4.run(settings, runner=None),
+            "revenue": revenue.run(settings, data_dir=root / "no-such-dir"),
+        }
+        for agent, result in degraded.items():
+            check(
+                f"{agent} degrades honestly without credentials",
+                # It may legitimately succeed if the operator has configured
+                # it; what it may never do is go unavailable without saying why.
+                result.status.value != "unavailable" or bool(result.reason),
+                result.reason or result.error or "collector had real data available",
+            )
+            check(
+                f"{agent} invents no numbers when unavailable",
+                result.status.value != "unavailable" or not result.findings,
+                "an unavailable collector produced zero findings, as required",
+            )
+
+        # 7. The priority board must never read as "all clear" when blind.
+        from analysis.priority_engine import Coverage, build_board
+
+        blind = build_board(
+            [], Coverage(ran=["site_guardian"], unavailable={"ga4": "not configured"})
+        )
+        headline = blind.headline().lower()
+        check(
+            "empty board with a blind spot does not claim all clear",
+            "incomplete picture" in headline
+            and "healthy" not in headline
+            and "all clear" not in headline,
+            blind.headline(),
+        )
+
     logging.disable(logging.NOTSET)
     passed = all(c["passed"] for c in checks)
     _print(
@@ -329,6 +410,20 @@ def build_parser() -> argparse.ArgumentParser:
         "--no-ai", action="store_true", help="capture browser evidence only"
     )
     vis.set_defaults(func=cmd_vision)
+
+    sub.add_parser("search-console", help="run one Search Console pull").set_defaults(
+        func=cmd_search_console
+    )
+    sub.add_parser("ga4", help="run one GA4 conversion pull").set_defaults(func=cmd_ga4)
+    sub.add_parser(
+        "revenue", help="run one revenue attribution / ROAS pass"
+    ).set_defaults(func=cmd_revenue)
+
+    board = sub.add_parser("board", help="print the priority board, send nothing")
+    board.add_argument(
+        "--no-ai", action="store_true", help="deterministic ranking only, no narration"
+    )
+    board.set_defaults(func=cmd_board)
 
     sub.add_parser("digest", help="build and send the prioritized digest").set_defaults(
         func=cmd_digest

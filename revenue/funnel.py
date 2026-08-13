@@ -286,6 +286,11 @@ class ChannelPerformance:
 
     @property
     def roas_status(self) -> str:
+        if self.channel == UNATTRIBUTED:
+            # Not a channel anyone buys, so ROAS is not a meaningful question
+            # for it — distinct from an organic channel that genuinely has no
+            # ad spend.
+            return "not_a_channel"
         if self.spend is None:
             return "no_spend_recorded" if self.spend_is_expected else "organic_no_spend"
         if self.spend <= 0:

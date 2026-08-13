@@ -35,7 +35,7 @@ from typing import Any
 
 from collectors.base import CollectorResult, collector_guard
 from core.config import Settings
-from core.models import Finding, RiskTier, Severity
+from core.models import VERDICT_WITHHELD, Finding, RiskTier, Severity
 from revenue import sources
 from revenue.funnel import (
     CANONICAL_CHAIN,
@@ -292,7 +292,8 @@ def detect(
                     "would move it substantially. Reported without a verdict."
                 ),
                 action="Let the sample grow before acting on this number.",
-                evidence=evidence,
+                # Stage 7 routes this to MONITOR however well it scores.
+                evidence={**evidence, VERDICT_WITHHELD: True},
                 confidence=0.9,
             )
 

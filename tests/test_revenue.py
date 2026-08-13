@@ -84,6 +84,8 @@ def test_unattributed_deals_are_never_spread_across_channels(settings):
 
     assert by_channel[UNATTRIBUTED]["gross_profit"] == 80000.0
     assert result.data["totals"]["unattributed_gross_profit"] == 80000.0
+    # And the bucket is not dressed up as an organic channel.
+    assert by_channel[UNATTRIBUTED]["roas_status"] == "not_a_channel"
 
 
 def test_unattributed_bucket_sorts_last_not_first(settings):

@@ -72,6 +72,13 @@ class ScheduleConfig:
     crawl_interval_seconds: int = 21600
     pagespeed_interval_seconds: int = 21600
     retention_interval_seconds: int = 86400
+    # Search Console and GA4 both refresh roughly daily upstream, so polling
+    # them more often spends quota to re-read the same numbers.
+    search_console_interval_seconds: int = 86400
+    ga4_interval_seconds: int = 86400
+    # Revenue reads CSV exports a human drops in, so a shorter interval just
+    # picks up a new export sooner.
+    revenue_interval_seconds: int = 21600
     digest_at: str = "07:00"
 
 

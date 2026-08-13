@@ -21,6 +21,13 @@ from enum import Enum
 from typing import Any
 
 
+# An evidence key any collector may set to say "I measured this, but the
+# sample is too thin to act on." Stage 7 routes such findings to MONITOR
+# regardless of how they score. It lives here, in the innermost layer, so a
+# collector can set it without importing anything from analysis/.
+VERDICT_WITHHELD = "verdict_withheld"
+
+
 def utcnow() -> datetime:
     return datetime.now(timezone.utc)
 
