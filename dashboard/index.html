@@ -410,6 +410,112 @@ a:hover { text-decoration: underline; }
 @media (max-width: 1080px) { .tiles { grid-template-columns: repeat(2,1fr); } }
 
 .bigstat { font-size: 34px; font-weight: 700; letter-spacing: -1.4px; color: var(--data); font-variant-numeric: tabular-nums; line-height: 1.05; }
+
+/* ---------------------------------------------------------------------
+   Stage 4-7 data views.
+
+   `.nodata` is the most important class on this page. Every view that has
+   a source it could not read renders it, carrying the collector's own
+   reason. Nothing here ever falls back to a zero or a dash for a value
+   that was not measured -- a zero reads as a measurement, and someone
+   will act on it.
+   --------------------------------------------------------------------- */
+.nodata {
+  margin: 14px 0 0; padding: 22px 20px; text-align: left;
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 4px solid var(--ink-4); border-radius: 10px; box-shadow: var(--shadow);
+}
+.nodata h3 { margin: 0 0 6px; font-size: 15px; font-weight: 700; letter-spacing: -.3px; }
+.nodata p  { margin: 0; font-size: 13.5px; color: var(--ink-2); max-width: 92ch; }
+.nodata .why {
+  margin-top: 10px; padding: 9px 12px; background: var(--bg);
+  border: 1px solid var(--border-2); border-radius: 6px;
+  font-size: 12.5px; color: var(--ink-2); font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  word-break: break-word;
+}
+.nodata.err { border-left-color: var(--red); }
+
+/* Coverage banner -- what the page could NOT see, stated before anything else. */
+.blind {
+  margin: 0 0 16px; padding: 12px 15px; border-radius: 8px;
+  background: var(--amber-bg); border: 1px solid var(--amber); border-left-width: 4px;
+}
+.blind strong { font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--amber); }
+.blind p { margin: 3px 0 0; font-size: 13px; color: var(--ink-2); max-width: 100ch; }
+.blind ul { margin: 7px 0 0; padding-left: 18px; font-size: 12.5px; color: var(--ink-2); }
+.blind.clear { background: var(--green-soft); border-color: var(--green); }
+.blind.clear strong { color: var(--green); }
+
+/* Priority board */
+.bucket { margin-top: 16px; }
+.bucket-head {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+}
+.bucket-head h2 { margin: 0; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; }
+.bucket-head .n {
+  font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 999px;
+  background: var(--grey-soft); color: var(--ink-2);
+}
+.bucket[data-b="critical_now"] .bucket-head h2 { color: var(--red); }
+.bucket[data-b="fix_next"] .bucket-head h2 { color: var(--amber); }
+.bucket[data-b="growth_opportunities"] .bucket-head h2 { color: var(--green); }
+.bucket[data-b="monitor"] .bucket-head h2,
+.bucket[data-b="no_action"] .bucket-head h2 { color: var(--ink-3); }
+
+.item {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 9px;
+  padding: 13px 15px; margin-bottom: 8px; box-shadow: var(--shadow);
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.item .sc {
+  flex: none; min-width: 46px; text-align: center; font-variant-numeric: tabular-nums;
+  font-size: 19px; font-weight: 700; letter-spacing: -.6px; color: var(--data);
+}
+.item .sc span { display: block; font-size: 9.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-4); }
+.item-body { min-width: 0; flex: 1; }
+.item-title { font-size: 14.5px; font-weight: 600; letter-spacing: -.2px; }
+.item-where { font-size: 12.5px; color: var(--ink-3); margin-top: 1px; word-break: break-word; }
+.item-impact { font-size: 13px; color: var(--ink-2); margin-top: 6px; max-width: 96ch; }
+.item-do { font-size: 13px; margin-top: 6px; }
+.item-do b { font-weight: 600; }
+.item-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.chip {
+  font-size: 11px; padding: 2px 8px; border-radius: 999px;
+  background: var(--bg); border: 1px solid var(--border-2); color: var(--ink-2);
+}
+.chip.agree { background: var(--violet-soft); border-color: var(--violet-line); color: var(--violet); font-weight: 600; }
+.chip.block { background: var(--red-soft); border-color: var(--red); color: var(--red); font-weight: 600; }
+.item-note {
+  margin-top: 8px; padding: 8px 11px; border-radius: 6px;
+  background: var(--violet-soft); border: 1px solid var(--violet-line);
+  font-size: 12.5px; color: var(--ink-2);
+}
+.item-why { margin-top: 7px; font-size: 11.5px; color: var(--ink-4); }
+
+/* Data tables shared by the Stage 4-6 views */
+.dt { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.dt th {
+  text-align: left; font-size: 11px; letter-spacing: .05em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 700; padding: 0 12px 8px; white-space: nowrap;
+}
+.dt th.num, .dt td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.dt td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+.dt tbody tr:hover { background: var(--bg); }
+.dt .u { color: var(--link); word-break: break-word; }
+.dt .up { color: var(--green); font-weight: 600; }
+.dt .down { color: var(--red); font-weight: 600; }
+.dt .na { color: var(--ink-4); font-style: italic; }
+.dt-wrap { overflow-x: auto; padding: 4px 6px 10px; }
+.tblnote { padding: 0 18px 14px; font-size: 12.5px; color: var(--ink-3); }
+
+/* Funnel */
+.funnel { display: grid; gap: 7px; padding: 6px 18px 16px; }
+.fstep { display: flex; align-items: center; gap: 12px; }
+.fstep .lbl { width: 130px; flex: none; font-size: 13px; color: var(--ink-2); }
+.fstep .bar { flex: 1; height: 22px; background: var(--grey-soft); border-radius: 5px; overflow: hidden; }
+.fstep .bar i { display: block; height: 100%; background: var(--violet); border-radius: 5px; }
+.fstep .val { width: 88px; flex: none; text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; font-size: 14px; }
+.fstep .pc { width: 62px; flex: none; text-align: right; font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
 .issue-table td.sev { width: 96px; }
 .audit-hero { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
 .audit-hero .num { font-size: 46px; font-weight: 700; letter-spacing: -2px; line-height: 1; font-variant-numeric: tabular-nums; }
@@ -931,6 +1037,78 @@ a:hover { text-decoration: underline; }
   </div>
 </section>
 
+<!-- ==================== STAGE 7 — PRIORITY BOARD ==================== -->
+<section class="view" data-view="priority-board">
+  <div class="viewhead">
+    <div>
+      <h1>Priority Board</h1>
+      <div class="crumb">Every agent, ranked by business impact · <span id="pb-when">—</span></div>
+    </div>
+    <div class="right"><span class="src src-live">Stage 7</span></div>
+  </div>
+  <div id="pb-blind"></div>
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-title">Assessment</div>
+      <div class="panel-note" id="pb-counts">—</div>
+    </div>
+    <div style="padding:0 18px 16px">
+      <div style="font-size:15px;line-height:1.5" id="pb-headline">—</div>
+      <div style="margin-top:12px;font-size:13.5px" id="pb-first"></div>
+    </div>
+  </div>
+  <div id="pb-buckets"></div>
+</section>
+
+<!-- ==================== STAGE 6 — ROAS TRACKER ==================== -->
+<section class="view" data-view="roas-tracker">
+  <div class="viewhead">
+    <div>
+      <h1>ROAS Tracker</h1>
+      <div class="crumb">Gross profit per dollar spent, by channel · <span id="ro-window">—</span></div>
+    </div>
+    <div class="right"><span class="src src-live">Stage 6</span></div>
+  </div>
+  <div id="ro-quality"></div>
+  <div id="ro-body"></div>
+</section>
+
+<!-- ==================== STAGE 6 — LEAD ATTRIBUTION ==================== -->
+<section class="view" data-view="lead-attribution">
+  <div class="viewhead">
+    <div>
+      <h1>Lead Attribution</h1>
+      <div class="crumb">How we know where each deal came from — and where we do not</div>
+    </div>
+    <div class="right"><span class="src src-live">Stage 6</span></div>
+  </div>
+  <div id="la-body"></div>
+</section>
+
+<!-- ==================== STAGE 4 — ORGANIC RANKINGS ==================== -->
+<section class="view" data-view="organic-rankings">
+  <div class="viewhead">
+    <div>
+      <h1>Organic Rankings</h1>
+      <div class="crumb">Search Console · <span id="sc-window">—</span> vs the prior period</div>
+    </div>
+    <div class="right"><span class="src src-live">Stage 4</span></div>
+  </div>
+  <div id="sc-body"></div>
+</section>
+
+<!-- ==================== STAGE 5 — TRAFFIC INSIGHTS ==================== -->
+<section class="view" data-view="organic-traffic-insights">
+  <div class="viewhead">
+    <div>
+      <h1>Organic Traffic Insights</h1>
+      <div class="crumb">Search Console joined to GA4, one row per landing page</div>
+    </div>
+    <div class="right"><span class="src src-live">Stage 5</span></div>
+  </div>
+  <div id="oti-body"></div>
+</section>
+
 <!-- ==================== GENERIC ==================== -->
 <section class="view" data-view="stub">
   <div class="viewhead">
@@ -962,6 +1140,9 @@ a:hover { text-decoration: underline; }
 <!--@AUDIT@-->
 <script>window.__AUDIT__ = {"crawled_at":"2026-08-13 17:44 UTC","pages":153,"health":100,"errors":0,"warnings":0,"notices":0,"redirects":12,"fetch_errors":0,"throttled":10,"verdict":"No defects found","blurb":"All 153 crawled pages returned 200 and carry a title, meta description, H1, and a self-referencing canonical. The crawl stopped early after 10 throttled responses \u2014 the host returned 503 under sustained crawling, so coverage is partial. That is a server-load signal, not a page defect.","issues":[],"themes":[["Crawlability",100],["Titles",100],["Meta descriptions",100],["H1 present",100],["Canonical self-referencing",100],["Indexable",100]]};</script>
 <!--@/AUDIT@-->
+<!--@THB@-->
+<script>window.__THB__ = {"generated_at":"2026-08-13 18:46 UTC","site":"Twin Home Buyer","base_url":"https://www.twinhomebuyer.com","row_cap":40,"board":{"generated_at":"2026-08-13T18:46:31.820352+00:00","headline":"Incomplete picture: 4 of 4 agents did not report (ga4, revenue, search_console, technical_seo). Anything absent from this board may simply not have been measured.","counts":{"critical_now":0,"fix_next":0,"growth_opportunities":0,"monitor":0,"no_action":0},"coverage":{"ran":[],"unavailable":{"technical_seo":"skipped: --offline was passed, so the site was not crawled","search_console":"GOOGLE_APPLICATION_CREDENTIALS is not set","ga4":"THB_GA4_PROPERTY_ID is not set","revenue":"no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input."},"failed":{},"complete":false,"blind_spots":["ga4: THB_GA4_PROPERTY_ID is not set","revenue: no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input.","search_console: GOOGLE_APPLICATION_CREDENTIALS is not set","technical_seo: skipped: --offline was passed, so the site was not crawled"],"caveat":"Incomplete picture: 4 of 4 agents did not report (ga4, revenue, search_console, technical_seo). Anything absent from this board may simply not have been measured."},"buckets":{"critical_now":[],"fix_next":[],"growth_opportunities":[],"monitor":[],"no_action":[]},"top_action":null,"narrative":{}},"search":{"status":"unavailable","reason":"GOOGLE_APPLICATION_CREDENTIALS is not set","findings":0},"ga4":{"status":"unavailable","reason":"THB_GA4_PROPERTY_ID is not set","findings":0},"revenue":{"status":"unavailable","reason":"no revenue data. Export deals.csv (deal_id, channel, attribution, stage, created_on, gross_profit) and spend.csv (channel, period_start, period_end, amount) into /workspace/THB-AI-SEO-Operations-System/data/revenue/input.","findings":0},"joined":[],"joined_count":0,"crawl":{"status":"unavailable","reason":"skipped: --offline was passed, so the site was not crawled","findings":0}};</script>
+<!--@/THB@-->
 <script>
 (() => {
   "use strict";
@@ -1087,8 +1268,58 @@ a:hover { text-decoration: underline; }
   const rail   = document.querySelectorAll(".rail-btn");
   let openKey  = null;
 
-  const esc = (s) => s.replace(/[&<>"]/g, (c) =>
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  /* Read a CSS custom property. Used for chart colours so the palette lives
+     in one place and follows the theme rather than being hard-coded twice. */
+  const css = (name) =>
+    getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  /* Build an SVG element with attributes. SVG needs createElementNS; using
+     createElement here produces an element that silently never paints. */
+  const el = (tag, attrs) => {
+    const node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (const [k, v] of Object.entries(attrs || {})) node.setAttribute(k, v);
+    return node;
+  };
+
+  const num = (v) => Number(v || 0).toLocaleString();
+  const pct = (v, d = 1) => `${(Number(v) * 100).toFixed(d)}%`;
+  const money = (v, cur) =>
+    `${cur === "USD" ? "$" : cur + " "}${Math.round(Number(v || 0)).toLocaleString()}`;
+
+  /* The honest empty state. Every view calls this instead of rendering a
+     zero when its source did not report. `reason` is the collector's own
+     words, not a paraphrase. */
+  function noData(title, body, reason, isError) {
+    return `<div class="nodata${isError ? " err" : ""}">` +
+           `<h3>${esc(title)}</h3><p>${esc(body)}</p>` +
+           (reason ? `<div class="why">${esc(reason)}</div>` : "") +
+           `</div>`;
+  }
+
+  /* Renders a panel only when its collector reported OK; otherwise explains
+     why, using the reason the collector supplied. Returns true if the caller
+     should go on to render real content. */
+  function gate(host, panel, label, hint) {
+    if (!panel) {
+      host.innerHTML = noData(
+        `${label} has not been built into this page yet`,
+        "Rebuild the dashboard with tools/build_dashboard.py to populate it.",
+        "", false);
+      return false;
+    }
+    if (panel.status === "ok") return true;
+    const failed = panel.status === "error";
+    host.innerHTML = noData(
+      failed ? `${label} failed` : `${label} is not connected`,
+      failed
+        ? `The agent ran and could not complete. Nothing is shown rather than a partial figure.`
+        : hint,
+      panel.reason, failed);
+    return false;
+  }
 
   function paint(key) {
     const kit = NAV[key];
@@ -1141,12 +1372,20 @@ a:hover { text-decoration: underline; }
      the data source it needs rather than pretending to be a real screen.
      ====================================================================== */
   const VIEWS = new Set(["home", "site-audit", "position-tracking",
-                         "domain-overview", "top-pages", "revenue-chain"]);
+                         "domain-overview", "top-pages", "revenue-chain",
+                         // Stage 4-7, backed by the agents.
+                         "priority-board", "roas-tracker", "lead-attribution",
+                         "organic-rankings", "organic-traffic-insights"]);
 
   const SLUG = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
+  // Menu labels that lead to a view named differently.
+  const ALIAS = {
+    "daily-prioritized-digest": "priority-board",
+    "incident-history": "priority-board"
+  };
+
   const STAGE = {
-    "organic-rankings":       ["Stage 4", "Search Console", "Ranking movement per keyword, weighted by the revenue of the page that holds it."],
     "compare-domains":        ["Stage 12", "a data provider", "Side-by-side against johnbuysbayareahouses.com and the other Bay Area cash buyers you track."],
     "keyword-gap":            ["Stage 12", "a data provider", "Keywords competitors rank for that you do not."],
     "backlink-gap":           ["Stage 12", "a data provider", "Referring domains pointing at rivals but not at you."],
@@ -1156,19 +1395,15 @@ a:hover { text-decoration: underline; }
     "referring-domains":      ["Stage 12", "a data provider", "Unique domains linking to you, and what you lost."],
     "backlink-audit":         ["Stage 12", "a data provider", "Toxic links worth disavowing."],
     "on-page-seo-checker":    ["Stage 11", "Search Console", "Per-page recommendations, each tagged with its risk tier."],
-    "organic-traffic-insights": ["Stage 5", "GA4 + Search Console", "The joined landing-page dataset that replaces guessed revenue weights."],
     "listing-management":     ["Stage 10", "Google Business Profile", "Citation consistency across directories."],
     "review-management":      ["Stage 10", "Google Business Profile", "Reviews, rating trend, and unanswered reviews."],
     "gbp-optimization":       ["Stage 10", "Google Business Profile", "Profile completeness and local pack visibility."],
     "map-rank-tracker":       ["Stage 10", "Google Business Profile", "Grid rankings per Bay Area city."],
-    "roas-tracker":           ["Stage 6", "CRM + GA4", "Current ROAS against your target, and the gap."],
-    "lead-attribution":       ["Stage 6", "CallRail + CRM", "Which page and channel produced each seller lead."],
     "money-page-monitor":     ["Stage 3", "nothing - already built", "The 5-minute heartbeat and hourly visual check, as a live view."],
-    "daily-prioritized-digest": ["Stage 7", "nothing - already built", "The 7am digest, rendered as a page instead of a Chat message."],
-    "incident-history":       ["Stage 7", "nothing - already built", "Every incident, when it opened, and when it recovered."]
   };
 
-  function showView(name, label) {
+  function showView(rawName, label) {
+    const name = ALIAS[rawName] || rawName;
     const target = VIEWS.has(name) ? name : "stub";
     document.querySelectorAll(".view").forEach((v) =>
       v.dataset.active = v.dataset.view === target ? "1" : "0");
@@ -1266,6 +1501,411 @@ a:hover { text-decoration: underline; }
     }
   }
   renderAudit();
+
+
+  /* ======================================================================
+     Stages 4-7 — written by tools/build_dashboard.py.
+
+     Design rule, enforced by `gate()` in every renderer below: when a
+     collector did not report, the view shows its reason. It never shows a
+     zero. A zero reads as a measurement, and a measurement is something
+     someone will act on.
+     ====================================================================== */
+  const THB = window.__THB__ || null;
+
+  const BUCKET_LABEL = {
+    critical_now: "Critical now",
+    fix_next: "Fix next",
+    growth_opportunities: "Growth opportunities",
+    monitor: "Monitor",
+    no_action: "No action"
+  };
+
+  function blindBanner(coverage) {
+    if (!coverage) return "";
+    if (coverage.complete) {
+      return `<div class="blind clear"><strong>Full coverage</strong>` +
+             `<p>Every agent reported. Nothing on this page is missing because it ` +
+             `could not be measured.</p></div>`;
+    }
+    const spots = coverage.blind_spots || [];
+    return `<div class="blind"><strong>Not measured</strong>` +
+           `<p>${esc(coverage.caveat || "Some agents did not report.")}</p>` +
+           (spots.length
+             ? `<ul>${spots.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>`
+             : "") +
+           `</div>`;
+  }
+
+  function itemCard(it) {
+    const chips = [];
+    if (it.conversion_blocking) chips.push(`<span class="chip block">Blocks conversion</span>`);
+    if (it.revenue_weight) chips.push(`<span class="chip">Revenue weight ${it.revenue_weight}</span>`);
+    chips.push(`<span class="chip">${esc(it.agent)}</span>`);
+    chips.push(`<span class="chip">${esc(it.severity)}</span>`);
+    if ((it.corroborated_by || []).length)
+      chips.push(`<span class="chip agree">Also seen by ${esc(it.corroborated_by.join(", "))}</span>`);
+    if (it.persistence > 1) chips.push(`<span class="chip">Seen ${it.persistence}x</span>`);
+
+    return `<div class="item">` +
+      `<div class="sc">${Math.round(it.score)}<span>score</span></div>` +
+      `<div class="item-body">` +
+        `<div class="item-title">${esc(it.problem)}</div>` +
+        (it.entity || it.url
+          ? `<div class="item-where">${esc(it.entity || it.url)}</div>` : "") +
+        (it.business_impact ? `<div class="item-impact">${esc(it.business_impact)}</div>` : "") +
+        (it.recommended_action
+          ? `<div class="item-do"><b>Do:</b> ${esc(it.recommended_action)}</div>` : "") +
+        `<div class="item-meta">${chips.join("")}</div>` +
+        (it.correlation_notes || []).map((n) =>
+          `<div class="item-note">${esc(n)}</div>`).join("") +
+        // Parenthesised deliberately: `+` binds tighter than `?:`, so without
+        // these the whole concatenation above becomes the condition and the
+        // card collapses to just this line.
+        ((it.reasons || []).length
+          ? `<div class="item-why">Ranked here because: ${esc(it.reasons.join("; "))}</div>`
+          : "") +
+      `</div></div>`;
+  }
+
+  function renderBoard() {
+    const host = document.getElementById("pb-buckets");
+    if (!host) return;
+    const blind = document.getElementById("pb-blind");
+
+    if (!THB || !THB.board) {
+      blind.innerHTML = "";
+      host.innerHTML = noData(
+        "The board has not been built yet",
+        "Run tools/build_dashboard.py to populate this page from the agents.",
+        "", false);
+      return;
+    }
+
+    const b = THB.board;
+    document.getElementById("pb-when").textContent = THB.generated_at || "—";
+    document.getElementById("pb-headline").textContent = b.headline;
+    document.getElementById("pb-counts").textContent =
+      Object.entries(b.counts).filter(([, n]) => n)
+        .map(([k, n]) => `${n} ${BUCKET_LABEL[k].toLowerCase()}`).join(" · ") || "nothing open";
+    blind.innerHTML = blindBanner(b.coverage);
+
+    const first = document.getElementById("pb-first");
+    first.innerHTML = b.top_action
+      ? `<b>Do this first:</b> ${esc(b.top_action.recommended_action || b.top_action.problem)}`
+      : "";
+
+    host.innerHTML = Object.keys(BUCKET_LABEL).map((key) => {
+      const items = b.buckets[key] || [];
+      if (!items.length) return "";
+      return `<div class="bucket" data-b="${key}">` +
+        `<div class="bucket-head"><h2>${esc(BUCKET_LABEL[key])}</h2>` +
+        `<span class="n">${items.length}</span></div>` +
+        items.map(itemCard).join("") + `</div>`;
+    }).join("") ||
+      `<div class="blind clear"><strong>Nothing open</strong><p>No agent has an ` +
+      `open finding. That is only as complete as the coverage above.</p></div>`;
+  }
+
+  /* ---------- Stage 6: ROAS ---------- */
+  function renderRoas() {
+    const host = document.getElementById("ro-body");
+    const qual = document.getElementById("ro-quality");
+    if (!host) return;
+    const panel = THB && THB.revenue;
+    qual.innerHTML = "";
+    if (!gate(host, panel,
+        "Revenue data",
+        "Export deals.csv and spend.csv from your CRM into data/revenue/input/, " +
+        "then rebuild. Until then no channel figure is shown, because the " +
+        "alternative is showing a number nobody measured.")) return;
+
+    const cur = panel.currency || "USD";
+    const target = panel.target_roas;
+    document.getElementById("ro-window").textContent =
+      (panel.window || []).join(" to ") || "—";
+
+    const q = panel.data_quality || {};
+    if (!q.reliable) {
+      qual.innerHTML =
+        `<div class="blind"><strong>Read these numbers with care</strong><p>` +
+        `${q.unattributed_deals || 0} of ${q.total_deals || 0} deals ` +
+        `(${pct(q.unknown_share || 0, 0)}) have no recorded source. Every ROAS below ` +
+        `is computed from the deals that do. Fixing the intake field is worth more ` +
+        `than any change this dashboard could recommend.</p></div>`;
+    }
+
+    const t = panel.totals || {};
+    const tiles =
+      `<div class="tiles">` +
+      `<div class="panel" style="margin:0;padding:15px 17px"><div class="metric-label">Total spend</div>` +
+        `<div class="bigstat">${money(t.total_spend, cur)}</div></div>` +
+      `<div class="panel" style="margin:0;padding:15px 17px"><div class="metric-label">Gross profit</div>` +
+        `<div class="bigstat">${money(t.total_gross_profit, cur)}</div></div>` +
+      `<div class="panel" style="margin:0;padding:15px 17px"><div class="metric-label">Blended ROAS</div>` +
+        `<div class="bigstat">${t.blended_roas == null ? "—" : t.blended_roas.toFixed(2) + "x"}</div>` +
+        `<div class="metric-sub">target ${Number(target).toFixed(1)}x</div></div>` +
+      `<div class="panel" style="margin:0;padding:15px 17px"><div class="metric-label">Unattributed profit</div>` +
+        `<div class="bigstat">${money(t.unattributed_gross_profit, cur)}</div>` +
+        `<div class="metric-sub">credited to no channel</div></div>` +
+      `</div>`;
+
+    const rows = (panel.channels || []).map((c) => {
+      const roasCell = c.roas == null
+        ? `<td class="num na" title="${esc(c.roas_status)}">not computable</td>`
+        : `<td class="num ${c.roas >= target ? "up" : "down"}"><strong>${c.roas.toFixed(2)}x</strong></td>`;
+      return `<tr>` +
+        `<td><strong>${esc(c.channel)}</strong>` +
+          (c.roas_status !== "computed"
+            ? `<div class="item-where">${esc(c.roas_status.replace(/_/g, " "))}</div>` : "") +
+        `</td>` +
+        `<td class="num">${c.spend == null ? '<span class="na">no record</span>' : money(c.spend, cur)}</td>` +
+        `<td class="num">${money(c.gross_profit, cur)}</td>` +
+        roasCell +
+        `<td class="num">${c.counts.lead}</td>` +
+        `<td class="num">${c.counts.contract}</td>` +
+        `<td class="num">${c.counts.closing}</td>` +
+        `<td class="num">${c.cost_per_closing == null ? '<span class="na">—</span>' : money(c.cost_per_closing, cur)}</td>` +
+        `<td class="num">${pct(c.attribution_confidence, 0)}</td>` +
+        `</tr>`;
+    }).join("");
+
+    host.innerHTML = tiles +
+      `<div class="panel"><div class="panel-head"><div class="panel-title">Channels</div>` +
+      `<div class="panel-note">ranked by gross profit · unattributed always last</div></div>` +
+      `<div class="dt-wrap"><table class="dt"><thead><tr>` +
+      `<th>Channel</th><th class="num">Spend</th><th class="num">Gross profit</th>` +
+      `<th class="num">ROAS</th><th class="num">Leads</th><th class="num">Contracts</th>` +
+      `<th class="num">Closings</th><th class="num">Cost / closing</th>` +
+      `<th class="num">Attribution</th>` +
+      `</tr></thead><tbody>${rows}</tbody></table></div>` +
+      `<div class="tblnote">${esc(panel.label || "")}</div></div>` +
+      funnelPanel(panel);
+  }
+
+  function funnelPanel(panel) {
+    const f = panel.funnel_totals || {};
+    const order = ["lead", "qualified_lead", "appointment", "offer", "contract", "closing"];
+    const top = f.lead || 0;
+    if (!top) return "";
+    return `<div class="panel"><div class="panel-head">` +
+      `<div class="panel-title">Funnel</div>` +
+      `<div class="panel-note">${esc((panel.canonical_chain || []).join(" → ").replace(/_/g, " "))}</div>` +
+      `</div><div class="funnel">` +
+      order.map((k) => {
+        const v = f[k] || 0;
+        return `<div class="fstep"><span class="lbl">${esc(k.replace(/_/g, " "))}</span>` +
+          `<span class="bar"><i style="width:${top ? (100 * v / top).toFixed(1) : 0}%"></i></span>` +
+          `<span class="val">${num(v)}</span>` +
+          `<span class="pc">${top ? Math.round(100 * v / top) : 0}%</span></div>`;
+      }).join("") + `</div></div>`;
+  }
+
+  /* ---------- Stage 6: attribution ---------- */
+  function renderAttribution() {
+    const host = document.getElementById("la-body");
+    if (!host) return;
+    const panel = THB && THB.revenue;
+    if (!gate(host, panel,
+        "Attribution data",
+        "This view needs the same CRM export as the ROAS tracker. Nothing is " +
+        "estimated in its absence.")) return;
+
+    const q = panel.data_quality || {};
+    const mix = {};
+    (panel.channels || []).forEach((c) =>
+      Object.entries(c.attribution_mix || {}).forEach(([k, n]) => mix[k] = (mix[k] || 0) + n));
+
+    const QUALITY = {
+      manually_verified: ["Manually verified", "A person asked the seller and recorded the answer. The strongest evidence there is."],
+      source_reported:   ["Source reported", "The ad platform itself reported the conversion."],
+      last_touch:        ["Last touch (inferred)", "Deduced from the final interaction. A guess, and labelled as one."],
+      first_touch:       ["First touch (inferred)", "Deduced from the first interaction. A guess, and labelled as one."],
+      unknown:           ["Unknown", "No attribution data exists. Kept separate and never distributed across channels."]
+    };
+    const total = Object.values(mix).reduce((a, b) => a + b, 0) || 1;
+
+    host.innerHTML =
+      `<div class="blind${q.reliable ? " clear" : ""}"><strong>` +
+      `${q.reliable ? "Attribution is usable" : "Attribution is the weak link"}</strong><p>` +
+      `${q.unattributed_deals || 0} of ${q.total_deals || 0} deals ` +
+      `(${pct(q.unknown_share || 0, 0)}) have no recorded source, against a ` +
+      `${pct(q.unknown_share_threshold || 0, 0)} tolerance. ` +
+      `${q.inferred_attribution_deals || 0} more ` +
+      `${(q.inferred_attribution_deals || 0) === 1 ? "was" : "were"} inferred rather ` +
+      `than established.` +
+      `</p></div>` +
+      `<div class="panel"><div class="panel-head"><div class="panel-title">How each deal was sourced</div>` +
+      `<div class="panel-note">strongest evidence first</div></div>` +
+      `<div class="dt-wrap"><table class="dt"><thead><tr><th>Quality</th>` +
+      `<th class="num">Deals</th><th class="num">Share</th><th>What it means</th>` +
+      `</tr></thead><tbody>` +
+      Object.entries(QUALITY).map(([k, [label, meaning]]) => {
+        const n = mix[k] || 0;
+        return `<tr><td><strong>${esc(label)}</strong></td>` +
+               `<td class="num">${num(n)}</td>` +
+               `<td class="num">${pct(n / total, 0)}</td>` +
+               `<td style="color:var(--ink-2)">${esc(meaning)}</td></tr>`;
+      }).join("") +
+      `</tbody></table></div></div>` +
+      adapterPanel(panel);
+  }
+
+  function adapterPanel(panel) {
+    const rows = (panel.adapters || []);
+    if (!rows.length) return "";
+    return `<div class="panel"><div class="panel-head">` +
+      `<div class="panel-title">Channel integrations</div>` +
+      `<div class="panel-note">none are automated yet — everything above came from a CSV export</div>` +
+      `</div><div class="dt-wrap"><table class="dt"><thead><tr>` +
+      `<th>Channel</th><th>Would provide</th><th>Needs</th></tr></thead><tbody>` +
+      rows.map((a) =>
+        `<tr><td><strong>${esc(a.label)}</strong></td>` +
+        `<td style="color:var(--ink-2)">${esc((a.provides || []).join(", "))}</td>` +
+        `<td style="color:var(--ink-2)">${esc((a.requires || []).join(", "))}</td></tr>`
+      ).join("") + `</tbody></table></div></div>`;
+  }
+
+  /* ---------- Stage 4: Search Console ---------- */
+  function renderSearch() {
+    const host = document.getElementById("sc-body");
+    if (!host) return;
+    const panel = THB && THB.search;
+    if (!gate(host, panel,
+        "Search Console",
+        "Grant a Google service account read access to the property and set " +
+        "GOOGLE_APPLICATION_CREDENTIALS. Until then no ranking or click figure " +
+        "appears here, because none has been measured.")) return;
+
+    document.getElementById("sc-window").textContent =
+      (panel.window || []).join(" to ") || "—";
+    const t = panel.totals || {};
+
+    const delta = (v, invert) => {
+      if (v == null || v === 0) return `<td class="num na">—</td>`;
+      const good = invert ? v < 0 : v > 0;
+      const sign = v > 0 ? "+" : "";
+      return `<td class="num ${good ? "up" : "down"}">${sign}${
+        Number.isInteger(v) ? num(v) : v.toFixed(1)}</td>`;
+    };
+
+    host.innerHTML =
+      `<div class="tiles">` +
+      `<div class="panel" style="margin:0;padding:15px 17px"><div class="metric-label">Clicks</div>` +
+        `<div class="bigstat">${num(t.clicks)}</div></div>` +
+      `<div class="panel" style="margin:0;padding:15px 17px"><div class="metric-label">Impressions</div>` +
+        `<div class="bigstat">${num(t.impressions)}</div></div>` +
+      `<div class="panel" style="margin:0;padding:15px 17px"><div class="metric-label">CTR</div>` +
+        `<div class="bigstat">${pct(t.ctr || 0)}</div></div>` +
+      `<div class="panel" style="margin:0;padding:15px 17px"><div class="metric-label">Avg. position</div>` +
+        `<div class="bigstat">${Number(t.position || 0).toFixed(1)}</div></div>` +
+      `</div>` +
+      `<div class="panel"><div class="panel-head"><div class="panel-title">Pages</div>` +
+      `<div class="panel-note">top ${Math.min(panel.page_count, THB.row_cap)} of ` +
+      `${num(panel.page_count)} · ranked by revenue weight</div></div>` +
+      `<div class="dt-wrap"><table class="dt"><thead><tr><th>Page</th>` +
+      `<th class="num">Clicks</th><th class="num">Δ</th><th class="num">Impr.</th>` +
+      `<th class="num">CTR</th><th class="num">Position</th><th class="num">Δ pos</th>` +
+      `<th class="num">Weight</th></tr></thead><tbody>` +
+      (panel.pages || []).map((p) =>
+        `<tr><td class="u">${esc(p.name || p.url)}</td>` +
+        `<td class="num">${num(p.current.clicks)}</td>` +
+        delta(p.click_delta, false) +
+        `<td class="num">${num(p.current.impressions)}</td>` +
+        `<td class="num">${pct(p.current.ctr)}</td>` +
+        `<td class="num">${Number(p.current.position).toFixed(1)}</td>` +
+        delta(p.position_delta, true) +
+        `<td class="num">${p.revenue_weight}</td></tr>`
+      ).join("") +
+      `</tbody></table></div></div>` +
+      `<div class="panel"><div class="panel-head"><div class="panel-title">Queries</div>` +
+      `<div class="panel-note">top ${Math.min(panel.query_count, THB.row_cap)} of ` +
+      `${num(panel.query_count)}</div></div>` +
+      `<div class="dt-wrap"><table class="dt"><thead><tr><th>Query</th>` +
+      `<th class="num">Clicks</th><th class="num">Δ</th><th class="num">Impr.</th>` +
+      `<th class="num">CTR</th><th class="num">Position</th></tr></thead><tbody>` +
+      (panel.queries || []).map((q) =>
+        `<tr><td>${esc(q.key || q.query || "")}</td>` +
+        `<td class="num">${num(q.current.clicks)}</td>` +
+        delta(q.click_delta, false) +
+        `<td class="num">${num(q.current.impressions)}</td>` +
+        `<td class="num">${pct(q.current.ctr)}</td>` +
+        `<td class="num">${Number(q.current.position).toFixed(1)}</td></tr>`
+      ).join("") +
+      `</tbody></table></div></div>`;
+  }
+
+  /* ---------- Stage 5: the join ---------- */
+  function renderJoined() {
+    const host = document.getElementById("oti-body");
+    if (!host) return;
+    const rows = (THB && THB.joined) || [];
+    const search = THB && THB.search, analytics = THB && THB.ga4;
+
+    if (!rows.length) {
+      const parts = [];
+      if (search && search.status !== "ok") parts.push(`Search Console: ${search.reason}`);
+      if (analytics && analytics.status !== "ok") parts.push(`GA4: ${analytics.reason}`);
+      host.innerHTML = noData(
+        "The joined dataset needs both halves",
+        "This view pairs what people searched for with what they did after they " +
+        "arrived. It appears once at least one source reports; a page present in " +
+        "only one source is shown as such rather than having the missing half " +
+        "filled with zeros.",
+        parts.join("  |  "), false);
+      return;
+    }
+
+    const cell = (v, fmt) =>
+      v == null ? `<td class="num na">not measured</td>` : `<td class="num">${fmt(v)}</td>`;
+
+    host.innerHTML =
+      (analytics && analytics.label
+        ? `<div class="blind"><strong>What a conversion is here</strong>` +
+          `<p>${esc(analytics.label)}</p></div>` : "") +
+      `<div class="panel"><div class="panel-head">` +
+      `<div class="panel-title">Landing pages</div>` +
+      `<div class="panel-note">top ${rows.length} of ${num(THB.joined_count)}</div></div>` +
+      `<div class="dt-wrap"><table class="dt"><thead><tr><th>Page</th>` +
+      `<th class="num">Clicks</th><th class="num">Sessions</th>` +
+      `<th class="num">Gap</th><th class="num">Conversions</th><th class="num">Rate</th>` +
+      `<th class="num">Position</th><th>Sources</th></tr></thead><tbody>` +
+      rows.map((r) => {
+        const s = r.search || {};
+        return `<tr><td class="u">${esc(r.name || r.url)}</td>` +
+          cell(s.clicks == null ? null : s.clicks, num) +
+          cell(r.sessions, num) +
+          cell(r.clicks_vs_sessions, (v) => (v > 0 ? "+" : "") + num(v)) +
+          cell(r.conversions, num) +
+          cell(r.conversion_rate, (v) => pct(v)) +
+          cell(s.position == null ? null : s.position, (v) => Number(v).toFixed(1)) +
+          `<td>${(r.sources || []).map((x) =>
+            `<span class="chip">${esc(x)}</span>`).join(" ")}</td></tr>`;
+      }).join("") +
+      `</tbody></table></div>` +
+      `<div class="tblnote">Gap is clicks minus sessions. A large positive gap means ` +
+      `Google recorded arrivals that analytics did not — usually a tagging problem, ` +
+      `not lost traffic.</div></div>`;
+  }
+
+  /* Home page gets the coverage banner too, so the first screen someone sees
+     never implies a completeness it does not have. */
+  function renderHomeCoverage() {
+    const strip = document.querySelector('[data-view="home"] .preview-strip');
+    if (!strip || !THB || !THB.board) return;
+    strip.outerHTML = blindBanner(THB.board.coverage) +
+      (THB.board.counts && THB.board.counts.critical_now
+        ? `<div class="blind"><strong>Needs attention now</strong><p>` +
+          `${esc(THB.board.headline)}</p></div>`
+        : "");
+  }
+
+  renderBoard();
+  renderRoas();
+  renderAttribution();
+  renderSearch();
+  renderJoined();
+  renderHomeCoverage();
 
   showView("home");
 
