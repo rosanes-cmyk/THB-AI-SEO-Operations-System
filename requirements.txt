@@ -1,0 +1,12 @@
+# Core runtime
+anthropic>=0.69.0
+requests>=2.32.0
+python-dotenv>=1.0.1
+PyYAML>=6.0.1
+
+# Vision collector (optional at runtime — vision degrades to "unavailable"
+# if Playwright is not installed, per Rule 8).
+playwright>=1.47.0
+
+# Tests
+pytest>=8.3.0

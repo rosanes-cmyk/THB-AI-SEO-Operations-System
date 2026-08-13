@@ -1,0 +1,98 @@
+# THB AI SEO Operations System — site and monitoring configuration.
+#
+#   cp config.example.yaml config.yaml
+#
+# Everything here is non-secret. Secrets live in .env.
+#
+# `revenue_weight` (0-100) is the single most important field in this file.
+# It is what makes the system prioritize by BUSINESS impact rather than
+# textbook SEO severity. A defect on a page with revenue_weight 95 outranks a
+# defect on a page with revenue_weight 5, regardless of technical severity.
+
+site:
+  name: "Twin Home Buyer"
+  base_url: "https://twinhomebuyer.com"
+  timezone: "America/Los_Angeles"
+
+# Scheduling cadences (Stage 2 defaults). Seconds.
+schedule:
+  heartbeat_interval_seconds: 300        # every 5 minutes  — revenue-page heartbeat
+  vision_interval_seconds: 3600          # every 60 minutes — AI visual inspection
+  crawl_interval_seconds: 21600          # every 6 hours    — technical crawl
+  pagespeed_interval_seconds: 21600      # every 6 hours    — PageSpeed
+  retention_interval_seconds: 86400      # daily            — disk cleanup
+  digest_at: "07:00"                     # daily digest, in site.timezone
+
+# Incident behavior (Rule 9 — no alert spam).
+incidents:
+  # Re-alert on a still-open incident only after this long.
+  escalation_after_seconds: 3600
+  # An incident must be seen this many consecutive times before it alerts,
+  # unless the finding is marked conversion-blocking (which alerts at once).
+  min_persistence_to_alert: 2
+  # AI findings below this confidence never alert on their own.
+  min_confidence_to_alert: 0.75
+
+# Resource protection (Rule: no unbounded disk growth).
+retention:
+  screenshots_max_files: 400
+  screenshots_max_age_days: 14
+  reports_max_files: 180
+  reports_max_age_days: 180
+  logs_max_age_days: 30
+  max_data_dir_mb: 2048
+
+# Collector limits and timeouts.
+limits:
+  http_timeout_seconds: 20
+  crawl_max_pages: 150
+  crawl_delay_seconds: 1.0
+  pagespeed_max_urls: 6
+  pagespeed_timeout_seconds: 90
+  vision_max_pages: 6
+  claude_max_calls_per_hour: 60
+
+# Viewports used by the vision collector.
+viewports:
+  - name: mobile
+    width: 390
+    height: 844
+    is_mobile: true
+  - name: desktop
+    width: 1440
+    height: 900
+    is_mobile: false
+
+# ---------------------------------------------------------------------------
+# Pages. `money_page: true` pages get the 5-minute heartbeat and the highest
+# vision frequency. Everything else is monitored on the slower cadences.
+# ---------------------------------------------------------------------------
+pages:
+  - url: "https://twinhomebuyer.com/"
+    name: "Homepage"
+    money_page: true
+    revenue_weight: 95
+    expect:
+      status: 200
+      form: true
+      phone_cta: true
+      text_contains:
+        - "cash offer"
+      min_visible_buttons: 1
+
+  - url: "https://twinhomebuyer.com/contact/"
+    name: "Contact / Seller Form"
+    money_page: true
+    revenue_weight: 90
+    expect:
+      status: 200
+      form: true
+      phone_cta: true
+      min_visible_buttons: 1
+
+  - url: "https://twinhomebuyer.com/blog/"
+    name: "Blog Index"
+    money_page: false
+    revenue_weight: 10
+    expect:
+      status: 200
